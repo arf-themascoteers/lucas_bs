@@ -82,8 +82,8 @@ class ANN(nn.Module):
 
 
 class Algorithm_bsdrcnn(Algorithm):
-    def __init__(self, target_size, dataset, tag, reporter, verbose, test, props):
-        super().__init__(target_size, dataset, tag, reporter, verbose, test, props)
+    def __init__(self, target_size, dataset, tag, reporter, verbose):
+        super().__init__(target_size, dataset, tag, reporter, verbose)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         torch.manual_seed(1)
         torch.cuda.manual_seed(1)

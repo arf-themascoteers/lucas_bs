@@ -1,14 +1,12 @@
 from abc import ABC, abstractmethod
-from metrics import Metrics
 from datetime import datetime
-import train_test_evaluator
 import torch
 import importlib
 import numpy as np
 
 
 class Algorithm(ABC):
-    def __init__(self, target_size:int, dataset, tag, reporter, verbose, test=False, props=None):
+    def __init__(self, target_size:int, dataset, tag, reporter, verbose):
         self.target_size = target_size
         self.dataset = dataset
         self.tag = tag
@@ -82,20 +80,8 @@ class Algorithm(ABC):
         return 0
 
     @staticmethod
-    def create(name, target_size, dataset, tag, reporter, verbose, test, props):
+    def create(name, target_size, dataset, tag, reporter, verbose):
         class_name = f"Algorithm_{name}"
         module = importlib.import_module(f"algorithms.algorithm_{name}")
         clazz = getattr(module, class_name)
-        return clazz(target_size, dataset, tag, reporter, verbose, test, props)
-
-    def set_weights(self, mean_weight):
-        self.weights = mean_weight
-
-    def get_weights(self):
-        if torch.is_tensor(self.weights) or isinstance(self.weights, np.ndarray):
-            return self.weights.tolist()
-        return self.weights
-
-    def get_props(self):
-        return 0
-
+        return clazz(target_size, dataset, tag, reporter, verbose)
