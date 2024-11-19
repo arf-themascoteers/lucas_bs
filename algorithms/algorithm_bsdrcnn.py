@@ -99,12 +99,18 @@ class Algorithm_bsdrcnn(Algorithm):
         optimizer = torch.optim.Adam(self.ann.parameters(), lr=self.lr, weight_decay=self.lr/10)
         for epoch in range(self.total_epoch):
             optimizer.zero_grad()
-            y_hat = self.ann(self.linterp_train)
+            y_hat = self.predict_train()
             loss = self.criterion(y_hat, self.train_y)
             loss.backward()
             optimizer.step()
             self.report(epoch)
-        return self.ann
+        return self
+
+    def predict_train(self):
+        return self.ann(self.linterp_train)
+
+    def predict_test(self):
+        return self.ann(self.linterp_test)
 
     def write_columns(self):
         if not self.verbose:
@@ -120,8 +126,8 @@ class Algorithm_bsdrcnn(Algorithm):
 
         bands = self.get_indices()
 
-        train_y_hat = self.ann(self.linterp_train)
-        test_y_hat = self.ann(self.linterp_test)
+        train_y_hat = self.predict_train()
+        test_y_hat = self.predict_test()
 
         r2, rmse = self.calculate_r2_rmse(self.test_y, test_y_hat)
         train_r2, train_rmse = self.calculate_r2_rmse(self.train_y, train_y_hat)
