@@ -1,5 +1,3 @@
-ks
-
 robustscaling vs minmax scaling
 
 asa's algo

@@ -23,3 +23,6 @@ crop only
 rmse, rpd, rpiq
 ==note===
 rmse percentage: https://www.mdpi.com/1999-4907/15/5/818
+
+
+ks

@@ -45,15 +45,15 @@ class Reporter:
 
         average = df[['r2', 'rmse', 'rpd','rpiq','train_r2', 'train_rmse','train_rpd','train_rpiq']].mean()
 
-        summary_df = pd.read_csv(self.summary_file)
+        summary_df_original = pd.read_csv(self.summary_file)
 
-        summary_df = summary_df[
-            (summary_df['algorithm'] == algorithm) &
-            (summary_df['dataset'] == dataset) &
-            (summary_df['target_size'] == target_size)
+        summary_df = summary_df_original[
+            (summary_df_original['algorithm'] == algorithm) &
+            (summary_df_original['dataset'] == dataset) &
+            (summary_df_original['target_size'] == target_size)
             ]
         if summary_df.empty:
-            summary_df.loc[len(summary_df)] = {
+            summary_df_original.loc[len(summary_df_original)] = {
                 "algorithm":algorithm,
                 "dataset":dataset,
                 "target_size":target_size,
@@ -66,16 +66,16 @@ class Reporter:
                 "train_rpd" : average['train_rpd'],
                 "train_rpiq" : average['train_rpiq']
             }
-            summary_df.to_csv(self.summary_file, index=False)
+            summary_df_original.to_csv(self.summary_file, index=False)
         else:
-            summary_df.loc[
-                (summary_df['algorithm'] == algorithm) &
-                (summary_df['dataset'] == dataset) &
-                (summary_df['target_size'] == target_size)
+            summary_df_original.loc[
+                (summary_df_original['algorithm'] == algorithm) &
+                (summary_df_original['dataset'] == dataset) &
+                (summary_df_original['target_size'] == target_size)
                 ,
                 ["r2","rmse","rpd","rpiq","train_r2","train_rmse","train_rpd","train_rpiq"]
             ] = [average['r2'],average['rmse'],average['train_r2'],average['train_rmse']]
-            summary_df.to_csv(self.summary_file, index=False)
+            summary_df_original.to_csv(self.summary_file, index=False)
 
     def write_details(self, algorithm,dataset, target_size, r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq,fold,selected_bands):
         selected_bands = sorted(selected_bands)
