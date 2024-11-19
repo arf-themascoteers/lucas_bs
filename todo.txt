@@ -1,3 +1,11 @@
+# rmse scaled
+# rmse %
+# rmse original
+# rmse original %
+
+# from sklearn.preprocessing import MinMaxScaler, RobustScaler
+
+
 first
 0. bsdrcnn
 1. no ks

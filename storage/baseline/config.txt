@@ -1,5 +1,0 @@
-tasks = {
-    "algorithms" : ["bsdrcnn"],
-    "datasets": ["lucas_r"],
-    "target_sizes" : [200]
-}

@@ -27,7 +27,7 @@ class Algorithm(ABC):
         train_r2, train_rmse, train_rpd, train_rpiq = self.calculate_metrics(self.train_y, train_y_hat)
         r2, rmse, rpd, rpiq = self.calculate_metrics(self.test_y, test_y_hat)
         self.reporter.write_details(self.get_name(),self.dataset.name,self.target_size,
-                                    r2, rmse, rpd, rpiq, rmse,
+                                    r2, rmse, rpd, rpiq,
                                     train_r2, train_rmse,train_rpd, train_rpiq,
                                     self.fold, self.get_indices())
 
