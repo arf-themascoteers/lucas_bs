@@ -3,7 +3,7 @@ from task_runner import TaskRunner
 if __name__ == '__main__':
     tag = "asa"
     tasks = {
-        "algorithms" : ["bsdrcnn"],
+        "algorithms" : ["asa"],
         "datasets": ["lucas"],
         "target_sizes" : [500]
     }
