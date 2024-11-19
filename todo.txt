@@ -1,3 +1,5 @@
+problem - why inconsistent rmse in csv and console
+
 first
 0. bsdrcnn
 1. no ks
