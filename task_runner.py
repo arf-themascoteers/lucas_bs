@@ -21,7 +21,7 @@ class TaskRunner:
                         if self.reporter.record_exists(algorithm, dataset, target_size, fold):
                             print(algorithm, "for", dataset, "for target size", target_size,"for fold", fold, "was done. Skipping")
                         else:
-                            algorithm_object = Algorithm.create(algorithm, dataset, train_x, train_y,test_x,test_y, target_size, fold, self.reporter,self.verbose)
+                            algorithm_object = Algorithm.create(algorithm, dataset_name, train_x, train_y,test_x,test_y, target_size, fold, self.reporter,self.verbose)
                             algorithm_object.compute_fold()
 
 
