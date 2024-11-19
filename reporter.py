@@ -19,11 +19,11 @@ class Reporter:
 
         if not os.path.exists(self.summary_file):
             with open(self.summary_file, 'w') as file:
-                file.write("algorithm,dataset,target_size,r2,rmse,r2_train,rmse_train\n")
+                file.write("algorithm,dataset,target_size,r2,rmse,train_r2,train_rmse\n")
 
         if not os.path.exists(self.details_file):
             with open(self.details_file, 'w') as file:
-                file.write("algorithm,dataset,target_size,r2,rmse,r2_train,rmse_train,fold,selected_bands\n")
+                file.write("algorithm,dataset,target_size,r2,rmse,train_r2,train_rmse,fold,selected_bands\n")
 
         self.current_epoch_report_file = None
 
@@ -43,7 +43,7 @@ class Reporter:
         if df.empty:
             return
 
-        average = df[['r2', 'rmse', 'r2_train', 'rmse_train']].mean()
+        average = df[['r2', 'rmse', 'train_r2', 'train_rmse']].mean()
 
         summary_df = pd.read_csv(self.summary_file)
 
