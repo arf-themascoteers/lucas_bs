@@ -43,7 +43,7 @@ class Reporter:
         if df.empty:
             return
 
-        average = df[['r2', 'rmse', 'train_r2', 'train_rmse']].mean()
+        average = df[['r2', 'rmse', 'rpd','rpiq' 'train_r2', 'train_rmse','train_rpd','train_rpiq']].mean()
 
         summary_df = pd.read_csv(self.summary_file)
 
@@ -81,7 +81,8 @@ class Reporter:
         selected_bands = sorted(selected_bands)
         with open(self.details_file, 'a') as file:
             file.write(f"{algorithm},{dataset},{target_size},"
-                       f"{r2},{rmse},{train_r2},{train_rmse},"
+                       f"{r2},{rmse},{rpd},{rpiq},"
+                       f"{train_r2},{train_rmse},{train_rpd},{train_rpiq},"
                        f"{fold},"
                        f"{'|'.join([str(i) for i in selected_bands])}\n")
         self.update_summary(algorithm,dataset, target_size)
