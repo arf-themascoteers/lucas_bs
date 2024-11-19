@@ -1,5 +1,7 @@
 asa's algo
 
+different conf for diff target size
+
 # rmse scaled
 # rmse %
 # rmse original
