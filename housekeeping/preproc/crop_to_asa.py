@@ -43,7 +43,7 @@ df_filtered_scaled = pd.DataFrame(X_scaled, columns=reflectance_cols)
 df_filtered_scaled['oc'] = y_scaled
 df_filtered_scaled.to_csv('../../data/lucas_crop_asa.csv', index=False)
 
-X_train, X_test, y_train, y_test = ks_split(X_scaled, y_scaled.ravel(), test_size=0.25)
-
-print(X_train.shape)
-print(y_test.shape)
+# X_train, X_test, y_train, y_test = ks_split(X_scaled, y_scaled.ravel(), test_size=0.25)
+#
+# print(X_train.shape)
+# print(y_test.shape)
