@@ -36,27 +36,18 @@ class Algorithm(ABC):
         y_pred = Algorithm.convert_to_numpy(y_pred.detach().cpu().numpy())
 
         r2 = r2_score(y_test, y_pred)
-        r2 = max(r2,0)
-
-        y_original = self.dataset.scaler_y.inverse_transform(y_test.reshape(-1, 1)).ravel()
-        y_pred_original = self.dataset.scaler_y.inverse_transform(y_pred.reshape(-1, 1)).ravel()
+        #r2 = max(r2,0)
 
         rmse = np.sqrt(mean_squared_error(y_test, y_pred))
-        rmse = max(rmse,0)
+        #rmse = max(rmse,0)
 
         std_dev = np.std(y_test, ddof=1)
         rpd = std_dev/rmse
-        rpd = max(rpd, 0)
+        #rpd = max(rpd, 0)
 
         iqr = np.percentile(y_test, 75) - np.percentile(y_test, 25)
         rpiq = iqr/rmse
-        rpiq = max(rpiq, 0)
-
-        rmse_original = np.sqrt(mean_squared_error(y_original, y_pred_original))
-        rmse_original = max(rmse_original, 0)
-
-        mean_val = np.mean(y_original)
-        rmse_perc = (rmse/mean_val)*100
+        #rpiq = max(rpiq, 0)
 
         return round(r2, 2), round(rmse, 2), round(rpd, 2), round(rpiq, 2)
 
