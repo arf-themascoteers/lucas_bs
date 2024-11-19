@@ -25,7 +25,7 @@ class SAE(nn.Module):
     def forward(self, X):
         hidden = self.encoder(X)
         output = self.decoder(hidden)
-        return hidden, output
+        return output
 
 
 class ANN(nn.Module):
