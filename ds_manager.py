@@ -13,12 +13,11 @@ class DSManager:
         self.data = df.to_numpy()
 
         scaler_X = MinMaxScaler()
-        scaler_y = RobustScaler()
+        self.scaler_y = RobustScaler()
 
-        self.data[:,0:-1] = scaler_X.fit_transform(self.data[:,0:-1])
-        self.data[:,-1] = scaler_y.fit_transform(self.data[:,-1].reshape(-1,1)).ravel()
-
-        self.scaler_y = scaler_y
+        if not name.endswith("asa"):
+            self.data[:,0:-1] = scaler_X.fit_transform(self.data[:,0:-1])
+            self.data[:,-1] = self.scaler_y.fit_transform(self.data[:,-1].reshape(-1,1)).ravel()
 
     def get_k_folds(self):
         for i in range(self.folds):
