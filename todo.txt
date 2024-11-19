@@ -1,24 +1,15 @@
----all metrics
----original scale rmse
-
-crop only
-
 graphs plots results - mid layer graph - gholizadeh algo
 
+1. full db
+2. full db asa
+3. crop db
+4. crop db asa
 
+asa algo
 
+2 stage
 
-==stage2=====
-rmse, rpd, rpiq
-
-==note===
-rmse percentage: https://www.mdpi.com/1999-4907/15/5/818
-
-==to --do==
-remove below 500
-Savitzky-Golay (SG)
-spectral outlier
-oc outlier
+diff target size
 
 ======================
 
@@ -26,4 +17,22 @@ oc outlier
 2. full db - pre
 3. crop db - pre
 
+
+
+================================
+done
+============================
+---all metrics
+---original scale rmse
 #. curve at diff stage
+==to --do==
+remove below 500
+Savitzky-Golay (SG)
+spectral outlier
+********************************oc outlier
+
+crop only
+==stage2=====
+rmse, rpd, rpiq
+==note===
+rmse percentage: https://www.mdpi.com/1999-4907/15/5/818
