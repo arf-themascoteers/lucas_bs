@@ -74,6 +74,11 @@ class Algorithm_bsdrcnn(Algorithm):
         torch.cuda.manual_seed(1)
         torch.backends.cudnn.deterministic = True
 
+        self.train_x = torch.tensor(train_x, dtype=torch.float32).to(self.device)
+        self.train_y = torch.tensor(train_y, dtype=torch.float32).to(self.device)
+        self.test_x = torch.tensor(test_x, dtype=torch.float32).to(self.device)
+        self.test_y = torch.tensor(test_y, dtype=torch.float32).to(self.device)
+
         self.criterion = torch.nn.MSELoss()
         self.class_size = 1
         self.lr = 0.001
