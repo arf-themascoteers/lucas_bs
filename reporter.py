@@ -108,7 +108,7 @@ class Reporter:
     def create_epoch_report(self, algorithm, dataset, target_size, fold):
         self.current_epoch_report_file = os.path.join(self.subfolder_path, f"{algorithm}_{dataset}_{target_size}_{fold}.csv")
 
-    def report_epoch_bsdr(self, epoch, r2, rmse, train_r2, train_rmse,selected_bands):
+    def report_epoch_bsdr(self, epoch, r2, rmse, rpd, rpiq, train_r2, train_rmse, train_rpd, train_rpiq, selected_bands):
         if not os.path.exists(self.current_epoch_report_file):
             with open(self.current_epoch_report_file, 'w') as file:
                 columns = ["epoch","r2","rmse","rpd","rpiq","train_r2","train_rmse","train_rpd","train_rpiq"] + [f"band_{index+1}" for index in range(len(selected_bands))]
@@ -118,7 +118,11 @@ class Reporter:
             file.write(f"{epoch},"
                        f"{Reporter.sanitize_metric(r2)},"
                        f"{Reporter.sanitize_metric(rmse)},"
+                       f"{Reporter.sanitize_metric(rpd)},"
+                       f"{Reporter.sanitize_metric(rpiq)},"
                        f"{Reporter.sanitize_metric(train_r2)},"
                        f"{Reporter.sanitize_metric(train_rmse)},"
+                       f"{Reporter.sanitize_metric(train_rpd)},"
+                       f"{Reporter.sanitize_metric(train_rpiq)},"
                        f"{','.join([str(i) for i in selected_bands])}\n"
                        )
