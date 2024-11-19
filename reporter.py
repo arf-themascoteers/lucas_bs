@@ -32,8 +32,6 @@ class Reporter:
         return self.details_file
 
     def update_summary(self, algorithm):
-        if not self.record_exists(algorithm):
-
         df = pd.read_csv(self.details_file)
         df = df[
             (df['algorithm'] == algorithm.name) &
@@ -43,19 +41,32 @@ class Reporter:
         if df.empty:
             return
 
-        result = df[df['algorithm'] == 'svr'].groupby('algorithm')[
-            ['r2', 'rmse', 'r2_train', 'rmse_train']].mean().reset_index()
-        result = result.iloc[0].to_dict()
+        average = df[['r2', 'rmse', 'train_r2', 'train_rmse']].mean()
 
-        df = pd.read_csv(self.summary_file)
-        filtered_df = df[df['algorithm'] == algorithm]
-        if filtered_df.empty:
-            df.loc[len(df)] = result
+        summary_df = pd.read_csv(self.summary_file)
 
-        df.loc[df['algorithm'] == 'svr', ['r2', 'rmse', 'r2_train', 'rmse_train']] = \
-            [result["r2"],result["rmse"],result["r2_train"],result["rmse_train"]]
-
-        df.to_csv(self.summary_file, index=False)
+        summary_df = summary_df[
+            (summary_df['algorithm'] == algorithm.name) &
+            (summary_df['dataset'] == algorithm.dataset) &
+            (summary_df['target_size'] == algorithm.target_size)
+            ]
+        if summary_df.empty:
+            summary_df.loc[len(summary_df)] = {
+                "r2" : average['r2'],
+                "rmse" : average['rmse'],
+                "train_r2" : average['train_r2'],
+                "train_rmse" : average['train_rmse']
+            }
+            summary_df.to_csv(self.summary_file, index=False)
+        else:
+            summary_df.loc[
+                (summary_df['algorithm'] == algorithm.name) &
+                (summary_df['dataset'] == algorithm.dataset) &
+                (summary_df['target_size'] == algorithm.target_size)
+                ,
+                ["r2","rmse","train_r2","train_rmse"]
+            ] = [average['r2'],average['rmse'],average['train_r2'],average['train_rmse']]
+            df.to_csv(self.summary_file, index=False)
 
     def write_details(self, algorithm,r2,rmse,r2_train,rmse_train,fold):
         selected_bands = sorted(algorithm.selected_indices)
@@ -66,7 +77,7 @@ class Reporter:
                        f"{'|'.join([str(i) for i in selected_bands])}\n")
         self.update_summary(algorithm)
 
-    def record_exists(self, algorithm_object):
+    def record_exists(self, algorithm_object,fold):
         algorithm = algorithm_object.name
         dataset = algorithm_object.dataset
         target_size = algorithm_object.target_size
@@ -74,7 +85,8 @@ class Reporter:
         df = df[
             (df['algorithm'] == algorithm) &
             (df['dataset'] == dataset) &
-            (df['target_size'] == target_size)
+            (df['target_size'] == target_size) &
+            (df['fold'] == fold)
             ]
         if df.empty:
             return False

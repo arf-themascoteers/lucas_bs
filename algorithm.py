@@ -29,11 +29,15 @@ class Algorithm(ABC):
 
     def compute_performance(self):
         for fold, (train_x, test_x, train_y, test_y) in enumerate(self.dataset.get_k_folds()):
-            train_y_hat = self.predict(train_x)
-            test_y_hat = self.predict(test_x)
-            train_r2, train_rmse = self.calculate_r2_rmse(train_y, train_y_hat)
-            r2, rmse = self.calculate_r2_rmse(test_y, test_y_hat)
-            self.reporter.write_details(self, r2, rmse, train_r2, train_rmse, fold)
+            if self.reporter.record_exists(self,fold):
+                print(self.get_name(), "for", self.dataset.get_name(), "for", self.target_size, "for", fold, "was done. Skipping")
+                continue
+            else:
+                train_y_hat = self.predict(train_x)
+                test_y_hat = self.predict(test_x)
+                train_r2, train_rmse = self.calculate_r2_rmse(train_y, train_y_hat)
+                r2, rmse = self.calculate_r2_rmse(test_y, test_y_hat)
+                self.reporter.write_details(self, r2, rmse, train_r2, train_rmse, fold)
 
     @staticmethod
     def calculate_r2_rmse(y_test, y_pred):

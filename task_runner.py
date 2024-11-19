@@ -16,19 +16,7 @@ class TaskRunner:
         dataset = DSManager()
         for index, algorithm in enumerate(self.task["algorithms"]):
             for target_size in self.task["target_sizes"]:
-                print(algorithm, target_size)
                 algorithm_object = Algorithm.create(algorithm, dataset, target_size, self.tag, self.reporter, self.verbose)
-                self.process_a_case(algorithm_object)
-
-        self.reporter.save_results()
-        return self.reporter.get_summary(), self.reporter.get_details()
-
-    def process_a_case(self, algorithm:Algorithm):
-        if self.reporter.record_exists(algorithm):
-            print(algorithm.get_name(), "for", algorithm.dataset.get_name(), "for",
-                  algorithm.target_size,"was done. Skipping")
-        else:
-            r2, rmse = algorithm.compute_performance()
-            self.reporter.write_details(algorithm, r2, rmse, r2_train, rmse_train, fold)
+                algorithm.compute_performance(algorithm_object)
 
 
