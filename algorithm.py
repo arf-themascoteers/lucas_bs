@@ -17,17 +17,13 @@ class Algorithm(ABC):
         self.fold = fold
         self.reporter = reporter
         self.verbose = verbose
-        
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        
-        self.model = None
 
-    def is_model_trained(self):
-        return self.model is not None
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     def compute_fold(self):
-        train_y_hat = self.predict(self.train_x)
-        test_y_hat = self.predict(self.test_x)
+        self._fit()
+        train_y_hat = self.predict_train()
+        test_y_hat = self.predict_test()
         train_r2, train_rmse = self.calculate_r2_rmse(self.train_y, train_y_hat)
         r2, rmse = self.calculate_r2_rmse(self.test_y, test_y_hat)
         self.reporter.write_details(self.get_name(),self.dataset,self.target_size, r2, rmse, train_r2, train_rmse, self.fold, self.get_indices())
@@ -52,11 +48,6 @@ class Algorithm(ABC):
     def _fit(self):
         pass
 
-    def predict(self, X):
-        if not self.is_model_trained():
-            self.model = self._fit()
-        return self.model(X)
-
     def get_name(self):
         class_name = self.__class__.__name__
         name_part = class_name[len("Algorithm_"):]
@@ -71,4 +62,12 @@ class Algorithm(ABC):
 
     @abstractmethod
     def get_indices(self):
+        pass
+
+    @abstractmethod
+    def predict_train(self):
+        pass
+
+    @abstractmethod
+    def predict_test(self):
         pass
