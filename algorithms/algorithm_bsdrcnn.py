@@ -83,18 +83,17 @@ class Algorithm_bsdrcnn(Algorithm):
         self.ann.to(self.device)
         self.original_feature_size = self.train_x.shape[1]
 
-        self.X_train = torch.tensor(self.train_x, dtype=torch.float32).to(self.device)
-        self.y_train = torch.tensor(self.train_y, dtype=torch.float32).to(self.device)
+        self.linterp_train = LinearInterpolationModule(self.train_x, self.device)
+        self.linterp_test = LinearInterpolationModule(self.test_x, self.device)
 
     def _fit(self):
         self.ann.train()
         self.write_columns()
         optimizer = torch.optim.Adam(self.ann.parameters(), lr=self.lr, weight_decay=self.lr/10)
-        linterp = LinearInterpolationModule(self.X_train, self.device)
         for epoch in range(self.total_epoch):
             optimizer.zero_grad()
-            y_hat = self.ann(linterp)
-            loss = self.criterion(y_hat, self.y_train)
+            y_hat = self.ann(self.linterp_train)
+            loss = self.criterion(y_hat, self.train_y)
             loss.backward()
             optimizer.step()
             self.report(epoch)
@@ -114,8 +113,8 @@ class Algorithm_bsdrcnn(Algorithm):
 
         bands = self.get_indices()
 
-        train_y_hat = self.ann(self.train_x)
-        test_y_hat = self.ann(self.test_x)
+        train_y_hat = self.ann(self.linterp_train)
+        test_y_hat = self.ann(self.linterp_test)
 
         r2, rmse = self.calculate_r2_rmse(self.test_y, test_y_hat)
         train_r2, train_rmse = self.calculate_r2_rmse(self.train_y, train_y_hat)
