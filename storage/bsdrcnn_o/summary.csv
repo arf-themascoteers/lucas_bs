@@ -1,0 +1,2 @@
+algorithm,dataset,target_size,r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq
+bsdrcnn,lucas,200,0.89,26.479999542236328,0.0099999997764825,0.0,0.87,26.690000534057617,0.0099999997764825,0.0
