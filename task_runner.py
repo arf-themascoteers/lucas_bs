@@ -16,7 +16,14 @@ class TaskRunner:
         dataset = DSManager()
         for index, algorithm in enumerate(self.task["algorithms"]):
             for target_size in self.task["target_sizes"]:
-                algorithm_object = Algorithm.create(algorithm, dataset, target_size, self.tag, self.reporter, self.verbose)
-                algorithm.compute_performance(algorithm_object)
+                for fold, (train_x, test_x, train_y, test_y) in enumerate(dataset.get_k_folds()):
+                    if self.reporter.record_exists(self):
+                        print(algorithm, "for", dataset, "for target size", target_size,"for fold", fold, "was done. Skipping")
+                    else:
+                        algorithm_object = Algorithm.create(algorithm, train_x, test_x, train_y, test_y, target_size, fold, self.reporter,self.verbose)
+                        algorithm.compute_fold(algorithm_object, dataset.name)
+
+
+
 
 

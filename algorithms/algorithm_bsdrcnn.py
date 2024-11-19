@@ -1,15 +1,6 @@
 from algorithm import Algorithm
 import torch
 import torch.nn as nn
-import numpy as np
-from train_test_evaluator import evaluate_split
-
-
-def r2_score_torch(y, y_pred):
-    ss_tot = torch.sum((y - torch.mean(y)) ** 2)
-    ss_res = torch.sum((y - y_pred) ** 2)
-    r2 = 1 - (ss_res / ss_tot)
-    return round(r2.item(),5)
 
 
 class LinearInterpolationModule(nn.Module):
@@ -36,11 +27,10 @@ class LinearInterpolationModule(nn.Module):
 
 
 class ANN(nn.Module):
-    def __init__(self, target_size, class_size):
+    def __init__(self, target_size):
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.target_size = target_size
-        self.class_size = class_size
 
         init_vals = torch.linspace(0.001, 0.99, self.target_size + 2)
         self.indices = nn.Parameter(
@@ -60,7 +50,7 @@ class ANN(nn.Module):
             nn.BatchNorm1d(128),
             nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
             nn.Flatten(start_dim=1),
-            nn.Linear(last_layer_input,self.class_size)
+            nn.Linear(last_layer_input,1)
         )
         num_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
         print("Number of learnable parameters:", num_params)
@@ -82,86 +72,55 @@ class ANN(nn.Module):
 
 
 class Algorithm_bsdrcnn(Algorithm):
-    def __init__(self, target_size, dataset, tag, reporter, verbose):
-        super().__init__(target_size, dataset, tag, reporter, verbose)
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    def __init__(self, train_x, test_x, train_y, test_y, target_size, fold, reporter, verbose):
+        super().__init__(train_x, test_x, train_y, test_y, target_size, fold, reporter, verbose)
+
         torch.manual_seed(1)
         torch.cuda.manual_seed(1)
         torch.backends.cudnn.deterministic = True
-        self.verbose = verbose
-        self.target_size = target_size
-        self.classification = dataset.is_classification()
-        if self.classification:
-            self.criterion = torch.nn.CrossEntropyLoss()
-            self.class_size = len(np.unique(self.dataset.get_train_y()))
-            self.lr = 0.001
-            self.total_epoch = 500
-        else:
-            self.criterion = torch.nn.MSELoss()
-            self.class_size = 1
-            self.lr = 0.001
-            self.total_epoch = 500
 
-        self.ann = ANN(self.target_size, self.class_size)
+        self.criterion = torch.nn.MSELoss()
+        self.class_size = 1
+        self.lr = 0.001
+        self.total_epoch = 500
+
+        self.ann = ANN(self.target_size)
         self.ann.to(self.device)
-        self.original_feature_size = self.dataset.get_train_x().shape[1]
+        self.original_feature_size = self.train_x.shape[1]
 
-        self.X_train = torch.tensor(self.dataset.get_train_x(), dtype=torch.float32).to(self.device)
-        ytype = torch.float32
-        if self.classification:
-            ytype = torch.int32
-        self.y_train = torch.tensor(self.dataset.get_train_y(), dtype=ytype).to(self.device)
+        self.X_train = torch.tensor(self.train_x, dtype=torch.float32).to(self.device)
+        self.y_train = torch.tensor(self.train_y, dtype=torch.float32).to(self.device)
 
-    def derive_selected_indices(self):
-        self.ann.train()
+    def _fit(self):
         self.write_columns()
         optimizer = torch.optim.Adam(self.ann.parameters(), lr=self.lr, weight_decay=self.lr/10)
         linterp = LinearInterpolationModule(self.X_train, self.device)
-        if self.classification:
-            y = self.y_train.type(torch.LongTensor).to(self.device)
-        else:
-            y = self.y_train
+        y = self.y_train
         for epoch in range(self.total_epoch):
+            self.ann.train()
             optimizer.zero_grad()
             y_hat = self.ann(linterp)
-            if not self.classification:
-                y_hat = y_hat.reshape(-1)
+            y_hat = y_hat.reshape(-1)
             loss = self.criterion(y_hat, y)
             loss.backward()
             optimizer.step()
-            r2_train = 0
-            if not self.classification:
-                r2_train = r2_score_torch(y, y_hat)
-            self.report(epoch, loss.item(), r2_train)
-        self.set_selected_indices(self.get_indices())
-        self.set_weights([1]*self.target_size)
-        return self, self.get_indices()
+            self.report(epoch)
+        return self.ann
 
     def write_columns(self):
         if not self.verbose:
             return
-        m1 = "oa"
-        m2 = "aa"
-        m3 = "k"
-        if not self.classification:
-            m1 = "r2"
-            m2 = "rmse"
-            m3 = "r2_train"
-        columns = ["epoch","loss",m1,m2,m3] + [f"band_{index+1}" for index in range(self.target_size)]
+        columns = ["epoch","loss","r2","rmse","train_r2","train_rmse"] + [f"band_{index+1}" for index in range(self.target_size)]
         print("".join([str(i).ljust(20) for i in columns]))
 
-    def report(self, epoch, loss, r2_train):
+    def report(self, epoch):
         if not self.verbose:
             return
         if epoch%10 != 0:
             return
 
-
-        m1,m2,m3 = evaluate_split(*self.dataset.get_a_fold(), self, classification=self.classification)
-        if not self.classification:
-            m3 = r2_train
-
         bands = self.get_indices()
+
         self.reporter.report_epoch_bsdr(epoch, loss, m1, m2, m3, bands)
         cells = [epoch, loss, m1,m2,m3] + bands
         cells = [round(item, 5) if isinstance(item, float) else item for item in cells]
@@ -170,9 +129,3 @@ class Algorithm_bsdrcnn(Algorithm):
     def get_indices(self):
         indices = torch.round(self.ann.get_indices() * self.original_feature_size ).to(torch.int64).tolist()
         return list(dict.fromkeys(indices))
-
-    def transform(self, X):
-        return X[:,self.get_indices()]
-
-    def is_cacheable(self):
-        return False

@@ -6,59 +6,56 @@ import numpy as np
 
 
 class Algorithm(ABC):
-    def __init__(self, dataset,target_size,tag, reporter, verbose):
-        self.dataset = dataset
+    def __init__(self, train_x, test_x, train_y, test_y, target_size, fold, reporter, verbose):
+        self.train_x = train_x
+        self.test_x = test_x
+        self.train_y = train_y
+        self.test_y = test_y
+        
         self.target_size = target_size
-        self.tag = tag
+        self.fold = fold
         self.reporter = reporter
         self.verbose = verbose
-        self.selected_indices = None
-        self.weights = None
-        self.all_indices = None
-        self.reporter.create_epoch_report(tag, self.get_name(), self.dataset.get_name(), self.target_size)
-        self.reporter.create_weight_report(tag, self.get_name(), self.dataset.get_name(), self.target_size)
-        self.reporter.create_weight_all_report(tag, self.get_name(), self.dataset.get_name(), self.target_size)
+        
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        
+        self.model = None
 
-    def _fitting_done(self):
-        return self.selected_indices is not None
+    def is_model_trained(self):
+        return self.model is not None
 
-    def _fit(self):
-        self.selected_indices = self.derive_selected_indices()
-        return self.selected_indices
-
-    def compute_performance(self):
-        for fold, (train_x, test_x, train_y, test_y) in enumerate(self.dataset.get_k_folds()):
-            if self.reporter.record_exists(self,fold):
-                print(self.get_name(), "for", self.dataset.get_name(), "for", self.target_size, "for", fold, "was done. Skipping")
-                continue
-            else:
-                train_y_hat = self.predict(train_x)
-                test_y_hat = self.predict(test_x)
-                train_r2, train_rmse = self.calculate_r2_rmse(train_y, train_y_hat)
-                r2, rmse = self.calculate_r2_rmse(test_y, test_y_hat)
-                self.reporter.write_details(self, r2, rmse, train_r2, train_rmse, fold)
+    def compute_fold(self, dataset_name):
+        train_y_hat = self.predict(self.train_x)
+        test_y_hat = self.predict(self.test_x)
+        train_r2, train_rmse = self.calculate_r2_rmse(self.train_y, train_y_hat)
+        r2, rmse = self.calculate_r2_rmse(self.test_y, test_y_hat)
+        self.reporter.write_details(self.get_name(),dataset_name,self.target_size, r2, rmse, train_r2, train_rmse, self.fold, self.get_indices())
 
     @staticmethod
     def calculate_r2_rmse(y_test, y_pred):
+        y_test = Algorithm.convert_to_numpy(y_test.detach().cpu().numpy())
+        y_pred = Algorithm.convert_to_numpy(y_pred.detach().cpu().numpy())
         r2 = r2_score(y_test, y_pred)
         rmse = np.sqrt(mean_squared_error(y_test, y_pred))
         r2 = max(r2,0)
         rmse = max(rmse,0)
         return round(r2, 2), round(rmse, 2)
 
+    @staticmethod
+    def convert_to_numpy(t):
+        if torch.is_tensor(t):
+            return t.detach().cpu().numpy()
+        return t
 
     @abstractmethod
-    def derive_selected_indices(self):
+    def _fit(self):
         pass
 
     @abstractmethod
     def predict(self, X):
-        pass
-
-    @abstractmethod
-    def get_model(self):
-        pass
+        if not self.is_model_trained():
+            self.model = self._fit()
+        return self.model(X)
 
     def get_name(self):
         class_name = self.__class__.__name__
@@ -66,8 +63,12 @@ class Algorithm(ABC):
         return name_part
 
     @staticmethod
-    def create(name, target_size, dataset, tag, reporter, verbose):
+    def create(name, train_x, test_x, train_y, test_y, target_size, fold, reporter, verbose):
         class_name = f"Algorithm_{name}"
         module = importlib.import_module(f"algorithms.algorithm_{name}")
         clazz = getattr(module, class_name)
-        return clazz(target_size, dataset, tag, reporter, verbose)
+        return clazz(train_x, test_x, train_y, test_y, target_size, fold, reporter, verbose)
+
+    @abstractmethod
+    def get_indices(self):
+        pass
