@@ -1,4 +1,5 @@
 first
+0. bsdrcnn
 1. no ks
 2. minmax scaling
 3. full db
@@ -7,7 +8,7 @@ first
 then asa versions, ks split + robustscaling [check double normalize]
 
 
-
+bsdrfcnn
 
 
 
