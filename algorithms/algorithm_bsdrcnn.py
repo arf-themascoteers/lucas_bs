@@ -112,7 +112,7 @@ class Algorithm_bsdrcnn(Algorithm):
             ytype = torch.int32
         self.y_train = torch.tensor(self.dataset.get_train_y(), dtype=ytype).to(self.device)
 
-    def get_selected_indices(self):
+    def derive_selected_indices(self):
         self.ann.train()
         self.write_columns()
         optimizer = torch.optim.Adam(self.ann.parameters(), lr=self.lr, weight_decay=self.lr/10)

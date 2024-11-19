@@ -1,28 +1,29 @@
 import os
 import pandas as pd
 import torch
-import shutil
 
 
 class Reporter:
     def __init__(self, tag="results", skip_all_bands=False):
         self.tag = tag
         self.skip_all_bands = skip_all_bands
-        self.summary_filename = f"{tag}_summary.csv"
-        self.details_filename = f"{tag}_details.csv"
-        self.save_dir = f"saved_results/{tag}"
-        self.summary_file = os.path.join("results", self.summary_filename)
-        self.details_file = os.path.join("results", self.details_filename)
+        self.subfolder = tag
+        self.subfolder_path = os.path.join("results", self.subfolder)
+        os.makedirs(self.subfolder_path, exist_ok=True)
+
+        self.summary_filename = f"summary.csv"
+        self.details_filename = f"details.csv"
+        self.summary_file = os.path.join(self.subfolder_path, self.summary_filename)
+        self.details_file = os.path.join(self.subfolder_path, self.details_filename)
         self.current_epoch_report_file = None
-        os.makedirs("results", exist_ok=True)
 
         if not os.path.exists(self.summary_file):
             with open(self.summary_file, 'w') as file:
-                file.write("target_size,algorithm,r2,rmse,r2_train,rmse_train\n")
+                file.write("algorithm,dataset,target_size,r2,rmse,r2_train,rmse_train\n")
 
         if not os.path.exists(self.details_file):
             with open(self.details_file, 'w') as file:
-                file.write("target_size,algorithm,r2,rmse,r2_train,rmse_train,fold,selected_bands\n")
+                file.write("algorithm,dataset,target_size,r2,rmse,r2_train,rmse_train,fold,selected_bands\n")
 
     def get_summary(self):
         return self.summary_file
@@ -30,9 +31,15 @@ class Reporter:
     def get_details(self):
         return self.details_file
 
-    def update_summary(self, algorithm, target_size):
+    def update_summary(self, algorithm):
+        if not self.record_exists(algorithm):
+
         df = pd.read_csv(self.details_file)
-        df = df[ (df['algorithm'] == algorithm) & (df['target_size'] == target_size)]
+        df = df[
+            (df['algorithm'] == algorithm.name) &
+            (df['dataset'] == algorithm.dataset) &
+            (df['target_size'] == algorithm.target_size)
+            ]
         if df.empty:
             return
 
@@ -50,29 +57,28 @@ class Reporter:
 
         df.to_csv(self.summary_file, index=False)
 
-    def write_details(self, algorithm, r2, rmse, r2_train, rmse_train, selected_bands, fold):
-        r2 = Reporter.sanitize_metric(r2)
-        rmse = Reporter.sanitize_metric(rmse)
-        r2_train = Reporter.sanitize_metric(r2_train)
-        rmse_train = Reporter.sanitize_metric(rmse_train)
-        selected_bands = sorted(selected_bands)
-
+    def write_details(self, algorithm,r2,rmse,r2_train,rmse_train,fold):
+        selected_bands = sorted(algorithm.selected_indices)
         with open(self.details_file, 'a') as file:
-            file.write(f"{algorithm.target_size},{algorithm.get_name()}"
-                       f"{r2},{rmse},{r2_train},{rmse_train},{fold},"
+            file.write(f"{algorithm.get_name()},{algorithm.dataset},{algorithm.target_size},"
+                       f"{r2},{rmse},{r2_train},{rmse_train},"
+                       f"{fold},"
                        f"{'|'.join([str(i) for i in selected_bands])}\n")
         self.update_summary(algorithm)
 
-    def save_results(self):
-        os.makedirs(self.save_dir, exist_ok=True)
-        for filename in os.listdir("results"):
-            if filename.startswith(f"{self.tag}_"):
-                source_file = os.path.join("results", filename)
-                if os.path.isfile(source_file):
-                    shutil.copy(source_file, self.save_dir)
-
-    def get_saved_metrics(self, al):
-        pass
+    def record_exists(self, algorithm_object):
+        algorithm = algorithm_object.name
+        dataset = algorithm_object.dataset
+        target_size = algorithm_object.target_size
+        df = pd.read_csv(self.details_file)
+        df = df[
+            (df['algorithm'] == algorithm) &
+            (df['dataset'] == dataset) &
+            (df['target_size'] == target_size)
+            ]
+        if df.empty:
+            return False
+        return True
 
     @staticmethod
     def sanitize_metric(metric):

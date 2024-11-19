@@ -1,25 +1,18 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.model_selection import KFold
 
 
 class DSManager:
-    def __init__(self, folds=1):
-        dataset_path = f"data/lucas_r.csv"
+    def __init__(self, name="lucas_r",folds=1):
+        dataset_path = f"data/{name}.csv"
         df = pd.read_csv(dataset_path)
         self.folds = folds
         self.data = df.to_numpy()
 
     def get_k_folds(self):
-        if self.folds == 1:
-            train_data, test_data = train_test_split(self.data, test_size=0.25, random_state=42)
+        for i in range(self.folds):
+            train_data, test_data = train_test_split(self.data, test_size=0.25, random_state=42+i)
             yield train_data[:,0:-1], train_data[:,-1], test_data[:,0:-1], test_data[:,-1]
-            return
-        kf = KFold(n_splits=self.folds)
-        for i, (train_index, test_index) in enumerate(kf.split(self.data)):
-            train_data = self.data[train_index]
-            test_data = self.data[test_index]
-            yield train_data[:, 0:-1], train_data[:, -1], test_data[:, 0:-1], test_data[:, -1]
 
 
 if __name__ == '__main__':
