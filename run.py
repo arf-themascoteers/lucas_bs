@@ -4,7 +4,7 @@ if __name__ == '__main__':
     tag = "baseline"
     tasks = {
         "algorithms" : ["bsdrcnn"],
-        "datasets": ["lucas_r"],
+        "datasets": ["lucas_asa"],
         "target_sizes" : [200]
     }
     ev = TaskRunner(tasks,1,tag,verbose=True)
