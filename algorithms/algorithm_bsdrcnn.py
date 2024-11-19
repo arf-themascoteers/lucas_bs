@@ -92,12 +92,12 @@ class Algorithm_bsdrcnn(Algorithm):
         self.y_train = torch.tensor(self.train_y, dtype=torch.float32).to(self.device)
 
     def _fit(self):
+        self.ann.train()
         self.write_columns()
         optimizer = torch.optim.Adam(self.ann.parameters(), lr=self.lr, weight_decay=self.lr/10)
         linterp = LinearInterpolationModule(self.X_train, self.device)
         y = self.y_train
         for epoch in range(self.total_epoch):
-            self.ann.train()
             optimizer.zero_grad()
             y_hat = self.ann(linterp)
             y_hat = y_hat.reshape(-1)
@@ -110,7 +110,7 @@ class Algorithm_bsdrcnn(Algorithm):
     def write_columns(self):
         if not self.verbose:
             return
-        columns = ["epoch","loss","r2","rmse","train_r2","train_rmse"] + [f"band_{index+1}" for index in range(self.target_size)]
+        columns = ["epoch","r2","rmse","train_r2","train_rmse"] + [f"band_{index+1}" for index in range(self.target_size)]
         print("".join([str(i).ljust(20) for i in columns]))
 
     def report(self, epoch):
@@ -121,8 +121,14 @@ class Algorithm_bsdrcnn(Algorithm):
 
         bands = self.get_indices()
 
-        self.reporter.report_epoch_bsdr(epoch, loss, m1, m2, m3, bands)
-        cells = [epoch, loss, m1,m2,m3] + bands
+        train_y_hat = self.ann(self.train_x)
+        test_y_hat = self.ann(self.test_x)
+
+        r2, rmse = self.calculate_r2_rmse(self.test_y, test_y_hat)
+        train_r2, train_rmse = self.calculate_r2_rmse(self.train_y, train_y_hat)
+
+        self.reporter.report_epoch_bsdr(epoch, r2, rmse, train_r2, train_rmse, bands)
+        cells = [epoch, r2, rmse, train_r2, train_rmse] + bands
         cells = [round(item, 5) if isinstance(item, float) else item for item in cells]
         print("".join([str(i).ljust(20) for i in cells]))
 
