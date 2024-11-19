@@ -1,3 +1,5 @@
+robustscaling vs minmax scaling
+
 asa's algo
 
 different conf for diff target size
