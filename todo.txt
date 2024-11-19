@@ -15,7 +15,15 @@ rmse, rpd, rpiq
 rmse percentage: https://www.mdpi.com/1999-4907/15/5/818
 
 ==to --do==
-
+remove below 500
 Savitzky-Golay (SG)
 spectral outlier
 oc outlier
+
+======================
+
+1. full db
+2. full db - pre
+3. crop db - pre
+
+#. curve at diff stage
