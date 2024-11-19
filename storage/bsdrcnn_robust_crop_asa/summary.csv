@@ -1,0 +1,2 @@
+algorithm,dataset,target_size,r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq
+bsdrcnn,lucas_crop_asa,200,0.57,0.8899999856948853,1.5199999809265137,1.149999976158142,0.86,0.6899999976158142,2.640000104904175,1.440000057220459
