@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, RobustScaler
 
 
 class DSManager:
@@ -13,7 +13,7 @@ class DSManager:
         self.data = df.to_numpy()
 
         scaler_X = MinMaxScaler()
-        scaler_y = MinMaxScaler()
+        scaler_y = RobustScaler()
 
         self.data[:,0:-1] = scaler_X.fit_transform(self.data[:,0:-1])
         self.data[:,-1] = scaler_y.fit_transform(self.data[:,-1].reshape(-1,1)).ravel()
