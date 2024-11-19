@@ -67,8 +67,8 @@ class ANN(nn.Module):
 
 
 class Algorithm_bsdrcnn(Algorithm):
-    def __init__(self, train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose):
-        super().__init__(train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose)
+    def __init__(self, dataset, train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose):
+        super().__init__(dataset, train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose)
 
         torch.manual_seed(1)
         torch.cuda.manual_seed(1)
@@ -90,6 +90,8 @@ class Algorithm_bsdrcnn(Algorithm):
 
         self.linterp_train = LinearInterpolationModule(self.train_x, self.device)
         self.linterp_test = LinearInterpolationModule(self.test_x, self.device)
+
+        self.reporter.create_epoch_report(self.get_name(), self.dataset, self.target_size, self.fold)
 
     def _fit(self):
         self.ann.train()

@@ -6,7 +6,8 @@ import numpy as np
 
 
 class Algorithm(ABC):
-    def __init__(self, train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose):
+    def __init__(self, dataset, train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose):
+        self.dataset = dataset
         self.train_x = train_x
         self.test_x = test_x
         self.train_y = train_y
@@ -24,12 +25,12 @@ class Algorithm(ABC):
     def is_model_trained(self):
         return self.model is not None
 
-    def compute_fold(self, dataset_name):
+    def compute_fold(self):
         train_y_hat = self.predict(self.train_x)
         test_y_hat = self.predict(self.test_x)
         train_r2, train_rmse = self.calculate_r2_rmse(self.train_y, train_y_hat)
         r2, rmse = self.calculate_r2_rmse(self.test_y, test_y_hat)
-        self.reporter.write_details(self.get_name(),dataset_name,self.target_size, r2, rmse, train_r2, train_rmse, self.fold, self.get_indices())
+        self.reporter.write_details(self.get_name(),self.dataset,self.target_size, r2, rmse, train_r2, train_rmse, self.fold, self.get_indices())
 
     @staticmethod
     def calculate_r2_rmse(y_test, y_pred):
@@ -62,11 +63,11 @@ class Algorithm(ABC):
         return name_part
 
     @staticmethod
-    def create(name, train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose):
+    def create(name, dataset, train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose):
         class_name = f"Algorithm_{name}"
         module = importlib.import_module(f"algorithms.algorithm_{name}")
         clazz = getattr(module, class_name)
-        return clazz(train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose)
+        return clazz(dataset, train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose)
 
     @abstractmethod
     def get_indices(self):
