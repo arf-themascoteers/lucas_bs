@@ -44,10 +44,6 @@ class ANN(nn.Module):
             nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
             nn.Conv1d(32, 64, kernel_size=8, stride=1, padding=0),
             nn.BatchNorm1d(64),
-            nn.LeakyReLU(),
-            nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
-            nn.Conv1d(64, 128, kernel_size=8, stride=1, padding=0),
-            nn.BatchNorm1d(128),
             nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
             nn.Flatten(start_dim=1),
             nn.Linear(last_layer_input,1)
@@ -63,8 +59,7 @@ class ANN(nn.Module):
         outputs = linterp(self.get_indices())
         outputs = outputs.reshape(outputs.shape[0], 1, outputs.shape[1])
         soc_hat = self.cnn(outputs)
-        if self.class_size == 1:
-            soc_hat = soc_hat.reshape(-1)
+        soc_hat = soc_hat.reshape(-1)
         return soc_hat
 
     def get_indices(self):

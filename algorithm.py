@@ -51,7 +51,6 @@ class Algorithm(ABC):
     def _fit(self):
         pass
 
-    @abstractmethod
     def predict(self, X):
         if not self.is_model_trained():
             self.model = self._fit()

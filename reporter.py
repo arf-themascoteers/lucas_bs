@@ -79,11 +79,7 @@ class Reporter:
                        f"{'|'.join([str(i) for i in selected_bands])}\n")
         self.update_summary(algorithm,dataset, target_size)
 
-    def record_exists(self, algorithm_object):
-        algorithm = algorithm_object.name
-        dataset = algorithm_object.dataset
-        target_size = algorithm_object.target_size
-        fold = algorithm_object.fold
+    def record_exists(self, algorithm, dataset, target_size, fold):
         df = pd.read_csv(self.details_file)
         df = df[
             (df['algorithm'] == algorithm) &
