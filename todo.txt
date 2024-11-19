@@ -1,7 +1,15 @@
-all metrics
-
-original scale rmse
+---all metrics
+---original scale rmse
 
 crop only
 
 graphs plots results - mid layer graph - gholizadeh algo
+
+
+
+
+==stage2=====
+rmse, rpd, rpiq
+
+==note===
+rmse percentage: https://www.mdpi.com/1999-4907/15/5/818

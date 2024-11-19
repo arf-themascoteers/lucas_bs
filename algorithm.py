@@ -41,6 +41,9 @@ class Algorithm(ABC):
         y_original = self.dataset.scaler_y.inverse_transform(y_test.reshape(-1, 1)).ravel()
         y_pred_original = self.dataset.scaler_y.inverse_transform(y_pred.reshape(-1, 1)).ravel()
 
+        y_original = y_test
+        y_pred_original = y_pred
+
         rmse = np.sqrt(mean_squared_error(y_original, y_pred_original))
         rmse = max(rmse,0)
 
@@ -53,7 +56,7 @@ class Algorithm(ABC):
         rpiq = max(rpiq, 0)
 
         mean_val = np.mean(y_original)
-        rmse = (rmse/mean_val)*100
+        rmse_perc = (rmse/mean_val)*100
 
         return round(r2, 2), round(rmse, 2), round(rpd, 2), round(rpiq, 2)
 
