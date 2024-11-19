@@ -4,8 +4,8 @@ if __name__ == '__main__':
     tag = "p200"
     tasks = {
         "algorithms" : ["bsdrcnn"],
-        "datasets": ["lucas_r_min"],
+        "datasets": ["lucas_r"],
         "target_sizes" : [200]
     }
-    ev = TaskRunner(tasks,tag,verbose=True)
+    ev = TaskRunner(tasks,1,tag,verbose=True)
     ev.evaluate()

@@ -54,6 +54,9 @@ class Reporter:
             ]
         if summary_df.empty:
             summary_df.loc[len(summary_df)] = {
+                "algorithm":algorithm,
+                "dataset":dataset,
+                "target_size":target_size,
                 "r2" : average['r2'],
                 "rmse" : average['rmse'],
                 "train_r2" : average['train_r2'],
@@ -68,7 +71,7 @@ class Reporter:
                 ,
                 ["r2","rmse","train_r2","train_rmse"]
             ] = [average['r2'],average['rmse'],average['train_r2'],average['train_rmse']]
-            df.to_csv(self.summary_file, index=False)
+            summary_df.to_csv(self.summary_file, index=False)
 
     def write_details(self, algorithm,dataset, target_size, r2,rmse,train_r2,train_rmse,fold,selected_bands):
         selected_bands = sorted(selected_bands)
