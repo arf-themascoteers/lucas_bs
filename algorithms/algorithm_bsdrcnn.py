@@ -42,9 +42,16 @@ class ANN(nn.Module):
             nn.BatchNorm1d(32),
             nn.LeakyReLU(),
             nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
+
             nn.Conv1d(32, 64, kernel_size=8, stride=1, padding=0),
             nn.BatchNorm1d(64),
+            nn.LeakyReLU(),
             nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
+
+            nn.Conv1d(64, 128, kernel_size=8, stride=1, padding=0),
+            nn.BatchNorm1d(128),
+            nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
+
             nn.Flatten(start_dim=1),
             nn.Linear(last_layer_input,1)
         )
