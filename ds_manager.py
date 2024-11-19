@@ -15,8 +15,8 @@ class DSManager:
         scaler_X = MinMaxScaler()
         scaler_y = MinMaxScaler()
 
-        X_scaled = scaler_X.fit_transform(self.data[:,0:-1])
-        y_scaled = scaler_y.fit_transform(self.data[:,-1].reshape(-1,1)).ravel()
+        self.data[:,0:-1] = scaler_X.fit_transform(self.data[:,0:-1])
+        self.data[:,-1] = scaler_y.fit_transform(self.data[:,-1].reshape(-1,1)).ravel()
 
         self.scaler_y = scaler_y
 

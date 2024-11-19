@@ -1,3 +1,17 @@
+first
+1. no ks
+2. minmax scaling
+3. full db
+4. rmse, rmse-original-scale, rmse%,
+
+then asa versions, ks split + robustscaling [check double normalize]
+
+
+
+
+
+
+===========
 graphs plots results - mid layer graph - gholizadeh algo
 
 1. full db
