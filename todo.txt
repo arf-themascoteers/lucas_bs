@@ -1,3 +1,5 @@
+asa's algo
+
 # rmse scaled
 # rmse %
 # rmse original
@@ -6,12 +8,7 @@
 # from sklearn.preprocessing import MinMaxScaler, RobustScaler
 
 
-first
-0. bsdrcnn
-1. no ks
-2. minmax scaling
-3. full db
-4. rmse, rmse-original-scale, rmse%,
+
 
 then asa versions, ks split + robustscaling [check double normalize]
 
@@ -42,20 +39,4 @@ diff target size
 
 
 
-================================
-done
-============================
----all metrics
----original scale rmse
-#. curve at diff stage
-==to --do==
-remove below 500
-Savitzky-Golay (SG)
-spectral outlier
-********************************oc outlier
 
-crop only
-==stage2=====
-rmse, rpd, rpiq
-==note===
-rmse percentage: https://www.mdpi.com/1999-4907/15/5/818
