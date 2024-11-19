@@ -8,7 +8,7 @@ from kennard_stone import train_test_split as ks_split
 
 cols = []
 spec = 400
-while spec <= 500:
+while spec <= 499.5:
     val = spec
     if int(val) == val:
         val = int(val)
@@ -16,7 +16,6 @@ while spec <= 500:
     cols.append(val)
     spec = spec+0.5
 
-cols = cols + ["oc"]
 df = pd.read_csv('../data/lucas.csv')
 df = df.drop(columns=cols).reset_index(drop=True).copy()
 reflectance_cols = [col for col in df.columns if col != 'oc']
@@ -24,6 +23,7 @@ reflectance_cols = [col for col in df.columns if col != 'oc']
 X = df[reflectance_cols].values
 y = df['oc'].values
 X_smooth = savgol_filter(X, window_length=41, polyorder=2, deriv=1, axis=1)
+df.loc[:, reflectance_cols] = X_smooth
 
 pca = PCA(n_components=2)
 X_pca = pca.fit_transform(X_smooth)

@@ -8,7 +8,7 @@ from kennard_stone import train_test_split as ks_split
 
 cols = []
 spec = 400
-while spec <= 500:
+while spec <= 499.5:
     val = spec
     if int(val) == val:
         val = int(val)
@@ -16,13 +16,9 @@ while spec <= 500:
     cols.append(val)
     spec = spec+0.5
 
-cols = cols + ["oc"]
-df = pd.read_csv('../data/lucas_r_min.csv')
+df = pd.read_csv('../data/lucas_min.csv')
 df = df.drop(columns=cols).reset_index(drop=True).copy()
 reflectance_cols = [col for col in df.columns if col != 'oc']
-
-
-
 X = df[reflectance_cols].values
 
 original_signal = X[100]
@@ -51,7 +47,7 @@ y_scaled = scaler_y.fit_transform(df_filtered[['oc']])
 
 df_filtered_scaled = pd.DataFrame(X_scaled, columns=reflectance_cols)
 df_filtered_scaled['oc'] = y_scaled
-df_filtered_scaled.to_csv('../data/lucas_r_asa_min.csv', index=False)
+df_filtered_scaled.to_csv('../data/lucas_asa_min.csv', index=False)
 
 X_train, X_test, y_train, y_test = ks_split(X_scaled, y_scaled.ravel(), test_size=0.25)
 
