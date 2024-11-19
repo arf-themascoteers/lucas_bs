@@ -67,8 +67,8 @@ class ANN(nn.Module):
 
 
 class Algorithm_bsdrcnn(Algorithm):
-    def __init__(self, train_x, test_x, train_y, test_y, target_size, fold, reporter, verbose):
-        super().__init__(train_x, test_x, train_y, test_y, target_size, fold, reporter, verbose)
+    def __init__(self, train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose):
+        super().__init__(train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose)
 
         torch.manual_seed(1)
         torch.cuda.manual_seed(1)
@@ -91,12 +91,10 @@ class Algorithm_bsdrcnn(Algorithm):
         self.write_columns()
         optimizer = torch.optim.Adam(self.ann.parameters(), lr=self.lr, weight_decay=self.lr/10)
         linterp = LinearInterpolationModule(self.X_train, self.device)
-        y = self.y_train
         for epoch in range(self.total_epoch):
             optimizer.zero_grad()
             y_hat = self.ann(linterp)
-            y_hat = y_hat.reshape(-1)
-            loss = self.criterion(y_hat, y)
+            loss = self.criterion(y_hat, self.y_train)
             loss.backward()
             optimizer.step()
             self.report(epoch)

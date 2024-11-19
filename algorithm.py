@@ -6,7 +6,7 @@ import numpy as np
 
 
 class Algorithm(ABC):
-    def __init__(self, train_x, test_x, train_y, test_y, target_size, fold, reporter, verbose):
+    def __init__(self, train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose):
         self.train_x = train_x
         self.test_x = test_x
         self.train_y = train_y
@@ -62,11 +62,11 @@ class Algorithm(ABC):
         return name_part
 
     @staticmethod
-    def create(name, train_x, test_x, train_y, test_y, target_size, fold, reporter, verbose):
+    def create(name, train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose):
         class_name = f"Algorithm_{name}"
         module = importlib.import_module(f"algorithms.algorithm_{name}")
         clazz = getattr(module, class_name)
-        return clazz(train_x, test_x, train_y, test_y, target_size, fold, reporter, verbose)
+        return clazz(train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose)
 
     @abstractmethod
     def get_indices(self):

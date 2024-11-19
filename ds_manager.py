@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 class DSManager:
     def __init__(self, name="lucas_r",folds=1):
         self.name = name
-        dataset_path = f"data/{name}.csv"
+        dataset_path = f"data/{self.name}.csv"
         df = pd.read_csv(dataset_path)
         self.folds = folds
         self.data = df.to_numpy()
