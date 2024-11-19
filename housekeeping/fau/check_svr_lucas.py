@@ -5,8 +5,9 @@ import numpy as np
 from sklearn.svm import SVR
 
 data = pd.read_csv("../../data/lucas_crop.csv")
+#data = data.sample(frac=0.3)
 
-idx = [i for i in range(100,4100,10)]
+idx = [i for i in range(100,4100,60)]
 
 X = data.iloc[:, idx]
 y = data.iloc[:, -1]
