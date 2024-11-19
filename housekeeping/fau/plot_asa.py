@@ -17,7 +17,7 @@ while spec <= 499.5:
     cols.append(val)
     spec = spec+0.5
 
-df = pd.read_csv('../data/lucas_min.csv')
+df = pd.read_csv('../../data/min_lucas.csv')
 df = df.drop(columns=cols).reset_index(drop=True).copy()
 reflectance_cols = [col for col in df.columns if col != 'oc']
 X = df[reflectance_cols].values
@@ -51,14 +51,14 @@ y_scaled = scaler_y.fit_transform(df_filtered[['oc']])
 
 df_filtered_scaled = pd.DataFrame(X_scaled, columns=reflectance_cols)
 df_filtered_scaled['oc'] = y_scaled
-df_filtered_scaled.to_csv('../data/lucas_asa_min.csv', index=False)
+
 
 X_train, X_test, y_train, y_test = ks_split(X_scaled, y_scaled.ravel(), test_size=0.25)
 
 print(X_train.shape)
 print(y_test.shape)
 
-fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+fig, axes = plt.subplots(2, 3, figsize=(12, 10))
 colors = ['blue', 'green', 'red', 'purple', 'orange']
 for i, idx in enumerate(shortlisted):
     axes[0][0].plot(X[idx], color=colors[i], label=f'Signal {idx}')
@@ -69,6 +69,12 @@ for i, idx in enumerate(shortlisted):
     axes[0][1].plot(X_scaled[idx], color=colors[i], label=f'Scaled Signal {idx}')
 axes[0][1].set_title('MinMax Scaled Signals')
 axes[0][1].legend()
+
+for i, idx in enumerate(shortlisted):
+    axes[0][2].plot(X_smooth[idx], color=colors[i], label=f'Scaled Signal {idx}')
+    break
+axes[0][2].set_title('MinMax Scaled Signals')
+axes[0][2].legend()
 
 axes[1][0].hist(y, bins=150, color='blue', alpha=0.7, edgecolor='black')
 axes[1][0].set_title('Distribution of Original y')
