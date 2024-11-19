@@ -16,7 +16,7 @@ while spec <= 499.5:
     cols.append(val)
     spec = spec+0.5
 
-df = pd.read_csv('../data/lucas.csv')
+df = pd.read_csv('../../data/lucas.csv')
 df = df.drop(columns=cols).reset_index(drop=True).copy()
 reflectance_cols = [col for col in df.columns if col != 'oc']
 
@@ -41,7 +41,7 @@ y_scaled = scaler_y.fit_transform(df_filtered[['oc']])
 
 df_filtered_scaled = pd.DataFrame(X_scaled, columns=reflectance_cols)
 df_filtered_scaled['oc'] = y_scaled
-df_filtered_scaled.to_csv('../data/lucas_asa.csv', index=False)
+df_filtered_scaled.to_csv('../../data/lucas_asa.csv', index=False)
 
 X_train, X_test, y_train, y_test = ks_split(X_scaled, y_scaled.ravel(), test_size=0.25)
 
