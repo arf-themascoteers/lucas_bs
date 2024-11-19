@@ -24,19 +24,38 @@ class Algorithm(ABC):
         self._fit()
         train_y_hat = self.predict_train()
         test_y_hat = self.predict_test()
-        train_r2, train_rmse = self.calculate_r2_rmse(self.train_y, train_y_hat)
-        r2, rmse = self.calculate_r2_rmse(self.test_y, test_y_hat)
-        self.reporter.write_details(self.get_name(),self.dataset,self.target_size, r2, rmse, train_r2, train_rmse, self.fold, self.get_indices())
+        train_r2, train_rmse, train_rpd, train_rpiq = self.calculate_metrics(self.train_y, train_y_hat)
+        r2, rmse, rpd, rpiq = self.calculate_metrics(self.test_y, test_y_hat)
+        self.reporter.write_details(self.get_name(),self.dataset.name,self.target_size,
+                                    r2, rpd, rpiq, rmse,
+                                    train_r2, train_rmse,train_rpd, train_rpiq,
+                                    self.fold, self.get_indices())
 
-    @staticmethod
-    def calculate_r2_rmse(y_test, y_pred):
+    def calculate_metrics(self, y_test, y_pred):
         y_test = Algorithm.convert_to_numpy(y_test.detach().cpu().numpy())
         y_pred = Algorithm.convert_to_numpy(y_pred.detach().cpu().numpy())
+
         r2 = r2_score(y_test, y_pred)
-        rmse = np.sqrt(mean_squared_error(y_test, y_pred))
         r2 = max(r2,0)
+
+        y_original = self.dataset.scaler_y.inverse_transform(y_test.reshape(-1, 1)).ravel()
+        y_pred_original = self.dataset.scaler_y.inverse_transform(y_pred.reshape(-1, 1)).ravel()
+
+        rmse = np.sqrt(mean_squared_error(y_original, y_pred_original))
         rmse = max(rmse,0)
-        return round(r2, 2), round(rmse, 2)
+
+        std_dev = np.std(y_original, ddof=1)
+        rpd = std_dev/rmse
+        rpd = max(rpd, 0)
+
+        iqr = np.percentile(y_original, 75) - np.percentile(y_original, 25)
+        rpiq = iqr/rmse
+        rpiq = max(rpiq, 0)
+
+        mean_val = np.mean(y_original)
+        rmse = (rmse/mean_val)*100
+
+        return round(r2, 2), round(rmse, 2), round(rpd, 2), round(rpiq, 2)
 
     @staticmethod
     def convert_to_numpy(t):

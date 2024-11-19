@@ -18,7 +18,7 @@ class DSManager:
         X_scaled = scaler_X.fit_transform(self.data[:,0:-1])
         y_scaled = scaler_y.fit_transform(self.data[:,-1].reshape(-1,1)).ravel()
 
-        self.y_scaled = y_scaled
+        self.scaler_y = scaler_y
 
     def get_k_folds(self):
         for i in range(self.folds):

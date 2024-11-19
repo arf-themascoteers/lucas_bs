@@ -91,7 +91,7 @@ class Algorithm_bsdrcnn(Algorithm):
         self.linterp_train = LinearInterpolationModule(self.train_x, self.device)
         self.linterp_test = LinearInterpolationModule(self.test_x, self.device)
 
-        self.reporter.create_epoch_report(self.get_name(), self.dataset, self.target_size, self.fold)
+        self.reporter.create_epoch_report(self.get_name(), self.dataset.name, self.target_size, self.fold)
 
     def _fit(self):
         self.ann.train()
@@ -115,7 +115,7 @@ class Algorithm_bsdrcnn(Algorithm):
     def write_columns(self):
         if not self.verbose:
             return
-        columns = ["epoch","r2","rmse","train_r2","train_rmse"] + [f"band_{index+1}" for index in range(self.target_size)]
+        columns = ["epoch","r2","rmse","rpd","rpiq","train_r2","train_rmse","train_rpd","train_rpiq"] + [f"band_{index+1}" for index in range(self.target_size)]
         print("".join([str(i).ljust(20) for i in columns]))
 
     def report(self, epoch):
@@ -129,8 +129,8 @@ class Algorithm_bsdrcnn(Algorithm):
         train_y_hat = self.predict_train()
         test_y_hat = self.predict_test()
 
-        r2, rmse = self.calculate_r2_rmse(self.test_y, test_y_hat)
-        train_r2, train_rmse = self.calculate_r2_rmse(self.train_y, train_y_hat)
+        r2, rmse = self.calculate_metrics(self.test_y, test_y_hat)
+        train_r2, train_rmse = self.calculate_metrics(self.train_y, train_y_hat)
 
         self.reporter.report_epoch_bsdr(epoch, r2, rmse, train_r2, train_rmse, bands)
         cells = [epoch, r2, rmse, train_r2, train_rmse] + bands

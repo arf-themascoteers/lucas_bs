@@ -1,17 +1,9 @@
-import pandas as pd
+import numpy as np
 
-data = {
-    'a': [1, 1, 2, 2, 1,],
-    'b': [2, 2, 3, 3, 2],
-    'c': [3, 3, 4, 4, 30],
-    'd': [10, 20, 30, 40, 50],
-    'e': [15, 25, 35, 45, 55],
-    'f': ['alpha', 'beta', 'gamma', 'delta', 'epsilon']
-}
-df = pd.DataFrame(data)
+data = [10, 20, 30, 40]
 
-result_df = df.groupby(['a', 'b', 'c']).agg(
-    {'d': 'mean', 'e': 'mean', 'f': lambda x: '---'.join(x)}
-).reset_index()
+pop_std = np.std(data, ddof=0)
+sample_std = np.std(data, ddof=1)
 
-print(result_df)
+print(pop_std)
+print(sample_std)

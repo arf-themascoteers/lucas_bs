@@ -19,11 +19,11 @@ class Reporter:
 
         if not os.path.exists(self.summary_file):
             with open(self.summary_file, 'w') as file:
-                file.write("algorithm,dataset,target_size,r2,rmse,train_r2,train_rmse\n")
+                file.write("algorithm,dataset,target_size,r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq\n")
 
         if not os.path.exists(self.details_file):
             with open(self.details_file, 'w') as file:
-                file.write("algorithm,dataset,target_size,r2,rmse,train_r2,train_rmse,fold,selected_bands\n")
+                file.write("algorithm,dataset,target_size,r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq,fold,selected_bands\n")
 
         self.current_epoch_report_file = None
 
@@ -59,8 +59,12 @@ class Reporter:
                 "target_size":target_size,
                 "r2" : average['r2'],
                 "rmse" : average['rmse'],
+                "rpd" : average['rpd'],
+                "rpiq" : average['rpiq'],
                 "train_r2" : average['train_r2'],
-                "train_rmse" : average['train_rmse']
+                "train_rmse" : average['train_rmse'],
+                "train_rpd" : average['train_rpd'],
+                "train_rpiq" : average['train_rpiq']
             }
             summary_df.to_csv(self.summary_file, index=False)
         else:
@@ -69,11 +73,11 @@ class Reporter:
                 (summary_df['dataset'] == dataset) &
                 (summary_df['target_size'] == target_size)
                 ,
-                ["r2","rmse","train_r2","train_rmse"]
+                ["r2","rmse","rpd","rpiq","train_r2","train_rmse","train_rpd","train_rpiq"]
             ] = [average['r2'],average['rmse'],average['train_r2'],average['train_rmse']]
             summary_df.to_csv(self.summary_file, index=False)
 
-    def write_details(self, algorithm,dataset, target_size, r2,rmse,train_r2,train_rmse,fold,selected_bands):
+    def write_details(self, algorithm,dataset, target_size, r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq,fold,selected_bands):
         selected_bands = sorted(selected_bands)
         with open(self.details_file, 'a') as file:
             file.write(f"{algorithm},{dataset},{target_size},"
@@ -107,7 +111,7 @@ class Reporter:
     def report_epoch_bsdr(self, epoch, r2, rmse, train_r2, train_rmse,selected_bands):
         if not os.path.exists(self.current_epoch_report_file):
             with open(self.current_epoch_report_file, 'w') as file:
-                columns = ["epoch","r2","rmse","train_r2","train_rmse"] + [f"band_{index+1}" for index in range(len(selected_bands))]
+                columns = ["epoch","r2","rmse","rpd","rpiq","train_r2","train_rmse","train_rpd","train_rpiq"] + [f"band_{index+1}" for index in range(len(selected_bands))]
                 file.write(",".join(columns)+"\n")
 
         with open(self.current_epoch_report_file, 'a') as file:
