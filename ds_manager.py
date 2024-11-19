@@ -1,5 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
 
 
 class DSManager:
@@ -8,7 +9,16 @@ class DSManager:
         dataset_path = f"data/{self.name}.csv"
         df = pd.read_csv(dataset_path)
         self.folds = folds
+        df = df.sample(frac=1).reset_index(drop=True)
         self.data = df.to_numpy()
+
+        scaler_X = MinMaxScaler()
+        scaler_y = MinMaxScaler()
+
+        X_scaled = scaler_X.fit_transform(self.data[:,0:-1])
+        y_scaled = scaler_y.fit_transform(self.data[:,-1].reshape(-1,1)).ravel()
+
+        self.y_scaled = y_scaled
 
     def get_k_folds(self):
         for i in range(self.folds):
