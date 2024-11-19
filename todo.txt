@@ -13,3 +13,9 @@ rmse, rpd, rpiq
 
 ==note===
 rmse percentage: https://www.mdpi.com/1999-4907/15/5/818
+
+==to --do==
+
+Savitzky-Golay (SG)
+spectral outlier
+oc outlier
