@@ -1,7 +1,7 @@
 from task_runner import TaskRunner
 
 if __name__ == '__main__':
-    tag = "pCrop50"
+    tag = "baseline"
     tasks = {
         "algorithms" : ["bsdrcnn"],
         "datasets": ["lucas_r"],
