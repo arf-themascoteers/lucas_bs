@@ -114,7 +114,8 @@ class Algorithm_asa(Algorithm):
 
         for epoch in range(self.total_epoch):
             optimizer_ann.zero_grad()
-            y_hat = self.sae.encoder(self.train_x)
+            hidden = self.sae.encoder(self.train_x)
+            y_hat = self.ann(hidden)
             loss = self.criterion_ann(y_hat, self.train_y)
             loss.backward()
             optimizer_ann.step()
