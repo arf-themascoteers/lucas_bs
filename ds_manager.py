@@ -1,5 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from kennard_stone import train_test_split as ks_split
 from sklearn.preprocessing import MinMaxScaler, RobustScaler
 
 
@@ -20,7 +21,10 @@ class DSManager:
             self.data[:,-1] = self.scaler_y.fit_transform(self.data[:,-1].reshape(-1,1)).ravel()
 
     def get_k_folds(self):
-        for i in range(self.folds):
+        train_data, test_data = ks_split(self.data, test_size=0.25)
+        yield train_data[:, 0:-1], train_data[:, -1], test_data[:, 0:-1], test_data[:, -1]
+
+        for i in range(self.folds-1):
             train_data, test_data = train_test_split(self.data, test_size=0.25, random_state=42+i)
             yield train_data[:,0:-1], train_data[:,-1], test_data[:,0:-1], test_data[:,-1]
 
