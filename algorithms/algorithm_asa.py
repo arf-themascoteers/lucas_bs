@@ -124,3 +124,9 @@ class Algorithm_asa(Algorithm):
     def get_indices(self):
         indices = torch.round(self.ann.get_indices() * self.original_feature_size ).to(torch.int64).tolist()
         return list(dict.fromkeys(indices))
+
+    def predict_train(self):
+        return self.ann(self.train_x)
+
+    def predict_test(self):
+        return self.ann(self.test_x)
