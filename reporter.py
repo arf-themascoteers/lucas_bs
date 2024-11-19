@@ -43,7 +43,7 @@ class Reporter:
         if df.empty:
             return
 
-        average = df[['r2', 'rmse', 'rpd','rpiq' 'train_r2', 'train_rmse','train_rpd','train_rpiq']].mean()
+        average = df[['r2', 'rmse', 'rpd','rpiq','train_r2', 'train_rmse','train_rpd','train_rpiq']].mean()
 
         summary_df = pd.read_csv(self.summary_file)
 
