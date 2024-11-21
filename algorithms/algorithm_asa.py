@@ -111,7 +111,7 @@ class Algorithm_asa(Algorithm):
                 loss.backward()
                 optimizer_sae.step()
             if self.verbose and epoch % 10 == 0:
-                print(loss.item())
+                print("AE",loss.item())
 
         for param in self.sae.encoder.parameters():
             param.requires_grad = False
@@ -129,7 +129,7 @@ class Algorithm_asa(Algorithm):
                 loss.backward()
                 optimizer_ann.step()
             if self.verbose and epoch % 10 == 0:
-                print(loss.item())
+                print("CNN",loss.item())
 
         torch.save(self.ann.state_dict(), 'model.pth')
         return self
@@ -138,7 +138,23 @@ class Algorithm_asa(Algorithm):
         return list(range(500))
 
     def predict_train(self):
-        return self.ann(self.train_x)
+        dataset = TensorDataset(self.train_x)
+        dataloader = DataLoader(dataset, batch_size=20)
+        outputs = []
+        for batch in dataloader:
+            batch_x = batch[0]
+            hidden = self.sae.encoder(batch_x)
+            batch_output = self.ann(hidden)
+            outputs.append(batch_output)
+        return torch.cat(outputs, dim=0)
 
     def predict_test(self):
-        return self.ann(self.test_x)
+        dataset = TensorDataset(self.test_x)
+        dataloader = DataLoader(dataset, batch_size=20)
+        outputs = []
+        for batch in dataloader:
+            batch_x = batch[0]
+            hidden = self.sae.encoder(batch_x)
+            batch_output = self.ann(hidden)
+            outputs.append(batch_output)
+        return torch.cat(outputs, dim=0)
