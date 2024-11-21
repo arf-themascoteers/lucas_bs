@@ -37,7 +37,7 @@ class ANN(nn.Module):
             torch.tensor([ANN.inverse_sigmoid_torch(init_vals[i + 1]) for i in range(self.target_size)],
                          requires_grad=True).to(self.device))
         self.indices.requires_grad = False
-        last_layer_input = 192
+        last_layer_input = 128
         self.cnn = nn.Sequential(
             nn.Conv1d(1,32,kernel_size=8, stride=1, padding=0),
             nn.BatchNorm1d(32),
