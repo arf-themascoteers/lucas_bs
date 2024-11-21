@@ -5,7 +5,7 @@ if __name__ == '__main__':
     tasks = {
         "algorithms" : ["bsdrcnn"],
         "datasets": ["lucas"],
-        "target_sizes" : [500]
+        "target_sizes" : [50]
     }
     ev = TaskRunner(tasks,1,tag,verbose=True)
     ev.evaluate()

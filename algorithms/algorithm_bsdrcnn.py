@@ -36,21 +36,21 @@ class ANN(nn.Module):
         self.indices = nn.Parameter(
             torch.tensor([ANN.inverse_sigmoid_torch(init_vals[i + 1]) for i in range(self.target_size)],
                          requires_grad=True).to(self.device))
-        last_layer_input = 640
+        last_layer_input = 192
         self.cnn = nn.Sequential(
             nn.Conv1d(1,32,kernel_size=8, stride=1, padding=0),
             nn.BatchNorm1d(32),
             nn.LeakyReLU(),
             nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
 
-            nn.Conv1d(32, 64, kernel_size=8, stride=1, padding=0),
+            nn.Conv1d(32, 64, kernel_size=4, stride=1, padding=0),
             nn.BatchNorm1d(64),
             nn.LeakyReLU(),
-            nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
+            nn.MaxPool1d(kernel_size=2, stride=2, padding=0),
 
-            nn.Conv1d(64, 128, kernel_size=8, stride=1, padding=0),
-            nn.BatchNorm1d(128),
-            nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
+            # nn.Conv1d(64, 128, kernel_size=8, stride=1, padding=0),
+            # nn.BatchNorm1d(128),
+            # nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
 
             nn.Flatten(start_dim=1),
             nn.Linear(last_layer_input,1)
@@ -89,7 +89,7 @@ class Algorithm_bsdrcnn(Algorithm):
         self.criterion = torch.nn.MSELoss()
         self.class_size = 1
         self.lr = 0.001
-        self.total_epoch = 500
+        self.total_epoch = 700
 
         self.ann = ANN(self.target_size)
         self.ann.to(self.device)

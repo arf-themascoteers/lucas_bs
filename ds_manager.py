@@ -16,15 +16,15 @@ class DSManager:
         scaler_X = MinMaxScaler()
         self.scaler_y = RobustScaler()
 
-        if not name.endswith("asa"):
-            self.data[:,0:-1] = scaler_X.fit_transform(self.data[:,0:-1])
-            self.data[:,-1] = self.scaler_y.fit_transform(self.data[:,-1].reshape(-1,1)).ravel()
+        #if not name.endswith("asa"):
+        self.data[:,0:-1] = scaler_X.fit_transform(self.data[:,0:-1])
+        self.data[:,-1] = self.scaler_y.fit_transform(self.data[:,-1].reshape(-1,1)).ravel()
 
     def get_k_folds(self):
-        train_data, test_data = ks_split(self.data, test_size=0.25)
-        yield train_data[:, 0:-1], train_data[:, -1], test_data[:, 0:-1], test_data[:, -1]
+        # train_data, test_data = ks_split(self.data, test_size=0.25)
+        # yield train_data[:, 0:-1], train_data[:, -1], test_data[:, 0:-1], test_data[:, -1]
 
-        for i in range(self.folds-1):
+        for i in range(self.folds):
             train_data, test_data = train_test_split(self.data, test_size=0.25, random_state=42+i)
             yield train_data[:,0:-1], train_data[:,-1], test_data[:,0:-1], test_data[:,-1]
 
