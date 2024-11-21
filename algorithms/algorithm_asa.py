@@ -79,7 +79,7 @@ class Algorithm_asa(Algorithm):
         self.criterion = torch.nn.MSELoss()
         self.class_size = 1
         self.lr = 0.001
-        self.total_epoch = 2
+        self.total_epoch = 400
 
         self.sae = SAE(self.train_x.shape[1],self.target_size)
         self.sae.to(self.device)
