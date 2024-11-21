@@ -5,7 +5,7 @@ from sklearn.preprocessing import MinMaxScaler, RobustScaler
 
 
 class DSManager:
-    def __init__(self, name="lucas_r",folds=1):
+    def __init__(self, name="lucas",folds=1):
         self.name = name
         dataset_path = f"data/{self.name}.csv"
         df = pd.read_csv(dataset_path)
@@ -30,10 +30,14 @@ class DSManager:
 
 
 if __name__ == '__main__':
+    import numpy as np
     ds = DSManager(folds=1)
     for train_x, train_y, test_x, test_y in ds.get_k_folds():
         print(train_x.shape, train_y.shape, test_x.shape, test_y.shape)
-
-    ds = DSManager(folds=4)
-    for train_x, train_y, test_x, test_y in ds.get_k_folds():
-        print(train_x.shape, train_y.shape, test_x.shape, test_y.shape)
+        print(np.min(train_y))
+        print(np.max(train_y))
+        print(np.max(train_y)-np.min(train_y))
+    #
+    # ds = DSManager(folds=4)
+    # for train_x, train_y, test_x, test_y in ds.get_k_folds():
+    #     print(train_x.shape, train_y.shape, test_x.shape, test_y.shape)

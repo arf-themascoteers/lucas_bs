@@ -1,6 +1,7 @@
 from algorithm import Algorithm
 import torch
 import torch.nn as nn
+from torch.utils.data import DataLoader, TensorDataset
 
 
 class SAE(nn.Module):
@@ -33,7 +34,7 @@ class ANN(nn.Module):
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.target_size = target_size
-        last_layer_input = 684
+        last_layer_input = 640
         self.cnn = nn.Sequential(
             nn.Conv1d(1,32,kernel_size=8, stride=1, padding=0),
             nn.BatchNorm1d(32),
@@ -55,19 +56,11 @@ class ANN(nn.Module):
         num_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
         print("Number of learnable parameters:", num_params)
 
-    @staticmethod
-    def inverse_sigmoid_torch(x):
-        return -torch.log(1.0 / x - 1.0)
-
-    def forward(self, linterp):
-        outputs = linterp(self.get_indices())
-        outputs = outputs.reshape(outputs.shape[0], 1, outputs.shape[1])
-        soc_hat = self.cnn(outputs)
-        soc_hat = soc_hat.reshape(-1)
-        return soc_hat
-
-    def get_indices(self):
-        return torch.sigmoid(self.indices)
+    def forward(self, X):
+        X = X.reshape(X.shape[0], 1, X.shape[1])
+        X = self.cnn(X)
+        X = X.reshape(-1)
+        return X
 
 
 class Algorithm_asa(Algorithm):
@@ -86,7 +79,7 @@ class Algorithm_asa(Algorithm):
         self.criterion = torch.nn.MSELoss()
         self.class_size = 1
         self.lr = 0.001
-        self.total_epoch = 700
+        self.total_epoch = 2
 
         self.sae = SAE(self.train_x.shape[1],self.target_size)
         self.sae.to(self.device)
@@ -106,25 +99,43 @@ class Algorithm_asa(Algorithm):
         optimizer_sae = torch.optim.Adam(self.sae.parameters(), lr=self.lr, weight_decay=self.lr/10)
         optimizer_ann = torch.optim.Adam(self.ann.parameters(), lr=self.lr, weight_decay=self.lr/10)
 
-        for epoch in range(self.total_epoch):
-            optimizer_sae.zero_grad()
-            x_hat = self.sae(self.train_x)
-            loss = self.criterion_sae(x_hat, self.train_x)
-            loss.backward()
-            optimizer_sae.step()
+        dataset = TensorDataset(self.train_x)
+        dataloader = DataLoader(dataset, batch_size=20, shuffle=True)
 
         for epoch in range(self.total_epoch):
-            optimizer_ann.zero_grad()
-            hidden = self.sae.encoder(self.train_x)
-            y_hat = self.ann(hidden)
-            loss = self.criterion_ann(y_hat, self.train_y)
-            loss.backward()
-            optimizer_ann.step()
+            for batch in dataloader:
+                batch_x = batch[0]
+                optimizer_sae.zero_grad()
+                x_hat = self.sae(batch_x)
+                loss = self.criterion_sae(x_hat, batch_x)
+                loss.backward()
+                optimizer_sae.step()
+            if self.verbose and epoch % 10 == 0:
+                print(loss.item())
+
+        for param in self.sae.encoder.parameters():
+            param.requires_grad = False
+
+        dataset = TensorDataset(self.train_x, self.train_y)
+        dataloader = DataLoader(dataset, batch_size=20, shuffle=True)
+
+        for epoch in range(self.total_epoch):
+            for batch in dataloader:
+                batch_x, batch_y = batch
+                optimizer_ann.zero_grad()
+                hidden = self.sae.encoder(batch_x)
+                y_hat = self.ann(hidden)
+                loss = self.criterion_ann(y_hat, batch_y)
+                loss.backward()
+                optimizer_ann.step()
+            if self.verbose and epoch % 10 == 0:
+                print(loss.item())
+
+        torch.save(self.ann.state_dict(), 'model.pth')
         return self
 
     def get_indices(self):
-        indices = torch.round(self.ann.get_indices() * self.original_feature_size ).to(torch.int64).tolist()
-        return list(dict.fromkeys(indices))
+        return list(range(500))
 
     def predict_train(self):
         return self.ann(self.train_x)
