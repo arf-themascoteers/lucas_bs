@@ -36,6 +36,7 @@ class ANN(nn.Module):
         self.indices = nn.Parameter(
             torch.tensor([ANN.inverse_sigmoid_torch(init_vals[i + 1]) for i in range(self.target_size)],
                          requires_grad=True).to(self.device))
+        self.indices.requires_grad = False
         last_layer_input = 192
         self.cnn = nn.Sequential(
             nn.Conv1d(1,32,kernel_size=8, stride=1, padding=0),
@@ -73,9 +74,9 @@ class ANN(nn.Module):
         return torch.sigmoid(self.indices)
 
 
-class Algorithm_bsdrcnn(Algorithm):
+class Algorithm_bsdrcnn_50_st(Algorithm):
     def __init__(self, dataset, train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose):
-        super().__init__(dataset, train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose)
+        super().__init__(dataset, train_x, train_y, test_x, test_y, 50, fold, reporter, verbose)
 
         torch.manual_seed(1)
         torch.cuda.manual_seed(1)
@@ -105,6 +106,8 @@ class Algorithm_bsdrcnn(Algorithm):
         self.write_columns()
         optimizer = torch.optim.Adam(self.ann.parameters(), lr=self.lr, weight_decay=self.lr/10)
         for epoch in range(self.total_epoch):
+            if epoch > self.total_epoch/2:
+                self.ann.indices.requires_grad = True
             optimizer.zero_grad()
             y_hat = self.predict_train()
             loss = self.criterion(y_hat, self.train_y)
