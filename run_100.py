@@ -7,5 +7,5 @@ if __name__ == '__main__':
         "datasets": ["lucas"],
         "target_sizes" : [100]
     }
-    ev = TaskRunner(tasks,10,tag,verbose=False)
+    ev = TaskRunner(tasks,1,tag,verbose=False)
     ev.evaluate()
