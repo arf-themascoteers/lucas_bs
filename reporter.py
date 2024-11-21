@@ -74,7 +74,7 @@ class Reporter:
                 (summary_df_original['target_size'] == target_size)
                 ,
                 ["r2","rmse","rpd","rpiq","train_r2","train_rmse","train_rpd","train_rpiq"]
-            ] = [average['r2'],average['rmse'],average['train_r2'],average['train_rmse']]
+            ] = [average['r2'],average['rmse'],average['rpd'],average['rpiq'],average['train_r2'],average['train_rmse'],average['rpd'],average['rpiq']]
             summary_df_original.to_csv(self.summary_file, index=False)
 
     def write_details(self, algorithm,dataset, target_size, r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq,fold,selected_bands):
