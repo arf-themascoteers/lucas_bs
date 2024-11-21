@@ -74,7 +74,7 @@ class ANN(nn.Module):
         return torch.sigmoid(self.indices)
 
 
-class Algorithm_bsdrcnn_50_st(Algorithm):
+class Algorithm_bsdrcnn_50_semi(Algorithm):
     def __init__(self, dataset, train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose):
         super().__init__(dataset, train_x, train_y, test_x, test_y, 50, fold, reporter, verbose)
 
