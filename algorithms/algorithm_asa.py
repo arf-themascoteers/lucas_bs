@@ -131,7 +131,8 @@ class Algorithm_asa(Algorithm):
             if self.verbose and epoch % 10 == 0:
                 print("CNN",loss.item())
 
-        torch.save(self.ann.state_dict(), 'model.pth')
+        torch.save(self.ann.state_dict(), 'ann.pth')
+        torch.save(self.sae.state_dict(), 'sae.pth')
         return self
 
     def get_indices(self):
