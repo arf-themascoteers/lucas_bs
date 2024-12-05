@@ -1,11 +1,13 @@
 from task_runner import TaskRunner
 
 if __name__ == '__main__':
-    tag = "asa"
+    tag = "fc2"
     tasks = {
-        "algorithms" : ["asa"],
-        "datasets": ["lucas"],
-        "target_sizes" : [500]
+        "algorithms" : ["bsdrfc"],
+        "datasets": ["lucas_asa"],
+        "target_sizes" : [16,50,500],
+        "scale_y" : ["robust","minmax"],
+        "mode" : ["static"]
     }
-    ev = TaskRunner(tasks,1,tag,verbose=True)
+    ev = TaskRunner(tasks,5,tag,verbose=True)
     ev.evaluate()

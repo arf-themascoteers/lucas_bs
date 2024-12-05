@@ -1,6 +1,7 @@
 from task_runner import TaskRunner
 
 if __name__ == '__main__':
+    TEST = False
     tag = "check"
     tasks = {
         "algorithms" : ["bsdrcnn","bsdrfc"],
@@ -9,5 +10,19 @@ if __name__ == '__main__':
         "scale_y" : ["robust"],
         "mode" : ["static","dyn","semi"]
     }
-    ev = TaskRunner(tasks,10,tag,verbose=False)
+    folds = 10
+    verbose = False
+
+    if TEST:
+        tasks = {
+            "algorithms": ["bsdrcnn"],
+            "datasets": ["lucas"],
+            "target_sizes": [16],
+            "scale_y": ["robust"],
+            "mode": ["static"]
+        }
+        folds = 1
+        verbose = True
+
+    ev = TaskRunner(tasks,folds,tag,verbose=verbose)
     ev.evaluate()
