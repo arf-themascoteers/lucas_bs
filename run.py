@@ -6,7 +6,7 @@ if __name__ == '__main__':
     tasks = {
         "algorithms" : ["bsdrcnn","bsdrfc"],
         "datasets": ["lucas"],
-        "target_sizes" : [8,16,32,65,131,262,525,1050,2100,4200],
+        "target_sizes" : [8,16,32,64,128,256,512,1024,2048,500,4200],
         "scale_y" : ["robust"],
         "mode" : ["static","dyn","semi"]
     }
@@ -17,7 +17,7 @@ if __name__ == '__main__':
         tasks = {
             "algorithms": ["bsdrcnn"],
             "datasets": ["min_lucas"],
-            "target_sizes": [8],
+            "target_sizes": [2048],
             "scale_y": ["robust"],
             "mode": ["static"]
         }

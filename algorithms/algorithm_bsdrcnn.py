@@ -56,141 +56,188 @@ class ANN(nn.Module):
             )
         if target_size == 16:
             return nn.Sequential(
-                nn.Conv1d(1, 16, kernel_size=4, stride=1, padding=0),
-                nn.BatchNorm1d(16),
-                nn.LeakyReLU(),
-                nn.MaxPool1d(kernel_size=2, stride=2, padding=0),
-                nn.Conv1d(16, 32, kernel_size=3, stride=1, padding=0),
+                nn.Conv1d(1, 32, kernel_size=4, stride=1, padding=0),
                 nn.BatchNorm1d(32),
                 nn.LeakyReLU(),
                 nn.MaxPool1d(kernel_size=2, stride=2, padding=0),
+                nn.Conv1d(32, 64, kernel_size=2, stride=1, padding=0),
+                nn.BatchNorm1d(64),
+                nn.LeakyReLU(),
+                nn.MaxPool1d(kernel_size=2, stride=2, padding=0),
                 nn.Flatten(start_dim=1),
-                nn.Linear(64, 1)
+                nn.Linear(128, 1)
             )
-        if target_size == 50:
+        if target_size == 32:
             return nn.Sequential(
-                nn.Conv1d(1, 16, kernel_size=8, stride=1, padding=0),
-                nn.BatchNorm1d(16),
+                nn.Conv1d(1, 32, kernel_size=8, stride=1, padding=0),
+                nn.BatchNorm1d(32),
                 nn.LeakyReLU(),
                 nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
-                nn.Conv1d(16, 32, kernel_size=4, stride=1, padding=0),
-                nn.BatchNorm1d(32),
+                nn.Conv1d(32, 64, kernel_size=2, stride=1, padding=0),
+                nn.BatchNorm1d(64),
                 nn.LeakyReLU(),
                 nn.MaxPool1d(kernel_size=2, stride=2, padding=0),
                 nn.Flatten(start_dim=1),
-                nn.Linear(96, 1)
+                nn.Linear(128, 1)
             )
 
-        if target_size == 100:
+        if target_size == 64:
             return nn.Sequential(
-                nn.Conv1d(1, 16, kernel_size=8, stride=1, padding=0),
-                nn.BatchNorm1d(16),
+                nn.Conv1d(1, 32, kernel_size=8, stride=1, padding=0),
+                nn.BatchNorm1d(32),
                 nn.LeakyReLU(),
                 nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
-                nn.Conv1d(16, 32, kernel_size=8, stride=1, padding=0),
-                nn.BatchNorm1d(32),
+                nn.Conv1d(32, 64, kernel_size=4, stride=1, padding=0),
+                nn.BatchNorm1d(64),
                 nn.LeakyReLU(),
                 nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
                 nn.Flatten(start_dim=1),
                 nn.Linear(128, 1)
             )
-        if target_size == 200:
+        if target_size == 128:
             return nn.Sequential(
-                nn.Conv1d(1, 16, kernel_size=8, stride=1, padding=0),
-                nn.BatchNorm1d(16),
-                nn.LeakyReLU(),
-                nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
-                nn.Conv1d(16, 32, kernel_size=8, stride=1, padding=0),
+                nn.Conv1d(1, 32, kernel_size=16, stride=1, padding=0),
                 nn.BatchNorm1d(32),
                 nn.LeakyReLU(),
-                nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
-                nn.Flatten(start_dim=1),
-                nn.Linear(320, 1)
-            )
-        if target_size == 300:
-            return nn.Sequential(
-                nn.Conv1d(1, 16, kernel_size=8, stride=1, padding=0),
-                nn.BatchNorm1d(16),
-                nn.LeakyReLU(),
-                nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
-                nn.Conv1d(16, 32, kernel_size=8, stride=1, padding=0),
-                nn.BatchNorm1d(32),
-                nn.LeakyReLU(),
-                nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
+                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
                 nn.Conv1d(32, 64, kernel_size=8, stride=1, padding=0),
                 nn.BatchNorm1d(64),
                 nn.LeakyReLU(),
                 nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
+                nn.Flatten(start_dim=1),
+                nn.Linear(64, 1)
+            )
+        if target_size == 256:
+            return nn.Sequential(
+                nn.Conv1d(1, 32, kernel_size=16, stride=1, padding=0),
+                nn.BatchNorm1d(32),
+                nn.LeakyReLU(),
+                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
+                nn.Conv1d(32, 64, kernel_size=8, stride=1, padding=0),
+                nn.BatchNorm1d(64),
+                nn.LeakyReLU(),
+                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
                 nn.Flatten(start_dim=1),
                 nn.Linear(128, 1)
             )
         if target_size == 500:
             return nn.Sequential(
-                nn.Conv1d(1, 16, kernel_size=8, stride=1, padding=0),
-                nn.BatchNorm1d(16),
-                nn.LeakyReLU(),
-                nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
-                nn.Conv1d(16, 32, kernel_size=8, stride=1, padding=0),
+                nn.Conv1d(1, 32, kernel_size=16, stride=1, padding=0),
                 nn.BatchNorm1d(32),
                 nn.LeakyReLU(),
-                nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
+                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
                 nn.Conv1d(32, 64, kernel_size=8, stride=1, padding=0),
                 nn.BatchNorm1d(64),
                 nn.LeakyReLU(),
-                nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
+                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
+                nn.Conv1d(64, 128, kernel_size=4, stride=1, padding=0),
+                nn.BatchNorm1d(128),
+                nn.LeakyReLU(),
+                nn.MaxPool1d(kernel_size=2, stride=2, padding=0),
                 nn.Flatten(start_dim=1),
-                nn.Linear(320, 1)
+                nn.Linear(128, 1)
+            )
+        if target_size == 512:
+            return nn.Sequential(
+                nn.Conv1d(1, 32, kernel_size=16, stride=1, padding=0),
+                nn.BatchNorm1d(32),
+                nn.LeakyReLU(),
+                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
+                nn.Conv1d(32, 64, kernel_size=8, stride=1, padding=0),
+                nn.BatchNorm1d(64),
+                nn.LeakyReLU(),
+                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
+                nn.Conv1d(64, 128, kernel_size=4, stride=1, padding=0),
+                nn.BatchNorm1d(128),
+                nn.LeakyReLU(),
+                nn.MaxPool1d(kernel_size=2, stride=2, padding=0),
+                nn.Flatten(start_dim=1),
+                nn.Linear(128, 1)
             )
         if target_size == 1000:
             return nn.Sequential(
-                nn.Conv1d(1, 16, kernel_size=16, stride=1, padding=0),
-                nn.BatchNorm1d(16),
-                nn.LeakyReLU(),
-                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
-                nn.Conv1d(16, 32, kernel_size=8, stride=1, padding=0),
+                nn.Conv1d(1, 32, kernel_size=16, stride=1, padding=0),
                 nn.BatchNorm1d(32),
                 nn.LeakyReLU(),
-                nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
+                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
                 nn.Conv1d(32, 64, kernel_size=8, stride=1, padding=0),
                 nn.BatchNorm1d(64),
                 nn.LeakyReLU(),
+                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
+                nn.Conv1d(64, 128, kernel_size=4, stride=1, padding=0),
+                nn.BatchNorm1d(128),
+                nn.LeakyReLU(),
                 nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
                 nn.Flatten(start_dim=1),
-                nn.Linear(320, 1)
+                nn.Linear(256, 1)
+            )
+        if target_size == 1024:
+            return nn.Sequential(
+                nn.Conv1d(1, 32, kernel_size=16, stride=1, padding=0),
+                nn.BatchNorm1d(32),
+                nn.LeakyReLU(),
+                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
+                nn.Conv1d(32, 64, kernel_size=8, stride=1, padding=0),
+                nn.BatchNorm1d(64),
+                nn.LeakyReLU(),
+                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
+                nn.Conv1d(64, 128, kernel_size=4, stride=1, padding=0),
+                nn.BatchNorm1d(128),
+                nn.LeakyReLU(),
+                nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
+                nn.Flatten(start_dim=1),
+                nn.Linear(256, 1)
             )
         if target_size == 2000:
             return nn.Sequential(
-                nn.Conv1d(1, 16, kernel_size=16, stride=1, padding=0),
-                nn.BatchNorm1d(16),
-                nn.LeakyReLU(),
-                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
-                nn.Conv1d(16, 32, kernel_size=16, stride=1, padding=0),
+                nn.Conv1d(1, 32, kernel_size=32, stride=1, padding=0),
                 nn.BatchNorm1d(32),
                 nn.LeakyReLU(),
-                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
-                nn.Conv1d(32, 64, kernel_size=8, stride=1, padding=0),
+                nn.MaxPool1d(kernel_size=16, stride=16, padding=0),
+                nn.Conv1d(32, 64, kernel_size=16, stride=1, padding=0),
                 nn.BatchNorm1d(64),
                 nn.LeakyReLU(),
                 nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
+                nn.Conv1d(64, 128, kernel_size=4, stride=1, padding=0),
+                nn.BatchNorm1d(128),
+                nn.LeakyReLU(),
+                nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
                 nn.Flatten(start_dim=1),
-                nn.Linear(320, 1)
+                nn.Linear(256, 1)
+            )
+        if target_size == 2048:
+            return nn.Sequential(
+                nn.Conv1d(1, 32, kernel_size=32, stride=1, padding=0),
+                nn.BatchNorm1d(32),
+                nn.LeakyReLU(),
+                nn.MaxPool1d(kernel_size=16, stride=16, padding=0),
+                nn.Conv1d(32, 64, kernel_size=16, stride=1, padding=0),
+                nn.BatchNorm1d(64),
+                nn.LeakyReLU(),
+                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
+                nn.Conv1d(64, 128, kernel_size=4, stride=1, padding=0),
+                nn.BatchNorm1d(128),
+                nn.LeakyReLU(),
+                nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
+                nn.Flatten(start_dim=1),
+                nn.Linear(256, 1)
             )
         if target_size == 4200:
             return nn.Sequential(
-                nn.Conv1d(1, 16, kernel_size=32, stride=1, padding=0),
-                nn.BatchNorm1d(16),
-                nn.LeakyReLU(),
-                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
-                nn.Conv1d(16, 32, kernel_size=16, stride=1, padding=0),
+                nn.Conv1d(1, 32, kernel_size=32, stride=1, padding=0),
                 nn.BatchNorm1d(32),
                 nn.LeakyReLU(),
-                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
-                nn.Conv1d(32, 64, kernel_size=8, stride=1, padding=0),
+                nn.MaxPool1d(kernel_size=16, stride=16, padding=0),
+                nn.Conv1d(32, 64, kernel_size=16, stride=1, padding=0),
                 nn.BatchNorm1d(64),
                 nn.LeakyReLU(),
-                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
+                nn.MaxPool1d(kernel_size=16, stride=16, padding=0),
+                nn.Conv1d(64, 128, kernel_size=4, stride=1, padding=0),
+                nn.BatchNorm1d(128),
+                nn.LeakyReLU(),
+                nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
                 nn.Flatten(start_dim=1),
-                nn.Linear(448, 1)
+                nn.Linear(384, 1)
             )
 
         return None
