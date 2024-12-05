@@ -1,7 +1,7 @@
 from task_runner import TaskRunner
 
 if __name__ == '__main__':
-    tag = "check"
+    tag = "asa"
     tasks = {
         "algorithms" : ["asa"],
         "datasets": ["lucas"],
