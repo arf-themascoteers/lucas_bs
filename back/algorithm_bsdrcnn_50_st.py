@@ -57,7 +57,7 @@ class ANN(nn.Module):
             nn.Linear(last_layer_input,1)
         )
         num_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
-        print("Number of learnable parameters:", num_params)
+        #print("Number of learnable parameters:", num_params)
 
     @staticmethod
     def inverse_sigmoid_torch(x):

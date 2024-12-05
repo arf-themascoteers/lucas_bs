@@ -54,7 +54,7 @@ class ANN(nn.Module):
             nn.Linear(last_layer_input,1)
         )
         num_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
-        print("Number of learnable parameters:", num_params)
+        #print("Number of learnable parameters:", num_params)
 
     def forward(self, X):
         X = X.reshape(X.shape[0], 1, X.shape[1])

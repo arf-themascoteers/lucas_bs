@@ -1,12 +1,12 @@
 from task_runner import TaskRunner
 
 if __name__ == '__main__':
-    TEST = False
+    TEST = True
     tag = "check"
     tasks = {
         "algorithms" : ["bsdrcnn","bsdrfc"],
         "datasets": ["lucas"],
-        "target_sizes" : [16,50, 100,200,300,500,1000,2000, 4200],
+        "target_sizes" : [8,16,32,65,131,262,525,1050,2100,4200],
         "scale_y" : ["robust"],
         "mode" : ["static","dyn","semi"]
     }
@@ -16,8 +16,8 @@ if __name__ == '__main__':
     if TEST:
         tasks = {
             "algorithms": ["bsdrcnn"],
-            "datasets": ["lucas"],
-            "target_sizes": [16],
+            "datasets": ["min_lucas"],
+            "target_sizes": [8],
             "scale_y": ["robust"],
             "mode": ["static"]
         }

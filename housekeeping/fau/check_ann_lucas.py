@@ -29,7 +29,7 @@ class ANN(nn.Module):
             nn.Linear(64, self.class_size)
         )
         num_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
-        print("Number of learnable parameters:", num_params)
+        #print("Number of learnable parameters:", num_params)
 
     def forward(self, X):
         outputs = self.linear(X)
