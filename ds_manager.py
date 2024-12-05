@@ -30,9 +30,11 @@ class DSManager:
 if __name__ == '__main__':
     import numpy as np
     ds = DSManager(folds=1, scale_y="minmax")
-    for train_x, train_y, test_x, test_y in ds.get_k_folds():
-        print(train_x.shape, train_y.shape, test_x.shape, test_y.shape)
-        print(np.min(train_y))
-        print(np.max(train_y))
-        print(np.max(train_y)-np.min(train_y))
-        print(np.mean(train_y))
+    pd.DataFrame(ds.data[:,-1], columns=['oc']).to_csv('oc.csv', index=False)
+    print(np.mean(ds.data[:,-1]))
+    # for train_x, train_y, test_x, test_y in ds.get_k_folds():
+    #     print(train_x.shape, train_y.shape, test_x.shape, test_y.shape)
+    #     print(np.min(train_y))
+    #     print(np.max(train_y))
+    #     print(np.max(train_y)-np.min(train_y))
+    #     print(np.mean(train_y))
