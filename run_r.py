@@ -10,7 +10,7 @@ if __name__ == '__main__':
         "mode" : ["dyn","semi"]
     }
     folds = 10
-    verbose = True
+    verbose = False
 
     ev = TaskRunner(tasks,folds,tag,verbose=verbose)
     ev.evaluate()
