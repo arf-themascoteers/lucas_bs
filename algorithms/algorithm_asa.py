@@ -69,6 +69,8 @@ class Algorithm_asa(Algorithm):
 
         if self.mode in ["static", "semi"]:
             raise Exception("Unsupported mode")
+        if self.target_size != 500:
+            raise Exception("Unsupported target size")
 
         torch.manual_seed(1)
         torch.cuda.manual_seed(1)

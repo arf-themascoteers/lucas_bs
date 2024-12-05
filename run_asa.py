@@ -1,13 +1,15 @@
 from task_runner import TaskRunner
 
 if __name__ == '__main__':
-    tag = "fc2"
+    tag = "check"
     tasks = {
-        "algorithms" : ["bsdrfc"],
-        "datasets": ["lucas_asa"],
-        "target_sizes" : [16,50,500],
-        "scale_y" : ["robust","minmax"],
+        "algorithms" : ["asa"],
+        "datasets": ["lucas"],
+        "target_sizes" : [500],
+        "scale_y" : ["robust"],
         "mode" : ["static"]
     }
-    ev = TaskRunner(tasks,5,tag,verbose=True)
+    folds = 10
+    verbose = False
+    ev = TaskRunner(tasks,folds,tag,verbose=verbose)
     ev.evaluate()
