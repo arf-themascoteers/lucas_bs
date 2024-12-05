@@ -21,7 +21,7 @@ class TaskRunner:
                         dataset = DSManager(dataset_name, self.folds, scale_y)
                         for mode in self.task["mode"]:
                             for fold, (train_x, train_y, test_x, test_y) in enumerate(dataset.get_k_folds()):
-                                if self.reporter.record_exists(algorithm, dataset_name, target_size, fold):
+                                if self.reporter.record_exists(algorithm, dataset_name, target_size, scale_y, mode, fold):
                                     print(algorithm, "for", dataset.name, "for target size", target_size,
                                           "for fold", fold, "for scale_y", scale_y, "for mode", mode,
                                           "was done. Skipping")
