@@ -1,10 +1,10 @@
 from task_runner import TaskRunner
 
 if __name__ == '__main__':
-    tag = "asa"
+    tag = "asa_r"
     tasks = {
         "algorithms" : ["asa"],
-        "datasets": ["lucas"],
+        "datasets": ["lucas_crop"],
         "target_sizes" : [500],
         "scale_y" : ["robust"],
         "mode" : ["static"]
