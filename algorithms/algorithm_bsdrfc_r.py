@@ -65,6 +65,7 @@ class ANN(nn.Module):
         loss = loss + torch.relu(self.indices[-1]-1)
         for i in range(1, len(self.indices)):
             loss = loss + torch.relu(self.indices[i-1]-self.indices[i])
+        return loss
 
 class Algorithm_bsdrfc_r(Algorithm):
     def __init__(self, dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, reporter, verbose):

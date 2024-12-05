@@ -257,7 +257,7 @@ class ANN(nn.Module):
         loss = loss + torch.relu(self.indices[-1]-1)
         for i in range(1, len(self.indices)):
             loss = loss + torch.relu(self.indices[i-1]-self.indices[i])
-
+        return loss
 
 
 class Algorithm_bsdrcnn_r(Algorithm):
