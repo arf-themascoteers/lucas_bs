@@ -42,9 +42,18 @@ class ANN(nn.Module):
 
         self.cnn = self.get_cnn(self.target_size)
         num_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
-        print("Number of learnable parameters:", num_params)
+        #print("Number of learnable parameters:", num_params)
 
     def get_cnn(self, target_size):
+        if target_size == 8:
+            return nn.Sequential(
+                nn.Conv1d(1, 32, kernel_size=4, stride=1, padding=0),
+                nn.BatchNorm1d(32),
+                nn.LeakyReLU(),
+                nn.MaxPool1d(kernel_size=2, stride=2, padding=0),
+                nn.Flatten(start_dim=1),
+                nn.Linear(64, 1)
+            )
         if target_size == 16:
             return nn.Sequential(
                 nn.Conv1d(1, 16, kernel_size=4, stride=1, padding=0),
