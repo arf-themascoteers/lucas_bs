@@ -29,6 +29,9 @@ class TaskRunner:
                                     algorithm_object = Algorithm.create(algorithm, dataset, train_x, train_y,
                                                                         test_x,test_y, target_size, fold,
                                                                         scale_y, mode, self.reporter,self.verbose)
+                                    if algorithm_object is None:
+                                        print(f"{algorithm} {mode} not supported. Skipping.")
+                                        continue
                                     algorithm_object.compute_fold()
 
 

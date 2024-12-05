@@ -74,7 +74,11 @@ class Algorithm(ABC):
         class_name = f"Algorithm_{name}"
         module = importlib.import_module(f"algorithms.algorithm_{name}")
         clazz = getattr(module, class_name)
-        return clazz(dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, reporter, verbose)
+        try:
+            obj = clazz(dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, reporter, verbose)
+            return obj
+        except Exception:
+            return None
 
     @abstractmethod
     def get_indices(self):
