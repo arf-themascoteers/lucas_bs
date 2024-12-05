@@ -4,12 +4,12 @@ if __name__ == '__main__':
     tag = "asa"
     tasks = {
         "algorithms" : ["asa"],
-        "datasets": ["min_lucas"],
+        "datasets": ["lucas"],
         "target_sizes" : [500],
         "scale_y" : ["robust"],
         "mode" : ["static"]
     }
     folds = 10
-    verbose = False
+    verbose = True
     ev = TaskRunner(tasks,folds,tag,verbose=verbose)
     ev.evaluate()

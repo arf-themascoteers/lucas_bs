@@ -116,7 +116,7 @@ class Algorithm_asa(Algorithm):
                 loss.backward()
                 optimizer_sae.step()
             if self.verbose and epoch % 10 == 0:
-                print("AE",loss.item())
+                print("AE",epoch,loss.item())
 
         for param in self.sae.encoder.parameters():
             param.requires_grad = False
@@ -134,7 +134,7 @@ class Algorithm_asa(Algorithm):
                 loss.backward()
                 optimizer_ann.step()
             if self.verbose and epoch % 10 == 0:
-                print("CNN",loss.item())
+                print("CNN",epoch,loss.item())
 
         torch.save(self.ann.state_dict(), 'ann.pth')
         torch.save(self.sae.state_dict(), 'sae.pth')
