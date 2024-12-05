@@ -9,7 +9,7 @@ if __name__ == '__main__':
         "scale_y" : ["robust"],
         "mode" : ["static"]
     }
-    folds = 10
+    folds = 1
     verbose = True
     ev = TaskRunner(tasks,folds,tag,verbose=verbose)
     ev.evaluate()
