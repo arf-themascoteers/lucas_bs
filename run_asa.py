@@ -4,7 +4,7 @@ if __name__ == '__main__':
     tag = "asa"
     tasks = {
         "algorithms" : ["asa"],
-        "datasets": ["lucas"],
+        "datasets": ["min_lucas"],
         "target_sizes" : [500],
         "scale_y" : ["robust"],
         "mode" : ["static"]

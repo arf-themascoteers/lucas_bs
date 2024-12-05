@@ -67,7 +67,7 @@ class Algorithm_asa(Algorithm):
     def __init__(self, dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, reporter, verbose):
         super().__init__(dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, reporter, verbose)
 
-        if self.mode in ["static", "semi"]:
+        if self.mode in ["dynamic", "semi"]:
             raise Exception("Unsupported mode")
         if self.target_size != 500:
             raise Exception("Unsupported target size")
@@ -84,7 +84,7 @@ class Algorithm_asa(Algorithm):
         self.criterion = torch.nn.MSELoss()
         self.class_size = 1
         self.lr = 0.001
-        self.total_epoch = 400
+        self.total_epoch = 700
 
         self.sae = SAE(self.train_x.shape[1],self.target_size)
         self.sae.to(self.device)
@@ -96,7 +96,7 @@ class Algorithm_asa(Algorithm):
         self.original_feature_size = self.train_x.shape[1]
 
 
-        self.reporter.create_epoch_report(self.get_name(), self.dataset.name, self.target_size, self.fold)
+        self.reporter.create_epoch_report(self.get_name(), self.dataset.name, self.target_size, self.scaler_y, self.mode, self.fold)
 
     def _fit(self):
         self.sae.train()

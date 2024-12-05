@@ -77,7 +77,7 @@ class Algorithm(ABC):
         try:
             obj = clazz(dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, reporter, verbose)
             return obj
-        except Exception:
+        except Exception as e:
             return None
 
     @abstractmethod
