@@ -9,5 +9,5 @@ if __name__ == '__main__':
         "scale_y" : ["robust","minmax"],
         "mode" : ["static"]
     }
-    ev = TaskRunner(tasks,1,tag,verbose=True)
+    ev = TaskRunner(tasks,5,tag,verbose=True)
     ev.evaluate()
