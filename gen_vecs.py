@@ -21,6 +21,10 @@ X_short = X[indices]
 h_short = h_hat[indices]
 X_hat_short = x_hat[indices]
 
+X_short = X
+h_short = h_hat
+X_hat_short = x_hat
+
 cols = [f"o_{i}" for i in range(X_short.shape[1])]
 cols = cols + [f"h_{i}" for i in range(h_short.shape[1])]
 cols = cols + [f"p_{i}" for i in range(X_hat_short.shape[1])]

@@ -4,8 +4,8 @@ import numpy as np
 
 
 data = pd.read_csv("vecs.csv").to_numpy()
-X_mean = np.mean(data[:,0:4200], axis=1)
-X_hat_mean = np.mean(data[:,4700:], axis=1)
+X_mean = np.mean(data[:,0:4200], axis=0)
+X_hat_mean = np.mean(data[:,4700:], axis=0)
 plt.plot(X_mean, color="green", label="Original data")
 plt.plot(X_hat_mean, color="blue", linestyle='--', dashes=(1, 3), label="Reconstructed data")
 
