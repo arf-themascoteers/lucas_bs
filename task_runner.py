@@ -28,7 +28,7 @@ class TaskRunner:
                                 else:
                                     algorithm_object = Algorithm.create(algorithm, dataset, train_x, train_y,
                                                                         test_x,test_y, target_size, fold,
-                                                                        mode, self.reporter,self.verbose)
+                                                                        scale_y, mode, self.reporter,self.verbose)
                                     algorithm_object.compute_fold()
 
 
