@@ -27,17 +27,21 @@ class LinearInterpolationModule(nn.Module):
 
 
 class ANN(nn.Module):
-    def __init__(self, target_size):
+    def __init__(self, target_size, mode):
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.target_size = target_size
+        self.mode = mode
 
         init_vals = torch.linspace(0.001, 0.99, self.target_size + 2)
         self.indices = nn.Parameter(
             torch.tensor([ANN.inverse_sigmoid_torch(init_vals[i + 1]) for i in range(self.target_size)],
                          requires_grad=True).to(self.device))
-        self.cnn = nn.Sequential(
+        if self.mode in ["static", "semi"]:
+            self.indices.requires_grad = False
+        self.fc = nn.Sequential(
             nn.Linear(self.target_size, 40),
+            nn.BatchNorm1d(40),
             nn.LeakyReLU(),
             nn.Linear(40,1)
         )
@@ -50,7 +54,7 @@ class ANN(nn.Module):
 
     def forward(self, linterp):
         outputs = linterp(self.get_indices())
-        soc_hat = self.cnn(outputs)
+        soc_hat = self.fc(outputs)
         soc_hat = soc_hat.reshape(-1)
         return soc_hat
 
@@ -58,9 +62,9 @@ class ANN(nn.Module):
         return torch.sigmoid(self.indices)
 
 
-class Algorithm_bsdrfcnn(Algorithm):
-    def __init__(self, dataset, train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose):
-        super().__init__(dataset, train_x, train_y, test_x, test_y, target_size, fold, reporter, verbose)
+class Algorithm_bsdrfc(Algorithm):
+    def __init__(self, dataset, train_x, train_y, test_x, test_y, target_size, fold, mode, reporter, verbose):
+        super().__init__(dataset, train_x, train_y, test_x, test_y, target_size, fold, mode, reporter, verbose)
 
         torch.manual_seed(1)
         torch.cuda.manual_seed(1)
@@ -76,7 +80,7 @@ class Algorithm_bsdrfcnn(Algorithm):
         self.lr = 0.001
         self.total_epoch = 500
 
-        self.ann = ANN(self.target_size)
+        self.ann = ANN(self.target_size, mode)
         self.ann.to(self.device)
         self.original_feature_size = self.train_x.shape[1]
 
@@ -90,6 +94,8 @@ class Algorithm_bsdrfcnn(Algorithm):
         self.write_columns()
         optimizer = torch.optim.Adam(self.ann.parameters(), lr=self.lr, weight_decay=self.lr/10)
         for epoch in range(self.total_epoch):
+            if epoch > self.total_epoch/2 and self.mode == "semi":
+                self.ann.indices.requires_grad = True
             optimizer.zero_grad()
             y_hat = self.predict_train()
             loss = self.criterion(y_hat, self.train_y)
