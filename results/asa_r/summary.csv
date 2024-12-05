@@ -1,0 +1,2 @@
+algorithm,dataset,target_size,scaler_y,mode,r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq
+asa,lucas_crop,500,robust,static,0.59,1.1299999952316284,1.5700000524520874,0.9100000262260436,0.71,1.0499999523162842,1.840000033378601,0.9300000071525574
