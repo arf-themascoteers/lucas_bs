@@ -4,7 +4,7 @@ from algorithms.algorithm_asa import SAE
 import pandas as pd
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-ds = DSManager(name="min_lucas")
+ds = DSManager(name="lucas")
 X = torch.tensor(ds.data[:,0:-1], dtype=torch.float32).to(device)
 
 model = SAE(4200,500).to(device)

@@ -105,7 +105,7 @@ class Algorithm_asa(Algorithm):
         optimizer_ann = torch.optim.Adam(self.ann.parameters(), lr=self.lr, weight_decay=self.lr/10)
 
         dataset = TensorDataset(self.train_x)
-        dataloader = DataLoader(dataset, batch_size=20, shuffle=True)
+        dataloader = DataLoader(dataset, batch_size=200000, shuffle=True)
 
         for epoch in range(self.total_epoch):
             for batch in dataloader:
@@ -115,6 +115,7 @@ class Algorithm_asa(Algorithm):
                 loss = self.criterion_sae(x_hat, batch_x)
                 loss.backward()
                 optimizer_sae.step()
+                # print("AE", epoch, loss.item())
             if self.verbose and epoch % 10 == 0:
                 print("AE",epoch,loss.item())
 
