@@ -29,9 +29,9 @@ class DSManager:
 
 if __name__ == '__main__':
     import numpy as np
-    ds = DSManager(folds=1, scale_y="minmax", name="min_lucas")
-    pd.DataFrame(ds.data[:,-1], columns=['oc']).to_csv('oc.csv', index=False)
-    print(np.mean(ds.data[:,-1]))
+    ds = DSManager(folds=1, scale_y="minmax", name="lucas")
+    # pd.DataFrame(ds.data[:,-1], columns=['oc']).to_csv('oc.csv', index=False)
+    # print(np.mean(ds.data[:,-1]))
     # for train_x, train_y, test_x, test_y in ds.get_k_folds():
     #     print(train_x.shape, train_y.shape, test_x.shape, test_y.shape)
     #     print(np.min(train_y))
@@ -39,6 +39,12 @@ if __name__ == '__main__':
     #     print(np.max(train_y)-np.min(train_y))
     #     print(np.mean(train_y))
     import matplotlib.pyplot as plt
-    X = ds.data[0,0:-1]
-    plt.plot(X)
+    data = np.mean(ds.data[:,0:-1],axis=0)
+    plt.plot(data)
+    plt.show()
+
+    dataset_path = f"data/lucas.csv"
+    data = pd.read_csv(dataset_path).to_numpy()[:,0:-1]
+    data = np.mean(data,axis=0)
+    plt.plot(data)
     plt.show()
