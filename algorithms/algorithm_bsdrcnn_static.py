@@ -233,10 +233,10 @@ class Algorithm_bsdrcnn_static(Algorithm):
         torch.cuda.manual_seed(1)
         torch.backends.cudnn.deterministic = True
 
-        self.train_x = torch.tensor(train_x, dtype=torch.float32).to(self.device)
-        self.train_y = torch.tensor(train_y, dtype=torch.float32).to(self.device)
-        self.test_x = torch.tensor(test_x, dtype=torch.float32).to(self.device)
-        self.test_y = torch.tensor(test_y, dtype=torch.float32).to(self.device)
+        self.train_x = torch.tensor(train_x, dtype=torch.float32)
+        self.train_y = torch.tensor(train_y, dtype=torch.float32)
+        self.test_x = torch.tensor(test_x, dtype=torch.float32)
+        self.test_y = torch.tensor(test_y, dtype=torch.float32)
 
         self.criterion = torch.nn.MSELoss()
         self.class_size = 1
@@ -259,11 +259,15 @@ class Algorithm_bsdrcnn_static(Algorithm):
 
         for epoch in range(self.total_epoch):
             for batch_x, batch_y in dataloader:
+                batch_x = batch_x.to(self.device)
+                batch_y = batch_y.to(self.device)
                 optimizer.zero_grad()
                 y_hat = self.ann(batch_x)
                 loss = self.criterion(y_hat, batch_y)
                 loss.backward()
                 optimizer.step()
+                del batch_x, batch_y, y_hat, loss
+                print("batch")
             self.report(epoch)
         return self
 
@@ -273,6 +277,7 @@ class Algorithm_bsdrcnn_static(Algorithm):
         y_hats = []
         for epoch in range(self.total_epoch):
             for batch_x, batch_y in dataloader:
+                batch_x = batch_x.to(self.device)
                 y_hat = self.ann(batch_x)
                 y_hats.append(y_hat)
         return torch.cat(y_hats, dim=0)
@@ -284,6 +289,7 @@ class Algorithm_bsdrcnn_static(Algorithm):
         y_hats = []
         for epoch in range(self.total_epoch):
             for batch_x, batch_y in dataloader:
+                batch_x = batch_x.to(self.device)
                 y_hat = self.ann(batch_x)
                 y_hats.append(y_hat)
         return torch.cat(y_hats, dim=0)

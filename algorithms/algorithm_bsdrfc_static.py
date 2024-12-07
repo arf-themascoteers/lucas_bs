@@ -16,7 +16,6 @@ class ANN(nn.Module):
             self.indices.requires_grad = False
         self.fc = nn.Sequential(
             nn.Linear(self.target_size, 40),
-            nn.BatchNorm1d(40),
             nn.LeakyReLU(),
             nn.Linear(40,1)
         )
@@ -70,6 +69,7 @@ class Algorithm_bsdrfc_static(Algorithm):
 
         for epoch in range(self.total_epoch):
             for batch_x, batch_y in dataloader:
+                torch.cuda.empty_cache()
                 optimizer.zero_grad()
                 y_hat = self.ann(batch_x)
                 loss = self.criterion(y_hat, batch_y)
@@ -85,7 +85,7 @@ class Algorithm_bsdrfc_static(Algorithm):
         for epoch in range(self.total_epoch):
             for batch_x, batch_y in dataloader:
                 y_hat = self.ann(batch_x)
-                y_hats.append(y_hat)
+                y_hats.append(y_hat.detach().cpu())
         return torch.cat(y_hats, dim=0)
 
 
@@ -96,7 +96,7 @@ class Algorithm_bsdrfc_static(Algorithm):
         for epoch in range(self.total_epoch):
             for batch_x, batch_y in dataloader:
                 y_hat = self.ann(batch_x)
-                y_hats.append(y_hat)
+                y_hats.append(y_hat.detach().cpu())
         return torch.cat(y_hats, dim=0)
 
 
