@@ -4,9 +4,9 @@ if __name__ == '__main__':
     TEST = False
     tag = "check1"
     tasks = {
-        "algorithms" : ["bsdrcnn","bsdrfc"],
+        "algorithms" : ["bsdrfc"],
         "datasets": ["lucas"],
-        "target_sizes" : [8,16,32,64,128,256,512,1024,2048,500,4200],
+        "target_sizes" : [512],
         "scale_y" : ["robust"],
         "mode" : ["static","dyn","semi"]
     }
