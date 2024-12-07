@@ -196,16 +196,14 @@ class ANN(nn.Module):
             )
         if target_size == 4200:
             return nn.Sequential(
-                nn.Conv1d(1, 32, kernel_size=64, stride=1, padding=0),
+                nn.Conv1d(1, 32, kernel_size=32, stride=16, padding=0),
                 nn.BatchNorm1d(32),
                 nn.LeakyReLU(),
-                nn.MaxPool1d(kernel_size=64, stride=64, padding=0),
-                nn.Conv1d(32, 64, kernel_size=16, stride=1, padding=0),
+                nn.MaxPool1d(kernel_size=16, stride=16, padding=0),
+                nn.Conv1d(32, 64, kernel_size=8, stride=1, padding=0),
                 nn.BatchNorm1d(64),
                 nn.LeakyReLU(),
-                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
-                nn.Conv1d(64, 128, kernel_size=6, stride=1, padding=0),
-                nn.BatchNorm1d(128),
+                nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
                 nn.LeakyReLU(),
                 nn.Flatten(start_dim=1),
                 nn.Linear(128, 1)
@@ -243,7 +241,7 @@ class Algorithm_bsdrcnn_static(Algorithm):
         self.criterion = torch.nn.MSELoss()
         self.class_size = 1
         self.lr = 0.001
-        self.total_epoch = 1
+        self.total_epoch = 30
 
         self.ann = ANN(self.target_size, mode)
         self.ann.to(self.device)
@@ -257,7 +255,7 @@ class Algorithm_bsdrcnn_static(Algorithm):
         optimizer = torch.optim.Adam(self.ann.parameters(), lr=self.lr, weight_decay=self.lr/10)
 
         dataset = TensorDataset(self.train_x, self.train_y)
-        dataloader = DataLoader(dataset, batch_size=100, shuffle=True)
+        dataloader = DataLoader(dataset, batch_size=50, shuffle=True)
 
         for epoch in range(self.total_epoch):
             for batch_x, batch_y in dataloader:
@@ -271,7 +269,7 @@ class Algorithm_bsdrcnn_static(Algorithm):
 
     def predict_train(self):
         dataset = TensorDataset(self.train_x, self.train_y)
-        dataloader = DataLoader(dataset, batch_size=100, shuffle=True)
+        dataloader = DataLoader(dataset, batch_size=50, shuffle=True)
         y_hats = []
         for epoch in range(self.total_epoch):
             for batch_x, batch_y in dataloader:
@@ -282,7 +280,7 @@ class Algorithm_bsdrcnn_static(Algorithm):
 
     def predict_test(self):
         dataset = TensorDataset(self.test_x, self.test_y)
-        dataloader = DataLoader(dataset, batch_size=100, shuffle=True)
+        dataloader = DataLoader(dataset, batch_size=50, shuffle=True)
         y_hats = []
         for epoch in range(self.total_epoch):
             for batch_x, batch_y in dataloader:
