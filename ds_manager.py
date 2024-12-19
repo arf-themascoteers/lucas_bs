@@ -5,12 +5,13 @@ from sklearn.preprocessing import MinMaxScaler, RobustScaler
 
 
 class DSManager:
-    def __init__(self, name="lucas",folds=1,scale_y="robust"):
+    def __init__(self, name="lucas",folds=1,scale_y="robust",shuffle=True):
         self.name = name
         dataset_path = f"data/{self.name}.csv"
         df = pd.read_csv(dataset_path)
         self.folds = folds
-        df = df.sample(frac=1).reset_index(drop=True)
+        if shuffle:
+            df = df.sample(frac=1).reset_index(drop=True)
         self.data = df.to_numpy()
 
         scaler_X = MinMaxScaler()
