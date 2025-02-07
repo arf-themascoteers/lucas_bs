@@ -1,9 +1,5 @@
-import numpy as np
+import pandas as pd
 
-data = [10, 20, 30, 40]
 
-pop_std = np.std(data, ddof=0)
-sample_std = np.std(data, ddof=1)
-
-print(pop_std)
-print(sample_std)
+df = pd.read_csv("../../data/lucas_crop.csv")
+print(len(df))
