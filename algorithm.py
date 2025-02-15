@@ -53,7 +53,8 @@ class Algorithm(ABC):
         rpiq = iqr/rmse
         #rpiq = max(rpiq, 0)
 
-        return round(r2, 2), round(rmse, 2), round(rpd, 2), round(rpiq, 2)
+        #return round(r2, 2), round(rmse, 2), round(rpd, 2), round(rpiq, 2)
+        return r2, rmse, rpd, rpiq
 
     @staticmethod
     def convert_to_numpy(t):
