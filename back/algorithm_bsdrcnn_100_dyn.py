@@ -100,7 +100,7 @@ class Algorithm_bsdrcnn_100_dyn(Algorithm):
         self.linterp_train = LinearInterpolationModule(self.train_x, self.device)
         self.linterp_test = LinearInterpolationModule(self.test_x, self.device)
 
-        self.reporter.create_epoch_report(self.get_name(), self.dataset.name, self.target_size, self.fold)
+        self.reporter.create_epoch_report(self.get_name(), self.dataset.name, self.target_size, self.train_size, self.fold)
 
     def _fit(self):
         self.ann.train()

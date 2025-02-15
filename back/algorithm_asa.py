@@ -91,7 +91,7 @@ class Algorithm_asa(Algorithm):
         self.original_feature_size = self.train_x.shape[1]
 
 
-        self.reporter.create_epoch_report(self.get_name(), self.dataset.name, self.target_size, self.fold)
+        self.reporter.create_epoch_report(self.get_name(), self.dataset.name, self.target_size, self.train_size, self.fold)
 
     def _fit(self):
         self.sae.train()

@@ -36,8 +36,8 @@ class ANN(nn.Module):
 
 
 class Algorithm_bsdrfc_static(Algorithm):
-    def __init__(self, dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, train_split, reporter, verbose):
-        super().__init__(dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, train_split, reporter, verbose)
+    def __init__(self, dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, train_size, reporter, verbose):
+        super().__init__(dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, train_size, reporter, verbose)
 
         torch.manual_seed(1)
         torch.cuda.manual_seed(1)
@@ -57,7 +57,7 @@ class Algorithm_bsdrfc_static(Algorithm):
         self.ann.to(self.device)
         self.original_feature_size = self.train_x.shape[1]
 
-        self.reporter.create_epoch_report(self.get_name(), self.dataset.name, self.target_size, self.scaler_y, self.mode, self.fold)
+        self.reporter.create_epoch_report(self.get_name(), self.dataset.name, self.target_size, self.scaler_y, self.mode, self.train_size, self.fold)
 
     def _fit(self):
         self.ann.train()

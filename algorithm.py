@@ -6,7 +6,7 @@ import numpy as np
 
 
 class Algorithm(ABC):
-    def __init__(self, dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, train_split, reporter, verbose):
+    def __init__(self, dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, train_size, reporter, verbose):
         self.dataset = dataset
         self.train_x = train_x
         self.test_x = test_x
@@ -17,7 +17,7 @@ class Algorithm(ABC):
         self.fold = fold
         self.scaler_y = scaler_y
         self.mode = mode
-        self.train_split = train_split
+        self.train_size = train_size
         self.reporter = reporter
         self.verbose = verbose
 
@@ -30,7 +30,7 @@ class Algorithm(ABC):
         train_r2, train_rmse, train_rpd, train_rpiq = self.calculate_metrics(self.train_y, train_y_hat)
         r2, rmse, rpd, rpiq = self.calculate_metrics(self.test_y, test_y_hat)
         self.reporter.write_details(self.get_name(),self.dataset.name,self.target_size,
-                                    self.scaler_y, self.mode, self.train_split,
+                                    self.scaler_y, self.mode, self.train_size,
                                     r2, rmse, rpd, rpiq,
                                     train_r2, train_rmse,train_rpd, train_rpiq,
                                     self.fold, self.get_indices())
@@ -71,14 +71,15 @@ class Algorithm(ABC):
         return name_part
 
     @staticmethod
-    def create(name, dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, train_split, reporter, verbose):
+    def create(name, dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, train_size, reporter, verbose):
         class_name = f"Algorithm_{name}"
         module = importlib.import_module(f"algorithms.algorithm_{name}")
         clazz = getattr(module, class_name)
         try:
-            obj = clazz(dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, train_split, reporter, verbose)
+            obj = clazz(dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, train_size, reporter, verbose)
             return obj
         except Exception as e:
+            print(e)
             return None
 
     @abstractmethod
