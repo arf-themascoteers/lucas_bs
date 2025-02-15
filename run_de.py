@@ -3,10 +3,10 @@ from my_env import TEST
 
 if __name__ == '__main__':
     train_sizes = [0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95]
-    verbose = True
+    verbose = False
     if TEST:
         train_sizes = [0.05, 0.15]
-        verbose = False
+        verbose = True
     tag = f"de6"
     tasks = {
         "algorithms" : ["bsdrcnn"],
