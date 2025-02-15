@@ -261,8 +261,8 @@ class ANN(nn.Module):
 
 
 class Algorithm_bsdrcnn_r(Algorithm):
-    def __init__(self, dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, reporter, verbose):
-        super().__init__(dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, reporter, verbose)
+    def __init__(self, dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, train_split, reporter, verbose):
+        super().__init__(dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, train_split, reporter, verbose)
 
         torch.manual_seed(1)
         torch.cuda.manual_seed(1)

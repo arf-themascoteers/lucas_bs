@@ -19,11 +19,11 @@ class Reporter:
 
         if not os.path.exists(self.summary_file):
             with open(self.summary_file, 'w') as file:
-                file.write("algorithm,dataset,target_size,scaler_y,mode,r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq\n")
+                file.write("algorithm,dataset,target_size,scaler_y,mode,train_split,r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq\n")
 
         if not os.path.exists(self.details_file):
             with open(self.details_file, 'w') as file:
-                file.write("algorithm,dataset,target_size,scaler_y,mode,r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq,fold,selected_bands\n")
+                file.write("algorithm,dataset,target_size,scaler_y,mode,train_split,r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq,fold,selected_bands\n")
 
         self.current_epoch_report_file = None
 
@@ -33,14 +33,15 @@ class Reporter:
     def get_details(self):
         return self.details_file
 
-    def update_summary(self, algorithm, dataset, target_size, scaler_y, mode):
+    def update_summary(self, algorithm, dataset, target_size, scaler_y, mode,train_split):
         df = pd.read_csv(self.details_file)
         df = df[
             (df['algorithm'] == algorithm) &
             (df['dataset'] == dataset) &
             (df['target_size'] == target_size) &
             (df['scaler_y'] == scaler_y) &
-            (df['mode'] == mode)
+            (df['mode'] == mode) &
+            (df['train_split'] == train_split)
             ]
         if df.empty:
             return
@@ -54,7 +55,8 @@ class Reporter:
             (summary_df_original['dataset'] == dataset) &
             (summary_df_original['target_size'] == target_size) &
             (summary_df_original['scaler_y'] == scaler_y) &
-            (summary_df_original['mode'] == mode)
+            (summary_df_original['mode'] == mode) &
+            (summary_df_original['train_split'] == train_split)
             ]
         if summary_df.empty:
             summary_df_original.loc[len(summary_df_original)] = {
@@ -63,6 +65,7 @@ class Reporter:
                 "target_size":target_size,
                 "scaler_y":scaler_y,
                 "mode":mode,
+                "train_split":train_split,
                 "r2" : average['r2'],
                 "rmse" : average['rmse'],
                 "rpd" : average['rpd'],
@@ -79,24 +82,26 @@ class Reporter:
                 (summary_df_original['dataset'] == dataset) &
                 (summary_df_original['target_size'] == target_size) &
                 (summary_df_original['scaler_y'] == scaler_y) &
-                (summary_df_original['mode'] == mode)
+                (summary_df_original['mode'] == mode) &
+                (summary_df_original['train_split'] == train_split)
                 ,
                 ["r2","rmse","rpd","rpiq","train_r2","train_rmse","train_rpd","train_rpiq"]
             ] = [average['r2'],average['rmse'],average['rpd'],average['rpiq'],average['train_r2'],average['train_rmse'],average['rpd'],average['rpiq']]
             summary_df_original.to_csv(self.summary_file, index=False)
 
-    def write_details(self, algorithm,dataset, target_size, scaler_y, mode, r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq,fold,selected_bands):
+    def write_details(self, algorithm,dataset, target_size, scaler_y, mode, train_split,
+                      r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq,fold,selected_bands):
         selected_bands = sorted(selected_bands)
         with open(self.details_file, 'a') as file:
             file.write(f"{algorithm},{dataset},{target_size},"
-                       f"{scaler_y},{mode},"
+                       f"{scaler_y},{mode},{train_split}"
                        f"{r2},{rmse},{rpd},{rpiq},"
                        f"{train_r2},{train_rmse},{train_rpd},{train_rpiq},"
                        f"{fold},"
                        f"{'|'.join([str(i) for i in selected_bands])}\n")
-        self.update_summary(algorithm,dataset, target_size, scaler_y, mode)
+        self.update_summary(algorithm,dataset, target_size, scaler_y, mode, train_split)
 
-    def record_exists(self, algorithm, dataset, target_size, scaler_y, mode, fold, test_split):
+    def record_exists(self, algorithm, dataset, target_size, scaler_y, mode, fold, train_split):
         df = pd.read_csv(self.details_file)
         df = df[
             (df['algorithm'] == algorithm) &
@@ -105,7 +110,7 @@ class Reporter:
             (df['scaler_y'] == scaler_y) &
             (df['mode'] == mode) &
             (df['fold'] == fold) &
-            (df['test_split'] == test_split)
+            (df['train_split'] == train_split)
             ]
         if df.empty:
             return False
@@ -118,8 +123,10 @@ class Reporter:
         metric = max(0,metric)
         return round(metric,5)
 
-    def create_epoch_report(self, algorithm, dataset, target_size, scaler_y, mode, fold):
-        self.current_epoch_report_file = os.path.join(self.subfolder_path, f"{algorithm}_{dataset}_{target_size}_{scaler_y}_{mode}_{fold}.csv")
+    def create_epoch_report(self, algorithm, dataset, target_size, scaler_y, mode, train_split, fold):
+        self.current_epoch_report_file = os.path.join(self.subfolder_path,
+                                                      f"{algorithm}_{dataset}_"
+                                                      f"{target_size}_{scaler_y}_{mode}_{train_split}_{fold}.csv")
 
     def report_epoch_bsdr(self, epoch, r2, rmse, rpd, rpiq, train_r2, train_rmse, train_rpd, train_rpiq, selected_bands):
         if not os.path.exists(self.current_epoch_report_file):
