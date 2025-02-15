@@ -1,6 +1,7 @@
 from algorithm import Algorithm
 import torch
 import torch.nn as nn
+from my_env import TEST
 
 
 class LinearInterpolationModule(nn.Module):
@@ -273,9 +274,11 @@ class Algorithm_bsdrcnn(Algorithm):
         self.criterion = torch.nn.MSELoss()
         self.class_size = 1
         self.lr = 0.001
-        self.total_epoch = 1
+        self.total_epoch = 2000
 
-        print(test_y.shape)
+        if TEST:
+            self.total_epoch = 1
+            print(test_y.shape)
 
         self.ann = ANN(self.target_size, mode)
         self.ann.to(self.device)
