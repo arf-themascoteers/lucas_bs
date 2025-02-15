@@ -301,7 +301,8 @@ class Algorithm_bsdrcnn(Algorithm):
             loss = self.criterion(y_hat, self.train_y)
             loss.backward()
             optimizer.step()
-            self.report(epoch)
+            if self.verbose:
+                self.report(epoch)
         return self
 
     def predict_train(self):
