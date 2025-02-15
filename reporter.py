@@ -96,7 +96,7 @@ class Reporter:
                        f"{'|'.join([str(i) for i in selected_bands])}\n")
         self.update_summary(algorithm,dataset, target_size, scaler_y, mode)
 
-    def record_exists(self, algorithm, dataset, target_size, scaler_y, mode, fold):
+    def record_exists(self, algorithm, dataset, target_size, scaler_y, mode, fold, test_split):
         df = pd.read_csv(self.details_file)
         df = df[
             (df['algorithm'] == algorithm) &
@@ -104,7 +104,8 @@ class Reporter:
             (df['target_size'] == target_size) &
             (df['scaler_y'] == scaler_y) &
             (df['mode'] == mode) &
-            (df['fold'] == fold)
+            (df['fold'] == fold) &
+            (df['test_split'] == test_split)
             ]
         if df.empty:
             return False

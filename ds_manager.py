@@ -5,7 +5,7 @@ from sklearn.preprocessing import MinMaxScaler, RobustScaler
 
 
 class DSManager:
-    def __init__(self, name="lucas",folds=1,scale_y="robust",shuffle=True):
+    def __init__(self, name="lucas",folds=1,scale_y="robust",shuffle=True,test_split=0.75):
         self.name = name
         dataset_path = f"data/{self.name}.csv"
         df = pd.read_csv(dataset_path)
@@ -21,10 +21,11 @@ class DSManager:
 
         self.data[:,0:-1] = scaler_X.fit_transform(self.data[:,0:-1])
         self.data[:,-1] = self.scaler_y.fit_transform(self.data[:,-1].reshape(-1,1)).ravel()
+        self.test_split = test_split
 
     def get_k_folds(self):
         for i in range(self.folds):
-            train_data, test_data = train_test_split(self.data, test_size=0.25, random_state=42+i)
+            train_data, test_data = train_test_split(self.data, test_size=self.test_split, random_state=42+i)
             yield train_data[:,0:-1], train_data[:,-1], test_data[:,0:-1], test_data[:,-1]
 
 

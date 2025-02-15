@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-data = pd.read_csv("results/check1/summary.csv")
+data = pd.read_csv("back/check1/summary.csv")
 data_bsdrcnn = data[(data["algorithm"] == "bsdrcnn") & (data["mode"] == "dyn")]
 data_bsdrfc = data[(data["algorithm"] == "bsdrfc") & (data["mode"] == "dyn")]
 
