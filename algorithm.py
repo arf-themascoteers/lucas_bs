@@ -3,6 +3,7 @@ from sklearn.metrics import r2_score, mean_squared_error
 import torch
 import importlib
 import numpy as np
+import time
 
 
 class Algorithm(ABC):
@@ -24,7 +25,10 @@ class Algorithm(ABC):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     def compute_fold(self):
+        start = time.time()
         self._fit()
+        end = time.time()
+        execution_time = end - start
         train_y_hat = self.predict_train()
         test_y_hat = self.predict_test()
         train_r2, train_rmse, train_rpd, train_rpiq = self.calculate_metrics(self.train_y, train_y_hat)
@@ -32,7 +36,7 @@ class Algorithm(ABC):
         self.reporter.write_details(self.get_name(),self.dataset.name,self.target_size,
                                     self.scaler_y, self.mode, self.train_size,
                                     r2, rmse, rpd, rpiq,
-                                    train_r2, train_rmse,train_rpd, train_rpiq,
+                                    train_r2, train_rmse,train_rpd, train_rpiq,execution_time,
                                     self.fold, self.get_indices())
 
     def calculate_metrics(self, y_test, y_pred):

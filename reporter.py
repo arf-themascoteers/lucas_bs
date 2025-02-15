@@ -19,11 +19,11 @@ class Reporter:
 
         if not os.path.exists(self.summary_file):
             with open(self.summary_file, 'w') as file:
-                file.write("algorithm,dataset,target_size,scaler_y,mode,train_size,r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq\n")
+                file.write("algorithm,dataset,target_size,scaler_y,mode,train_size,r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq,execution_time\n")
 
         if not os.path.exists(self.details_file):
             with open(self.details_file, 'w') as file:
-                file.write("algorithm,dataset,target_size,scaler_y,mode,train_size,r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq,fold,selected_bands\n")
+                file.write("algorithm,dataset,target_size,scaler_y,mode,train_size,r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq,execution_time,fold,selected_bands\n")
 
         self.current_epoch_report_file = None
 
@@ -46,7 +46,7 @@ class Reporter:
         if df.empty:
             return
 
-        average = df[['r2', 'rmse', 'rpd','rpiq','train_r2', 'train_rmse','train_rpd','train_rpiq']].mean()
+        average = df[['r2', 'rmse', 'rpd','rpiq','train_r2', 'train_rmse','train_rpd','train_rpiq','execution_time']].mean()
 
         summary_df_original = pd.read_csv(self.summary_file)
 
@@ -73,7 +73,8 @@ class Reporter:
                 "train_r2" : average['train_r2'],
                 "train_rmse" : average['train_rmse'],
                 "train_rpd" : average['train_rpd'],
-                "train_rpiq" : average['train_rpiq']
+                "train_rpiq" : average['train_rpiq'],
+                "execution_time": average['execution_time']
             }
             summary_df_original.to_csv(self.summary_file, index=False)
         else:
@@ -85,18 +86,20 @@ class Reporter:
                 (summary_df_original['mode'] == mode) &
                 (summary_df_original['train_size'] == train_size)
                 ,
-                ["r2","rmse","rpd","rpiq","train_r2","train_rmse","train_rpd","train_rpiq"]
-            ] = [average['r2'],average['rmse'],average['rpd'],average['rpiq'],average['train_r2'],average['train_rmse'],average['rpd'],average['rpiq']]
+                ["r2","rmse","rpd","rpiq","train_r2","train_rmse","train_rpd","train_rpiq","execution_time"]
+            ] = [average['r2'],average['rmse'],average['rpd'],average['rpiq'],average['train_r2'],
+                 average['train_rmse'],average['train_rpd'],average['train_rpiq'],average['execution_time']],
             summary_df_original.to_csv(self.summary_file, index=False)
 
     def write_details(self, algorithm,dataset, target_size, scaler_y, mode, train_size,
-                      r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq,fold,selected_bands):
+                      r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq,execution_time,
+                      fold,selected_bands):
         selected_bands = sorted(selected_bands)
         with open(self.details_file, 'a') as file:
             file.write(f"{algorithm},{dataset},{target_size},"
                        f"{scaler_y},{mode},{train_size},"
                        f"{r2},{rmse},{rpd},{rpiq},"
-                       f"{train_r2},{train_rmse},{train_rpd},{train_rpiq},"
+                       f"{train_r2},{train_rmse},{train_rpd},{train_rpiq},{execution_time},"
                        f"{fold},"
                        f"{'|'.join([str(i) for i in selected_bands])}\n")
         self.update_summary(algorithm,dataset, target_size, scaler_y, mode, train_size)
