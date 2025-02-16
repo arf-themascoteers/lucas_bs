@@ -14,12 +14,12 @@ class DSManager:
             df = df.sample(frac=1).reset_index(drop=True)
         self.data = df.to_numpy()
 
-        scaler_X = MinMaxScaler()
+        self.scaler_X = MinMaxScaler()
         self.scaler_y = RobustScaler()
         if scale_y == "minmax":
             self.scaler_y = MinMaxScaler()
 
-        self.data[:,0:-1] = scaler_X.fit_transform(self.data[:,0:-1])
+        self.data[:,0:-1] = self.scaler_X.fit_transform(self.data[:,0:-1])
         self.data[:,-1] = self.scaler_y.fit_transform(self.data[:,-1].reshape(-1,1)).ravel()
         self.train_size = train_size
 
