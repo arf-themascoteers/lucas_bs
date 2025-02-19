@@ -181,9 +181,10 @@ class ANN(nn.Module):
         return self.indices
 
     def get_order_loss(self):
+        min_dist = 3/4200
         loss = torch.tensor(0.0, dtype=torch.float32).to(self.device)
         for i in range(1, len(self.indices)):
-            loss = loss + torch.relu(self.indices[i-1]-self.indices[i])
+            loss = loss + torch.relu(self.indices[i-1]-(self.indices[i]+min_dist))
         return loss
 
     def get_range_loss(self):
@@ -192,8 +193,7 @@ class ANN(nn.Module):
         loss = loss + torch.relu(self.indices[-1]-1)
         return loss
 
-
-class Algorithm_bsdrcnn_r(Algorithm):
+class Algorithm_bsdrcnn_r_d(Algorithm):
     def __init__(self, dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, train_size, reporter, verbose):
         super().__init__(dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, train_size, reporter, verbose)
 

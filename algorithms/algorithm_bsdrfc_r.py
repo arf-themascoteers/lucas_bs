@@ -84,14 +84,14 @@ class ANN(nn.Module):
 
     def get_order_loss(self):
         loss = torch.tensor(0.0, dtype=torch.float32).to(self.device)
-        loss = loss + torch.relu(-self.indices[0])
-        loss = loss + torch.relu(self.indices[-1] - 1)
+        for i in range(1, len(self.indices)):
+            loss = loss + torch.relu(self.indices[i - 1] - self.indices[i])
         return loss
 
     def get_range_loss(self):
         loss = torch.tensor(0.0, dtype=torch.float32).to(self.device)
-        for i in range(1, len(self.indices)):
-            loss = loss + torch.relu(self.indices[i - 1] - self.indices[i])
+        loss = loss + torch.relu(-self.indices[0])
+        loss = loss + torch.relu(self.indices[-1] - 1)
         return loss
 
 
