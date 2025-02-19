@@ -40,7 +40,20 @@ class ANN(nn.Module):
                          requires_grad=True).to(self.device))
         if self.mode in ["static", "semi"]:
             self.indices.requires_grad = False
-        if target_size > 100:
+
+        if 512 < target_size:
+            hidden1 = 100
+            hidden2 = 50
+            self.fc = nn.Sequential(
+                nn.Linear(target_size, hidden1),
+                nn.BatchNorm1d(hidden1),
+                nn.LeakyReLU(),
+                nn.Linear(hidden1, hidden2),
+                nn.BatchNorm1d(hidden2),
+                nn.LeakyReLU(),
+                nn.Linear(hidden2, 1)
+            )
+        elif 100 < target_size <= 512:
             hidden1 = target_size // 2
             hidden2 = target_size // 4
             self.fc = nn.Sequential(
