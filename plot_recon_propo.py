@@ -28,6 +28,8 @@ for idx, ax in enumerate(axes):
                3047, 3153, 3183, 3203, 3275, 3318, 3319, 3470, 3475, 3477, 3478, 3568, 3608, 3610, 3733, 3736, 3741,
                3766, 3775, 3820, 3899, 3903, 3933, 3967, 3969, 3985, 4115, 4144]
 
+    print(len(indices))
+
     X_hat = X[indices]
     ax.plot(X, color="green", label="Original spectra")
     ax.plot(indices, X_hat, color="blue", linestyle='--', dashes=(1, 2), label="Reconstructed spectra", linewidth=3)
