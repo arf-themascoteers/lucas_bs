@@ -27,8 +27,9 @@ class LinearInterpolationModule(nn.Module):
 
 
 class ANN(nn.Module):
-    def __init__(self, target_size, mode):
+    def __init__(self, input_size, target_size, mode):
         super().__init__()
+        self.input_size = input_size
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.target_size = target_size
         self.mode = mode
@@ -39,12 +40,26 @@ class ANN(nn.Module):
                          requires_grad=True).to(self.device))
         if self.mode in ["static", "semi"]:
             self.indices.requires_grad = False
-        self.fc = nn.Sequential(
-            nn.Linear(self.target_size, 40),
-            nn.BatchNorm1d(40),
-            nn.LeakyReLU(),
-            nn.Linear(40,1)
-        )
+        if input_size > 100:
+            hidden1 = input_size // 2
+            hidden2 = input_size // 4
+            self.fc = nn.Sequential(
+                nn.Linear(input_size, hidden1),
+                nn.BatchNorm1d(hidden1),
+                nn.LeakyReLU(),
+                nn.Linear(hidden1, hidden2),
+                nn.BatchNorm1d(hidden2),
+                nn.LeakyReLU(),
+                nn.Linear(hidden2, 1)
+            )
+        else:
+            hidden = max(10, input_size // 2)
+            self.fc = nn.Sequential(
+                nn.Linear(input_size, hidden),
+                nn.BatchNorm1d(hidden),
+                nn.LeakyReLU(),
+                nn.Linear(hidden, 1)
+            )
         num_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
         #print("Number of learnable parameters:", num_params)
 
@@ -80,9 +95,9 @@ class Algorithm_bsdrfc(Algorithm):
         self.lr = 0.001
         self.total_epoch = 2000
 
-        self.ann = ANN(self.target_size, mode)
-        self.ann.to(self.device)
         self.original_feature_size = self.train_x.shape[1]
+        self.ann = ANN(self.original_feature_size,self.target_size, mode)
+        self.ann.to(self.device)
 
         self.linterp_train = LinearInterpolationModule(self.train_x, self.device)
         self.linterp_test = LinearInterpolationModule(self.test_x, self.device)
