@@ -5,7 +5,7 @@ if __name__ == '__main__':
     verbose = False
     tag = f"mine"
     tasks = {
-        "algorithms": ["bsdrcnn","bsdrfc"],
+        "algorithms": ["bsdrcnn"],
         "datasets": ["lucas"],
         "target_sizes" : [8,16,32,64,128,256,512,4200],
         "scale_y": ["robust"],
