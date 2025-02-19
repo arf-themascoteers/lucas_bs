@@ -22,16 +22,19 @@ class Reporter:
                 file.write("algorithm,dataset,target_size,scaler_y,mode,train_size,"
                            "r2,rmse,rpd,rpiq,"
                            "r2_o,rmse_o,rpd_o,rpiq_o,"
+                           "train_r2,train_rmse,train_rpd,train_rpiq,"
                            "train_r2_o,train_rmse_o,train_rpd_o,train_rpiq_o,"
+                           "params,"
                            "execution_time\n")
 
         if not os.path.exists(self.details_file):
             with open(self.details_file, 'w') as file:
                 file.write("algorithm,dataset,target_size,scaler_y,mode,train_size,"
-                           "r2,rmse,rpd,rpiq,train_r2,"
-                           "r2_o,rmse_o,rpd_o,rpiq_o,train_r2_o,"
-                           "train_rmse,train_rpd,train_rpiq,"
-                           "train_rmse_o,train_rpd_o,train_rpiq_o,"
+                           "r2,rmse,rpd,rpiq,"
+                           "r2_o,rmse_o,rpd_o,rpiq_o,"
+                           "train_r2,train_rmse,train_rpd,train_rpiq,"
+                           "train_r2_o,train_rmse_o,train_rpd_o,train_rpiq_o,"
+                           "params,"
                            "execution_time,fold,selected_bands\n")
 
         self.current_epoch_report_file = None
@@ -55,7 +58,12 @@ class Reporter:
         if df.empty:
             return
 
-        average = df[['r2', 'rmse', 'rpd','rpiq','train_r2', 'train_rmse','train_rpd','train_rpiq','execution_time']].mean()
+        average = df[['r2', 'rmse', 'rpd','rpiq',
+                      'r2_o', 'rmse_o', 'rpd_o','rpiq_o',
+                      'train_r2', 'train_rmse','train_rpd','train_rpiq',
+                      'train_r2_o', 'train_rmse_o','train_rpd_o','train_rpiq_o',
+                      'params,'
+                      'execution_time']].mean()
 
         summary_df_original = pd.read_csv(self.summary_file)
 
@@ -79,10 +87,19 @@ class Reporter:
                 "rmse" : average['rmse'],
                 "rpd" : average['rpd'],
                 "rpiq" : average['rpiq'],
+                "r2_o": average['r2_o'],
+                "rmse_o": average['rmse_o'],
+                "rpd_o": average['rpd_o'],
+                "rpiq_o": average['rpiq_o'],
                 "train_r2" : average['train_r2'],
                 "train_rmse" : average['train_rmse'],
                 "train_rpd" : average['train_rpd'],
                 "train_rpiq" : average['train_rpiq'],
+                "train_r2_o": average['train_r2_o'],
+                "train_rmse_o": average['train_rmse_o'],
+                "train_rpd_o": average['train_rpd_o'],
+                "train_rpiq_o": average['train_rpiq_o'],
+                "params": average['params'],
                 "execution_time": average['execution_time']
             }
             summary_df_original.to_csv(self.summary_file, index=False)
@@ -95,7 +112,14 @@ class Reporter:
                 (summary_df_original['mode'] == mode) &
                 (summary_df_original['train_size'] == train_size)
                 ,
-                ["r2","rmse","rpd","rpiq","train_r2","train_rmse","train_rpd","train_rpiq","execution_time"]
+                [
+                    "r2","rmse","rpd","rpiq",
+                    "r2_o","rmse_o","rpd_o","rpiq_o",
+                    "train_r2","train_rmse","train_rpd","train_rpiq",
+                    "train_r2_o","train_rmse_o","train_rpd_o","train_rpiq_o",
+                    "params",
+                    "execution_time"
+                ]
             ] = [average['r2'],average['rmse'],average['rpd'],average['rpiq'],average['train_r2'],
                  average['train_rmse'],average['train_rpd'],average['train_rpiq'],average['execution_time']],
             summary_df_original.to_csv(self.summary_file, index=False)
@@ -143,7 +167,11 @@ class Reporter:
     def report_epoch_bsdr(self, epoch, r2, rmse, rpd, rpiq, train_r2, train_rmse, train_rpd, train_rpiq, selected_bands):
         if not os.path.exists(self.current_epoch_report_file):
             with open(self.current_epoch_report_file, 'w') as file:
-                columns = ["epoch","r2","rmse","rpd","rpiq","train_r2","train_rmse","train_rpd","train_rpiq"] + [f"band_{index+1}" for index in range(len(selected_bands))]
+                columns = [
+                              "epoch",
+                              "r2","rmse","rpd","rpiq","train_r2",
+                              "train_rmse","train_rpd","train_rpiq"
+                          ] + [f"band_{index+1}" for index in range(len(selected_bands))]
                 file.write(",".join(columns)+"\n")
 
         with open(self.current_epoch_report_file, 'a') as file:

@@ -1,6 +1,7 @@
 from algorithm import Algorithm
 import torch
 import torch.nn as nn
+from my_env import TEST
 
 
 class LinearInterpolationModule(nn.Module):
@@ -92,6 +93,10 @@ class Algorithm_bsdrfc(Algorithm):
         self.class_size = 1
         self.lr = 0.001
         self.total_epoch = 2000
+
+        if TEST:
+            self.total_epoch = 1
+            print(test_y.shape)
 
         self.original_feature_size = self.train_x.shape[1]
         self.ann = ANN(self.original_feature_size,self.target_size, mode)

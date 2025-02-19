@@ -42,6 +42,7 @@ class Algorithm(ABC):
                                     train_r2, train_rmse,train_rpd, train_rpiq,
                                     train_r2_o, train_rmse_o, train_rpd_o, train_rpiq_o,
                                     execution_time,
+                                    self.get_num_params(),
                                     self.fold, self.get_indices())
 
     def calculate_4_metrics(self, y_test, y_pred):
