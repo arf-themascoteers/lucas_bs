@@ -193,7 +193,7 @@ class ANN(nn.Module):
         return loss
 
 
-class Algorithm_bsdrcnn(Algorithm):
+class Algorithm_bsdrcnn_r(Algorithm):
     def __init__(self, dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, train_size, reporter, verbose):
         super().__init__(dataset, train_x, train_y, test_x, test_y, target_size, fold, scaler_y, mode, train_size, reporter, verbose)
 
