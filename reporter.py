@@ -102,7 +102,7 @@ class Reporter:
                 "train_rmse_o": average['train_rmse_o'],
                 "train_rpd_o": average['train_rpd_o'],
                 "train_rpiq_o": average['train_rpiq_o'],
-                "execution_time": average['execution_time'],
+                "execution_time": int(average['execution_time']),
                 "params": average['params']
             }
             summary_df_original.to_csv(self.summary_file, index=False)
