@@ -24,8 +24,9 @@ class Reporter:
                            "r2_o,rmse_o,rpd_o,rpiq_o,"
                            "train_r2,train_rmse,train_rpd,train_rpiq,"
                            "train_r2_o,train_rmse_o,train_rpd_o,train_rpiq_o,"
-                           "params,"
-                           "execution_time\n")
+                           "execution_time,"
+                           "params\n"
+                           )
 
         if not os.path.exists(self.details_file):
             with open(self.details_file, 'w') as file:
@@ -34,8 +35,9 @@ class Reporter:
                            "r2_o,rmse_o,rpd_o,rpiq_o,"
                            "train_r2,train_rmse,train_rpd,train_rpiq,"
                            "train_r2_o,train_rmse_o,train_rpd_o,train_rpiq_o,"
+                           "execution_time,"
                            "params,"
-                           "execution_time,fold,selected_bands\n")
+                           "fold,selected_bands\n")
 
         self.current_epoch_report_file = None
 
@@ -62,8 +64,9 @@ class Reporter:
                       'r2_o', 'rmse_o', 'rpd_o','rpiq_o',
                       'train_r2', 'train_rmse','train_rpd','train_rpiq',
                       'train_r2_o', 'train_rmse_o','train_rpd_o','train_rpiq_o',
-                      'params,'
-                      'execution_time']].mean()
+                      'execution_time',
+                      'params'
+                      ]].mean()
 
         summary_df_original = pd.read_csv(self.summary_file)
 
@@ -99,8 +102,8 @@ class Reporter:
                 "train_rmse_o": average['train_rmse_o'],
                 "train_rpd_o": average['train_rpd_o'],
                 "train_rpiq_o": average['train_rpiq_o'],
-                "params": average['params'],
-                "execution_time": average['execution_time']
+                "execution_time": average['execution_time'],
+                "params": average['params']
             }
             summary_df_original.to_csv(self.summary_file, index=False)
         else:
@@ -117,22 +120,37 @@ class Reporter:
                     "r2_o","rmse_o","rpd_o","rpiq_o",
                     "train_r2","train_rmse","train_rpd","train_rpiq",
                     "train_r2_o","train_rmse_o","train_rpd_o","train_rpiq_o",
-                    "params",
-                    "execution_time"
+                    "execution_time",
+                    "params"
                 ]
-            ] = [average['r2'],average['rmse'],average['rpd'],average['rpiq'],average['train_r2'],
-                 average['train_rmse'],average['train_rpd'],average['train_rpiq'],average['execution_time']],
+            ] = [
+                 average['r2'],average['rmse'],average['rpd'],average['rpiq'],
+                 average['r2_o'],average['rmse_o'],average['rpd_o'],average['rpiq_o'],
+                 average['train_r2'],average['train_rmse'],average['train_rpd'],average['train_rpiq'],
+                 average['train_r2_o'],average['train_rmse_o'],average['train_rpd_o'],average['train_rpiq'],
+                 average['execution_time'],
+                 int(average['params']),
+                 ],
             summary_df_original.to_csv(self.summary_file, index=False)
 
     def write_details(self, algorithm,dataset, target_size, scaler_y, mode, train_size,
-                      r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq,execution_time,
+                      r2, rmse, rpd, rpiq,
+                      r2_o, rmse_o, rpd_o, rpiq_o,
+                      train_r2, train_rmse, train_rpd, train_rpiq,
+                      train_r2_o, train_rmse_o, train_rpd_o, train_rpiq_o,
+                      execution_time,
+                      params,
                       fold,selected_bands):
         selected_bands = sorted(selected_bands)
         with open(self.details_file, 'a') as file:
             file.write(f"{algorithm},{dataset},{target_size},"
                        f"{scaler_y},{mode},{train_size},"
                        f"{r2},{rmse},{rpd},{rpiq},"
-                       f"{train_r2},{train_rmse},{train_rpd},{train_rpiq},{execution_time},"
+                       f"{r2_o},{rmse_o},{rpd_o},{rpiq_o},"
+                       f"{train_r2},{train_rmse},{train_rpd},{train_rpiq},"
+                       f"{train_r2_o},{train_rmse_o},{train_rpd_o},{train_rpiq_o},"
+                       f"{execution_time},"
+                       f"{int(params)},"
                        f"{fold},"
                        f"{'|'.join([str(i) for i in selected_bands])}\n")
         self.update_summary(algorithm,dataset, target_size, scaler_y, mode, train_size)

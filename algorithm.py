@@ -38,7 +38,7 @@ class Algorithm(ABC):
         self.reporter.write_details(self.get_name(),self.dataset.name,self.target_size,
                                     self.scaler_y, self.mode, self.train_size,
                                     r2, rmse, rpd, rpiq,
-                                    rmse_o, rpd_o, rpiq_o,
+                                    r2_o,rmse_o, rpd_o, rpiq_o,
                                     train_r2, train_rmse,train_rpd, train_rpiq,
                                     train_r2_o, train_rmse_o, train_rpd_o, train_rpiq_o,
                                     execution_time,
@@ -60,7 +60,6 @@ class Algorithm(ABC):
         y_pred = Algorithm.convert_to_numpy(y_pred.detach().cpu().numpy())
 
         r2, rmse, rpd, rpiq = self.calculate_4_metrics(y_test, y_pred)
-        print(self.scaler_y)
         y_test_original = self.dataset.scaler_y.inverse_transform(y_test.reshape(-1, 1)).ravel()
         y_pred_original = self.dataset.scaler_y.inverse_transform(y_pred.reshape(-1, 1)).ravel()
 
