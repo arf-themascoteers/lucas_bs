@@ -2,7 +2,7 @@ from task_runner import TaskRunner
 
 if __name__ == '__main__':
     train_sizes = [0.05, 0.15]
-    verbose = True
+    verbose = False
     tag = f"test1"
     tasks = {
         "algorithms": ["bsdrcnn","bsdrfc"],

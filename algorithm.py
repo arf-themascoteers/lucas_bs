@@ -60,9 +60,9 @@ class Algorithm(ABC):
         y_pred = Algorithm.convert_to_numpy(y_pred.detach().cpu().numpy())
 
         r2, rmse, rpd, rpiq = self.calculate_4_metrics(y_test, y_pred)
-
-        y_test_original = self.scaler_y.inverse_transform(y_test.reshape(-1, 1)).ravel()
-        y_pred_original = self.scaler_y.inverse_transform(y_pred.reshape(-1, 1)).ravel()
+        print(self.scaler_y)
+        y_test_original = self.dataset.scaler_y.inverse_transform(y_test.reshape(-1, 1)).ravel()
+        y_pred_original = self.dataset.scaler_y.inverse_transform(y_pred.reshape(-1, 1)).ravel()
 
         r2_o, rmse_o, rpd_o, rpiq_o = self.calculate_4_metrics(y_test_original, y_pred_original)
 

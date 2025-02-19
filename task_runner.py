@@ -19,7 +19,10 @@ class TaskRunner:
                 for target_size in self.task["target_sizes"]:
                     for scale_y in self.task["scale_y"]:
                         for train_size in self.task["train_sizes"]:
-                            dataset = DSManager(dataset_name, self.folds, scale_y, train_size=train_size)
+                            split = "normal"
+                            if "split" in self.task:
+                                split = self.task["split"]
+                            dataset = DSManager(dataset_name, self.folds, scale_y, train_size=train_size,split=split)
                             for mode in self.task["mode"]:
                                 for fold, (train_x, train_y, test_x, test_y) in enumerate(dataset.get_k_folds()):
                                     if self.reporter.record_exists(algorithm, dataset_name, target_size, scale_y, mode, fold, train_size):

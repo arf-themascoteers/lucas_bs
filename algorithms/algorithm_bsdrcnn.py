@@ -326,8 +326,10 @@ class Algorithm_bsdrcnn(Algorithm):
         train_y_hat = self.predict_train()
         test_y_hat = self.predict_test()
 
-        r2, rmse, rpd, rpiq = self.calculate_metrics(self.test_y, test_y_hat)
-        train_r2, train_rmse, train_rpd, train_rpiq = self.calculate_metrics(self.train_y, train_y_hat)
+        r2, rmse, rpd, rpiq, r2_o, rmse_o, rpd_o, rpiq_o \
+            = self.calculate_metrics(self.test_y, test_y_hat)
+        train_r2, train_rmse, train_rpd, train_rpiq, train_r2_o, train_rmse_o, train_rpd_o, train_rpiq_o \
+            = self.calculate_metrics(self.train_y, train_y_hat)
 
         self.reporter.report_epoch_bsdr(epoch, r2, rpd, rpiq, rmse, train_r2, train_rmse, train_rpd, train_rpiq, bands)
         cells = [epoch, r2, rmse, rpd, rpiq, train_r2, train_rmse, train_rpd, train_rpiq] + bands
