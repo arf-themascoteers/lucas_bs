@@ -53,8 +53,6 @@ class ANN(nn.Module):
             nn.Flatten(start_dim=1),
             nn.Linear(last_layer_input,1)
         )
-        num_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
-        #print("Number of learnable parameters:", num_params)
 
     def forward(self, X):
         X = X.reshape(X.shape[0], 1, X.shape[1])
@@ -165,3 +163,8 @@ class Algorithm_asa(Algorithm):
             batch_output = self.ann(hidden)
             outputs.append(batch_output)
         return torch.cat(outputs, dim=0)
+
+    def get_num_params(self):
+        num_params1 = sum(p.numel() for p in self.ann.parameters() if p.requires_grad)
+        num_params2 = sum(p.numel() for p in self.sae.parameters() if p.requires_grad)
+        return num_params1 + num_params2

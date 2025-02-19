@@ -31,34 +31,41 @@ class Algorithm(ABC):
         execution_time = end - start
         train_y_hat = self.predict_train()
         test_y_hat = self.predict_test()
-        train_r2, train_rmse, train_rpd, train_rpiq = self.calculate_metrics(self.train_y, train_y_hat)
-        r2, rmse, rpd, rpiq = self.calculate_metrics(self.test_y, test_y_hat)
+        train_r2, train_rmse, train_rpd, train_rpiq, train_r2_o, train_rmse_o, train_rpd_o, train_rpiq_o\
+            = self.calculate_metrics(self.train_y, train_y_hat)
+        r2, rmse, rpd, rpiq, r2_o, rmse_o, rpd_o, rpiq_o \
+            = self.calculate_metrics(self.test_y, test_y_hat)
         self.reporter.write_details(self.get_name(),self.dataset.name,self.target_size,
                                     self.scaler_y, self.mode, self.train_size,
                                     r2, rmse, rpd, rpiq,
-                                    train_r2, train_rmse,train_rpd, train_rpiq,execution_time,
+                                    rmse_o, rpd_o, rpiq_o,
+                                    train_r2, train_rmse,train_rpd, train_rpiq,
+                                    train_r2_o, train_rmse_o, train_rpd_o, train_rpiq_o,
+                                    execution_time,
                                     self.fold, self.get_indices())
+
+    def calculate_4_metrics(self, y_test, y_pred):
+        r2 = r2_score(y_test, y_pred)
+        rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+        std_dev = np.std(y_test, ddof=1)
+        rpd = std_dev/rmse
+        iqr = np.percentile(y_test, 75) - np.percentile(y_test, 25)
+        rpiq = iqr/rmse
+
+        return r2, rmse, rpd, rpiq
 
     def calculate_metrics(self, y_test, y_pred):
         y_test = Algorithm.convert_to_numpy(y_test.detach().cpu().numpy())
         y_pred = Algorithm.convert_to_numpy(y_pred.detach().cpu().numpy())
 
-        r2 = r2_score(y_test, y_pred)
-        #r2 = max(r2,0)
+        r2, rmse, rpd, rpiq = self.calculate_4_metrics(y_test, y_pred)
 
-        rmse = np.sqrt(mean_squared_error(y_test, y_pred))
-        #rmse = max(rmse,0)
+        y_test_original = self.scaler_y.inverse_transform(y_test.reshape(-1, 1)).ravel()
+        y_pred_original = self.scaler_y.inverse_transform(y_pred.reshape(-1, 1)).ravel()
 
-        std_dev = np.std(y_test, ddof=1)
-        rpd = std_dev/rmse
-        #rpd = max(rpd, 0)
+        r2_o, rmse_o, rpd_o, rpiq_o = self.calculate_4_metrics(y_test_original, y_pred_original)
 
-        iqr = np.percentile(y_test, 75) - np.percentile(y_test, 25)
-        rpiq = iqr/rmse
-        #rpiq = max(rpiq, 0)
-
-        #return round(r2, 2), round(rmse, 2), round(rpd, 2), round(rpiq, 2)
-        return r2, rmse, rpd, rpiq
+        return r2, rmse, rpd, rpiq, r2_o, rmse_o, rpd_o, rpiq_o
 
     @staticmethod
     def convert_to_numpy(t):
@@ -97,4 +104,8 @@ class Algorithm(ABC):
 
     @abstractmethod
     def predict_test(self):
+        pass
+
+    @abstractmethod
+    def get_num_params(self):
         pass

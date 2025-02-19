@@ -19,11 +19,20 @@ class Reporter:
 
         if not os.path.exists(self.summary_file):
             with open(self.summary_file, 'w') as file:
-                file.write("algorithm,dataset,target_size,scaler_y,mode,train_size,r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq,execution_time\n")
+                file.write("algorithm,dataset,target_size,scaler_y,mode,train_size,"
+                           "r2,rmse,rpd,rpiq,"
+                           "r2_o,rmse_o,rpd_o,rpiq_o,"
+                           "train_r2_o,train_rmse_o,train_rpd_o,train_rpiq_o,"
+                           "execution_time\n")
 
         if not os.path.exists(self.details_file):
             with open(self.details_file, 'w') as file:
-                file.write("algorithm,dataset,target_size,scaler_y,mode,train_size,r2,rmse,rpd,rpiq,train_r2,train_rmse,train_rpd,train_rpiq,execution_time,fold,selected_bands\n")
+                file.write("algorithm,dataset,target_size,scaler_y,mode,train_size,"
+                           "r2,rmse,rpd,rpiq,train_r2,"
+                           "r2_o,rmse_o,rpd_o,rpiq_o,train_r2_o,"
+                           "train_rmse,train_rpd,train_rpiq,"
+                           "train_rmse_o,train_rpd_o,train_rpiq_o,"
+                           "execution_time,fold,selected_bands\n")
 
         self.current_epoch_report_file = None
 

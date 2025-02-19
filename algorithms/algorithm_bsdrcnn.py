@@ -42,8 +42,6 @@ class ANN(nn.Module):
             self.indices.requires_grad = False
 
         self.cnn = self.get_cnn(self.target_size)
-        num_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
-        #print("Number of learnable parameters:", num_params)
 
     def get_cnn(self, target_size):
         if target_size == 8:
@@ -339,3 +337,6 @@ class Algorithm_bsdrcnn(Algorithm):
     def get_indices(self):
         indices = torch.round(self.ann.get_indices() * self.original_feature_size ).to(torch.int64).tolist()
         return list(dict.fromkeys(indices))
+
+    def get_num_params(self):
+        return sum(p.numel() for p in self.ann.parameters() if p.requires_grad)

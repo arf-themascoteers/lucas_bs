@@ -60,8 +60,6 @@ class ANN(nn.Module):
                 nn.LeakyReLU(),
                 nn.Linear(hidden, 1)
             )
-        num_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
-        #print("Number of learnable parameters:", num_params)
 
     @staticmethod
     def inverse_sigmoid_torch(x):
@@ -153,3 +151,6 @@ class Algorithm_bsdrfc(Algorithm):
     def get_indices(self):
         indices = torch.round(self.ann.get_indices() * self.original_feature_size ).to(torch.int64).tolist()
         return list(dict.fromkeys(indices))
+
+    def get_num_params(self):
+        return sum(p.numel() for p in self.ann.parameters() if p.requires_grad)
