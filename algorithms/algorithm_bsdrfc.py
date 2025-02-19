@@ -28,9 +28,8 @@ class LinearInterpolationModule(nn.Module):
 
 
 class ANN(nn.Module):
-    def __init__(self, input_size, target_size, mode):
+    def __init__(self, target_size, mode):
         super().__init__()
-        self.input_size = input_size
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.target_size = target_size
         self.mode = mode
@@ -41,11 +40,11 @@ class ANN(nn.Module):
                          requires_grad=True).to(self.device))
         if self.mode in ["static", "semi"]:
             self.indices.requires_grad = False
-        if input_size > 100:
-            hidden1 = input_size // 2
-            hidden2 = input_size // 4
+        if target_size > 100:
+            hidden1 = target_size // 2
+            hidden2 = target_size // 4
             self.fc = nn.Sequential(
-                nn.Linear(input_size, hidden1),
+                nn.Linear(target_size, hidden1),
                 nn.BatchNorm1d(hidden1),
                 nn.LeakyReLU(),
                 nn.Linear(hidden1, hidden2),
@@ -54,9 +53,9 @@ class ANN(nn.Module):
                 nn.Linear(hidden2, 1)
             )
         else:
-            hidden = max(10, input_size // 2)
+            hidden = max(10, target_size // 2)
             self.fc = nn.Sequential(
-                nn.Linear(input_size, hidden),
+                nn.Linear(target_size, hidden),
                 nn.BatchNorm1d(hidden),
                 nn.LeakyReLU(),
                 nn.Linear(hidden, 1)
@@ -99,7 +98,7 @@ class Algorithm_bsdrfc(Algorithm):
             print(test_y.shape)
 
         self.original_feature_size = self.train_x.shape[1]
-        self.ann = ANN(self.original_feature_size,self.target_size, mode)
+        self.ann = ANN(self.target_size, mode)
         self.ann.to(self.device)
 
         self.linterp_train = LinearInterpolationModule(self.train_x, self.device)
