@@ -97,7 +97,7 @@ class Algorithm_bsdrcnn_r_4200(Algorithm):
         self.criterion = torch.nn.MSELoss()
         self.class_size = 1
         self.lr = 0.001
-        self.total_epoch = 2000
+        self.total_epoch = 30
 
         if TEST:
             self.total_epoch = 1
@@ -211,8 +211,7 @@ class Algorithm_bsdrcnn_r_4200(Algorithm):
         for index, (batch_x, batch_y) in enumerate(self.test_dataloader):
             linterp_test = self.linterp_tests[index]
             y_hat = self.ann(linterp_test)
-            test_y_hat.append(y_hat)
-
+            test_y_hat.append(y_hat.detach().cpu())
         test_y_hat = torch.cat(test_y_hat, dim=0)
         return test_y_hat
 
