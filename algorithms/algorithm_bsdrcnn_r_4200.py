@@ -142,6 +142,7 @@ class Algorithm_bsdrcnn_r_4200(Algorithm):
                 loss = mse_loss + order_loss + range_loss
                 loss.backward()
                 optimizer.step()
+                print(epoch, index, loss.item())
                 if self.verbose:
                     self.report(epoch)
         return self
