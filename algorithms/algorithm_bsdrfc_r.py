@@ -45,10 +45,8 @@ class ANN(nn.Module):
             hidden2 = 50
             self.fc = nn.Sequential(
                 nn.Linear(target_size, hidden1),
-                nn.BatchNorm1d(hidden1),
                 nn.LeakyReLU(),
                 nn.Linear(hidden1, hidden2),
-                nn.BatchNorm1d(hidden2),
                 nn.LeakyReLU(),
                 nn.Linear(hidden2, 1)
             )
@@ -57,10 +55,8 @@ class ANN(nn.Module):
             hidden2 = target_size // 4
             self.fc = nn.Sequential(
                 nn.Linear(target_size, hidden1),
-                nn.BatchNorm1d(hidden1),
                 nn.LeakyReLU(),
                 nn.Linear(hidden1, hidden2),
-                nn.BatchNorm1d(hidden2),
                 nn.LeakyReLU(),
                 nn.Linear(hidden2, 1)
             )
@@ -68,7 +64,6 @@ class ANN(nn.Module):
             hidden = max(10, target_size // 2)
             self.fc = nn.Sequential(
                 nn.Linear(target_size, hidden),
-                nn.BatchNorm1d(hidden),
                 nn.LeakyReLU(),
                 nn.Linear(hidden, 1)
             )
@@ -111,7 +106,7 @@ class Algorithm_bsdrfc_r(Algorithm):
         self.criterion = torch.nn.MSELoss()
         self.class_size = 1
         self.lr = 0.001
-        self.total_epoch = 2000
+        self.total_epoch = 1000
 
         if TEST:
             self.total_epoch = 1

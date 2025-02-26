@@ -96,12 +96,15 @@ class ANN(nn.Module):
                 nn.Conv1d(1, 32, kernel_size=16, stride=1, padding=0),
                 nn.BatchNorm1d(32),
                 nn.LeakyReLU(),
-                nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
+                nn.MaxPool1d(kernel_size=8, stride=4, padding=0),
                 nn.Conv1d(32, 64, kernel_size=8, stride=1, padding=0),
                 nn.BatchNorm1d(64),
                 nn.LeakyReLU(),
                 nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
                 nn.Flatten(start_dim=1),
+                nn.Linear(320, 64),
+                nn.BatchNorm1d(64),
+                nn.LeakyReLU(),
                 nn.Linear(64, 1)
             )
         if target_size == 256:
@@ -209,7 +212,7 @@ class Algorithm_bsdrcnn_r(Algorithm):
         self.criterion = torch.nn.MSELoss()
         self.class_size = 1
         self.lr = 0.001
-        self.total_epoch = 2000
+        self.total_epoch = 1000
 
         if TEST:
             self.total_epoch = 1

@@ -50,12 +50,12 @@ class ANN(nn.Module):
             nn.BatchNorm1d(64),
             nn.LeakyReLU(),
             nn.MaxPool1d(kernel_size=16, stride=16, padding=0),
-            nn.Conv1d(64, 128, kernel_size=4, stride=1, padding=0),
+            nn.Conv1d(64, 128, kernel_size=8, stride=1, padding=0),
             nn.BatchNorm1d(128),
             nn.LeakyReLU(),
-            nn.MaxPool1d(kernel_size=4, stride=4, padding=0),
+            nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
             nn.Flatten(start_dim=1),
-            nn.Linear(384, 1)
+            nn.Linear(128, 1)
         )
 
     def forward(self, linterp):
@@ -97,7 +97,7 @@ class Algorithm_bsdrcnn_r_4200(Algorithm):
         self.criterion = torch.nn.MSELoss()
         self.class_size = 1
         self.lr = 0.001
-        self.total_epoch = 30
+        self.total_epoch = 1000
 
         if TEST:
             self.total_epoch = 1
