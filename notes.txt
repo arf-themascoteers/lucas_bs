@@ -30,3 +30,11 @@ spectral continuity
 recon
 - bottom
 - theo justific. take help from chatgpt. citation - sab?
+
+=====
+
+explain how sort works
+
+bsdr compare
+
+comparison directly

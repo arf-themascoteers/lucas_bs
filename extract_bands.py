@@ -26,7 +26,8 @@ downsampled_unordered = signal[values_list]
 
 axes[2].plot(downsampled_unordered)
 axes[2].set_title("(b) Downsampled Signal (unordered)")
-
+print(len(downsampled_unordered))
+print(values_list)
 plt.tight_layout()
 plt.show()
 
