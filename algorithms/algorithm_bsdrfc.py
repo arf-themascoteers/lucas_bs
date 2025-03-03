@@ -41,33 +41,39 @@ class ANN(nn.Module):
         if self.mode in ["static", "semi"]:
             self.indices.requires_grad = False
 
-        if 512 < target_size:
-            hidden1 = 100
-            hidden2 = 50
-            self.fc = nn.Sequential(
-                nn.Linear(target_size, hidden1),
-                nn.LeakyReLU(),
-                nn.Linear(hidden1, hidden2),
-                nn.LeakyReLU(),
-                nn.Linear(hidden2, 1)
-            )
-        elif 100 < target_size <= 512:
-            hidden1 = target_size // 2
-            hidden2 = target_size // 4
-            self.fc = nn.Sequential(
-                nn.Linear(target_size, hidden1),
-                nn.LeakyReLU(),
-                nn.Linear(hidden1, hidden2),
-                nn.LeakyReLU(),
-                nn.Linear(hidden2, 1)
-            )
-        else:
-            hidden = max(10, target_size // 2)
-            self.fc = nn.Sequential(
-                nn.Linear(target_size, hidden),
-                nn.LeakyReLU(),
-                nn.Linear(hidden, 1)
-            )
+        self.fc = nn.Sequential(
+            nn.Linear(target_size, 40),
+            nn.LeakyReLU(),
+            nn.Linear(40, 1)
+        )
+
+        # if 512 < target_size:
+        #     hidden1 = 100
+        #     hidden2 = 50
+        #     self.fc = nn.Sequential(
+        #         nn.Linear(target_size, hidden1),
+        #         nn.LeakyReLU(),
+        #         nn.Linear(hidden1, hidden2),
+        #         nn.LeakyReLU(),
+        #         nn.Linear(hidden2, 1)
+        #     )
+        # elif 100 < target_size <= 512:
+        #     hidden1 = target_size // 2
+        #     hidden2 = target_size // 4
+        #     self.fc = nn.Sequential(
+        #         nn.Linear(target_size, hidden1),
+        #         nn.LeakyReLU(),
+        #         nn.Linear(hidden1, hidden2),
+        #         nn.LeakyReLU(),
+        #         nn.Linear(hidden2, 1)
+        #     )
+        # else:
+        #     hidden = max(10, target_size // 2)
+        #     self.fc = nn.Sequential(
+        #         nn.Linear(target_size, hidden),
+        #         nn.LeakyReLU(),
+        #         nn.Linear(hidden, 1)
+        #     )
 
     @staticmethod
     def inverse_sigmoid_torch(x):
