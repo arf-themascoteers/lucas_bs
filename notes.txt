@@ -1,0 +1,32 @@
+last column (downsampled) for top competitor paper
+
+explicitly used supervised
+
+recording reconstruction last - 54:50
+
+rewrite contribution part (search)
+- diff from others
+- significance
+
+downgrade competitor
+
+caption - mention specific confs
+
+reconstruction explanation referring bsdr paper
+
+"must"
+
+not mutually exclusive - still capturing both bada but they are referred by maintaining relative order.
+
+
+---
+
+philo
+
+spectral continuity
+-- not mutually exclusive. like l1 reg.
+-- why more sequential data provised better results with cnn (refs) - chatgpt pro output
+
+recon
+- bottom
+- theo justific. take help from chatgpt. citation - sab?
