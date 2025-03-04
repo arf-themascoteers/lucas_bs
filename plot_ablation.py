@@ -2,20 +2,23 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-data = pd.read_csv("back/check1/summary.csv")
-data_bsdrcnn = data[(data["algorithm"] == "bsdrcnn") & (data["mode"] == "dyn")]
-data_bsdrfc = data[(data["algorithm"] == "bsdrfc") & (data["mode"] == "dyn")]
+data = pd.read_csv("imp_res/ablation1.csv")
 
-data_bsdrcnn2 = data[(data["algorithm"] == "bsdrcnn") & (data["mode"] == "static")]
-data_bsdrfc2 = data[(data["algorithm"] == "bsdrfc") & (data["mode"] == "static")]
+data_bsdrcnn = data[(data["algorithm"] == "bsdrcnn_r") & (data["mode"] == "dyn")]
+data_bsdrfc = data[(data["algorithm"] == "bsdrfc_r") & (data["mode"] == "dyn")]
+
+data_bsdrcnn2 = data[(data["algorithm"] == "bsdrcnn_r") & (data["mode"] == "static")]
+data_bsdrfc2 = data[(data["algorithm"] == "bsdrfc_r") & (data["mode"] == "static")]
+
+data_bsdr = data[(data["algorithm"] == "bsdrfc") & (data["mode"] == "dyn")]
 
 fig, axes = plt.subplots(3, 1, figsize=(7, 14))
-metrics = ["r2", "rmse", "rpd"]
-colors = {"bsdrcnn": "blue", "bsdrfc": "red", "bsdrcnn2": "green", "bsdrfc2": "orange"}
-markers = {"bsdrcnn": ".", "bsdrfc": "+", "bsdrcnn2": "o", "bsdrfc2": "*"}
-line_Style = {"bsdrcnn": "-", "bsdrfc": "--", "bsdrcnn2": "-.", "bsdrfc2": ":"}
-labels = {"bsdrcnn": "AD-CNN (proposed)", "bsdrfc": "AD-FCNN", "bsdrcnn2": "FD-CNN", "bsdrfc2": "FD-FCNN"}
-
+metrics = ["r2_o", "rmse_o", "rpd_o"]
+colors = {"bsdrcnn": "blue", "bsdrfc": "red", "bsdrcnn2": "green", "bsdrfc2": "orange", "bsdr": "yellow"}
+markers = {"bsdrcnn": ".", "bsdrfc": "+", "bsdrcnn2": "o", "bsdrfc2": "*", "bsdr": "v"}
+line_Style = {"bsdrcnn": "-", "bsdrfc": "--", "bsdrcnn2": "-.", "bsdrfc2": ":", "bsdr": (0, (3, 1, 1, 1))}
+labels = {"bsdrcnn": "AD-CNN (proposed)", "bsdrfc": "AD-FCNN", "bsdrcnn2": "FD-CNN", "bsdrfc2": "FD-FCNN", "bsdr": "BSDR"}
+metric_labels = ["$R^2","RMSE","RPD"]
 for i, metric in enumerate(metrics):
     ax = axes[i]
 
@@ -27,15 +30,14 @@ for i, metric in enumerate(metrics):
             marker=markers["bsdrcnn2"], markersize=8, label=labels["bsdrcnn2"], linestyle=line_Style["bsdrcnn2"])
     ax.plot(data_bsdrfc2["target_size"], data_bsdrfc2[metric], color=colors["bsdrfc2"],
             marker=markers["bsdrfc2"], markersize=8, label=labels["bsdrfc2"], linestyle=line_Style["bsdrfc2"])
+    ax.plot(data_bsdr["target_size"], data_bsdr[metric], color=colors["bsdr"],
+            marker=markers["bsdr"], markersize=8, label=labels["bsdr"], linestyle=line_Style["bsdr"])
 
     ax.set_xscale("log", base=2)
     ax.set_xticks([8, 16, 32, 64, 128, 256, 512])
     ax.get_xaxis().set_major_formatter(plt.ScalarFormatter())
 
-    if i==0:
-        ax.set_ylabel("$R^2$", fontsize=22)
-    else:
-        ax.set_ylabel(metric.upper(), fontsize=22)
+    ax.set_ylabel(metric_labels[i], fontsize=22)
 
     ax.set_xlabel("Target Size (log\u2082 scale)", fontsize=22)
     ax.tick_params(axis='x', labelsize=18)
