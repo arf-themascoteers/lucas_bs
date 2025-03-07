@@ -21,7 +21,7 @@ class Algorithm_cnn_4200(Algorithm):
         self.criterion = torch.nn.MSELoss()
         self.class_size = 1
         self.lr = 0.001
-        self.total_epoch = 1000
+        self.total_epoch = 62
 
         if TEST:
             self.total_epoch = 1
