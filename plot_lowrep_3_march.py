@@ -71,7 +71,7 @@ for p in range(5):
         ax.set_ylabel("Reflectance", fontsize=12)
 
     if p == 1:
-        ax.plot(h_fd, color="yellow", label="Fixed-interval downsampling")
+        ax.plot(h_fd, color="purple", label="Fixed-interval downsampling")
         ax.set_xlabel("Index", fontsize=12)
         ax.set_ylabel("Value", fontsize=12)
 
