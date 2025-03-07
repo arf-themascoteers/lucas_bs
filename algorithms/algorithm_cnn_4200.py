@@ -28,15 +28,15 @@ class Algorithm_cnn_4200(Algorithm):
             print(test_y.shape)
 
         self.ann = nn.Sequential(
-            nn.Conv1d(1, 32, kernel_size=32, stride=1, padding=0),
+            nn.Conv1d(1, 32, kernel_size=16, stride=1, padding=0),
             nn.BatchNorm1d(32),
             nn.LeakyReLU(),
             nn.MaxPool1d(kernel_size=16, stride=16, padding=0),
-            nn.Conv1d(32, 64, kernel_size=16, stride=1, padding=0),
+            nn.Conv1d(32, 64, kernel_size=8, stride=1, padding=0),
             nn.BatchNorm1d(64),
             nn.LeakyReLU(),
             nn.MaxPool1d(kernel_size=16, stride=16, padding=0),
-            nn.Conv1d(64, 128, kernel_size=8, stride=1, padding=0),
+            nn.Conv1d(64, 128, kernel_size=4, stride=1, padding=0),
             nn.BatchNorm1d(128),
             nn.LeakyReLU(),
             nn.MaxPool1d(kernel_size=8, stride=8, padding=0),
