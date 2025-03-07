@@ -14,12 +14,13 @@ class Algorithm_cnn_420(Algorithm):
         torch.backends.cudnn.deterministic = True
 
         indices = torch.linspace(0, 4199, self.target_size, dtype=torch.int)
+        print(indices)
 
         self.train_x = torch.tensor(train_x, dtype=torch.float32).to(self.device)
-        self.train_x = self.train_x[indices]
+        self.train_x = self.train_x[:,indices]
         self.train_y = torch.tensor(train_y, dtype=torch.float32).to(self.device)
         self.test_x = torch.tensor(test_x, dtype=torch.float32).to(self.device)
-        self.test_x = self.test_x[indices]
+        self.test_x = self.test_x[:,indices]
         self.test_y = torch.tensor(test_y, dtype=torch.float32).to(self.device)
 
         self.criterion = torch.nn.MSELoss()
