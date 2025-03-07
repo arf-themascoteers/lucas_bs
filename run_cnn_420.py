@@ -6,7 +6,7 @@ if __name__ == '__main__':
     tag = f"22_cnn_420"
     tasks = {
         "algorithms": ["cnn_420"],
-        "datasets": ["min_lucas"],
+        "datasets": ["lucas"],
         "target_sizes" : [420],
         "scale_y": ["robust"],
         "mode": ["dyn"],

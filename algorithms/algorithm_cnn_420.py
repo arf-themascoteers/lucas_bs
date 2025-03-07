@@ -14,7 +14,6 @@ class Algorithm_cnn_420(Algorithm):
         torch.backends.cudnn.deterministic = True
 
         indices = torch.linspace(0, 4199, self.target_size, dtype=torch.int)
-        print(indices)
 
         self.train_x = torch.tensor(train_x, dtype=torch.float32).to(self.device)
         self.train_x = self.train_x[:,indices]
@@ -26,7 +25,7 @@ class Algorithm_cnn_420(Algorithm):
         self.criterion = torch.nn.MSELoss()
         self.class_size = 1
         self.lr = 0.001
-        self.total_epoch = 2
+        self.total_epoch = 62
 
         if TEST:
             self.total_epoch = 1
