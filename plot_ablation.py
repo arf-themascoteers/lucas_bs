@@ -13,12 +13,12 @@ data_bsdrfc2 = data[(data["algorithm"] == "bsdrfc_r") & (data["mode"] == "static
 data_bsdr = data[(data["algorithm"] == "bsdrfc") & (data["mode"] == "dyn")]
 
 fig, axes = plt.subplots(3, 1, figsize=(7, 14))
-metrics = ["r2_o", "rmse_o", "rpd_o"]
+metrics = ["r2", "rmse_o", "rpd_o"]
 colors = {"bsdrcnn": "blue", "bsdrfc": "red", "bsdrcnn2": "green", "bsdrfc2": "orange", "bsdr": "yellow"}
 markers = {"bsdrcnn": ".", "bsdrfc": "+", "bsdrcnn2": "o", "bsdrfc2": "*", "bsdr": "v"}
 line_Style = {"bsdrcnn": "-", "bsdrfc": "--", "bsdrcnn2": "-.", "bsdrfc2": ":", "bsdr": (0, (3, 1, 1, 1))}
 labels = {"bsdrcnn": "AD-CNN (proposed)", "bsdrfc": "AD-FCNN", "bsdrcnn2": "FD-CNN", "bsdrfc2": "FD-FCNN", "bsdr": "BSDR"}
-metric_labels = ["$R^2","RMSE","RPD"]
+metric_labels = ["$R^2$","RMSE","RPD"]
 for i, metric in enumerate(metrics):
     ax = axes[i]
 

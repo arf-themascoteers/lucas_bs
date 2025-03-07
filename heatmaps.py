@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib.colors import LogNorm
 
-df = pd.read_csv("imp_res/res.csv")
+df = pd.read_csv("imp_res/best.csv")
 df["train_size"] = (df["train_size"] * 100).astype(int)
 
-metrics = ["r2_o", "rmse_o", "rpd_o", "execution_time"]
+metrics = ["r2", "rmse_o", "rpd_o", "execution_time"]
 labels = ["$R^2$", "RMSE", "RPD", "Execution time"]
 
 for i,metric in enumerate(metrics):
@@ -19,7 +19,7 @@ for i,metric in enumerate(metrics):
 
 
     else:
-        sns.heatmap(pivot_table, annot=pivot_table.map(lambda x: f"{x:.3f}"), fmt="", cmap="viridis")
+        sns.heatmap(pivot_table, annot=pivot_table.map(lambda x: f"{x:.2f}"), fmt="", cmap="viridis")
 
     row = pivot_table.index.get_loc(75)
     col = pivot_table.columns.get_loc(128)
