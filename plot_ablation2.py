@@ -26,14 +26,14 @@ for i, metric in enumerate(metrics):
 
     ax.plot(data_bsdrcnn["target_size"], data_bsdrcnn[metric], color=colors["bsdrcnn"],
             marker=markers["bsdrcnn"], markersize=8, label=labels["bsdrcnn"], linestyle=line_Style["bsdrcnn"])
-    ax.plot(data_bsdrfc["target_size"], data_bsdrfc[metric], color=colors["bsdrfc"],
-            marker=markers["bsdrfc"], markersize=8, label=labels["bsdrfc"], linestyle=line_Style["bsdrfc"])
-    ax.plot(data_bsdrcnn2["target_size"], data_bsdrcnn2[metric], color=colors["bsdrcnn2"],
-            marker=markers["bsdrcnn2"], markersize=8, label=labels["bsdrcnn2"], linestyle=line_Style["bsdrcnn2"])
-    ax.plot(data_bsdrfc2["target_size"], data_bsdrfc2[metric], color=colors["bsdrfc2"],
-            marker=markers["bsdrfc2"], markersize=8, label=labels["bsdrfc2"], linestyle=line_Style["bsdrfc2"])
-    ax.plot(data_bsdr["target_size"], data_bsdr[metric], color=colors["bsdr"],
-            marker=markers["bsdr"], markersize=8, label=labels["bsdr"], linestyle=line_Style["bsdr"])
+    # ax.plot(data_bsdrfc["target_size"], data_bsdrfc[metric], color=colors["bsdrfc"],
+    #         marker=markers["bsdrfc"], markersize=8, label=labels["bsdrfc"], linestyle=line_Style["bsdrfc"])
+    # ax.plot(data_bsdrcnn2["target_size"], data_bsdrcnn2[metric], color=colors["bsdrcnn2"],
+    #         marker=markers["bsdrcnn2"], markersize=8, label=labels["bsdrcnn2"], linestyle=line_Style["bsdrcnn2"])
+    # ax.plot(data_bsdrfc2["target_size"], data_bsdrfc2[metric], color=colors["bsdrfc2"],
+    #         marker=markers["bsdrfc2"], markersize=8, label=labels["bsdrfc2"], linestyle=line_Style["bsdrfc2"])
+    # ax.plot(data_bsdr["target_size"], data_bsdr[metric], color=colors["bsdr"],
+    #         marker=markers["bsdr"], markersize=8, label=labels["bsdr"], linestyle=line_Style["bsdr"])
     ax.plot(data_bsdr["target_size"], data_bsdrc[metric], color=colors["bsdrc"],
             marker=markers["bsdrc"], markersize=8, label=labels["bsdrc"], linestyle=line_Style["bsdrc"])
 
@@ -55,7 +55,7 @@ subplot_labels = ['(a) $R^2$', '(b) RMSE', '(c) RPD', '(d) Training time (second
 for i, ax in enumerate(axes.flatten()):
     ax.text(0.5, -0.3, subplot_labels[i], transform=ax.transAxes, fontsize=25, ha='center', va='top')
 
-fig.legend(labels.values(), loc="upper center", ncol=2, bbox_to_anchor=(0.55, 1), fontsize=19)
+#fig.legend(loc="upper center", bbox_to_anchor=(0.55, 1), fontsize=19)
 plt.tight_layout(rect=[0, 0, 1, 0.90])
 plt.savefig("ablation2.png", dpi=600)
 plt.show()
