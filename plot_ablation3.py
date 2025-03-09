@@ -2,8 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-files = ["results/40_bsdr_ad_cnn/summary.csv"]
-algorithms = ["bsdrcnn_r","bsdrcnn_r_wo_order"]
+files = ["results/40_bsdr_ad_cnn/summary.csv","results/44_bsdr_ad_cnn_4/summary.csv"]
+algorithms = ["bsdrcnn_r","bsdrcnn"]
 modes = ["dyn","dyn"]
 algorithm_labels = ["AD-CNN (proposed)","BSDR-CNN"]
 
@@ -20,7 +20,7 @@ for i, metric in enumerate(metrics):
 
     for index, algorithm in enumerate(algorithms):
         mode = modes[index]
-        data = df[(df["algorithm"] == algorithm) & (df["mode"] == mode) & (df["train_size"] == 0.65)]
+        data = df[(df["algorithm"] == algorithm) & (df["mode"] == mode) & (df["train_size"] == 0.75)]
         algorithm_label = algorithm_labels[index]
         color = colors[algorithm_label]
         marker = markers[algorithm_label]
@@ -30,7 +30,8 @@ for i, metric in enumerate(metrics):
                 marker=marker, markersize=8, label=algorithm_label, linestyle=line_style)
 
     ax.set_xscale("log", base=2)
-    ax.set_xticks([8, 16, 32, 64, 128, 256, 512])
+    #ax.set_xticks([8, 16, 32, 64, 128, 256, 512])
+    ax.set_xticks([8, 16, 32, 64])
     ax.get_xaxis().set_major_formatter(plt.ScalarFormatter())
 
     ax.set_ylabel(metric_labels[i], fontsize=22)
