@@ -5,7 +5,7 @@ if __name__ == '__main__':
     verbose = False
     tag = f"40_bsdr_ad_cnn"
     tasks = {
-        "algorithms": ["bsdrcnn_r","bsdrcnn_r_wo_order"],
+        "algorithms": ["bsdrcnn_r_wo_order","bsdrcnn_r"],
         "datasets": ["lucas"],
         "target_sizes": [8, 16, 32, 64, 128, 256, 512],
         "scale_y": ["robust"],
