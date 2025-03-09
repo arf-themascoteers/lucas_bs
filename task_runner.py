@@ -39,6 +39,7 @@ class TaskRunner:
                                             print(f"{algorithm} {mode} not supported. Skipping.")
                                             continue
                                         algorithm_object.compute_fold()
+                                    print(f"Done {algorithm}, target {target_size}, train {train_size}, fold {fold}")
 
 
 
