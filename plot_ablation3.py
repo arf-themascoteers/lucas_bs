@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-files = ["results/52_cnn_v/summary.csv"]
+files = ["results/50_cnn_v/summary.csv"]
 algorithms = ["bsdrcnn_r","bsdrcnn"]
 modes = ["dyn","dyn"]
 algorithm_labels = ["AD-CNN (proposed)","BSDR-CNN"]
