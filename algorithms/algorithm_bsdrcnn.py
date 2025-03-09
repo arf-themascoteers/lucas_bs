@@ -205,7 +205,7 @@ class Algorithm_bsdrcnn(Algorithm):
         self.criterion = torch.nn.MSELoss()
         self.class_size = 1
         self.lr = 0.001
-        self.total_epoch = 2000
+        self.total_epoch = 1000
 
         if TEST:
             self.total_epoch = 1
