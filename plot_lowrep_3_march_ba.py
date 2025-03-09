@@ -4,7 +4,7 @@ import numpy as np
 from ds_manager import DSManager
 
 bsdr_indices = []
-df = pd.read_csv("results/2_compo/bsdrfc_r_norder_lucas_128_robust_dyn_0.75_0.csv")
+df = pd.read_csv("backup_results/2_compo/bsdrfc_r_norder_lucas_128_robust_dyn_0.75_0.csv")
 for i in range(3):
     last_row = df.iloc[i+1]
     values_list = last_row.loc['band_1':].dropna().tolist()
@@ -14,7 +14,7 @@ for i in range(3):
 
 
 ad_indices = []
-df = pd.read_csv("results/1_cnnr/bsdrcnn_r_lucas_128_robust_dyn_0.75_0.csv")
+df = pd.read_csv("backup_results/1_cnnr/bsdrcnn_r_lucas_128_robust_dyn_0.75_0.csv")
 for i in range(4):
     last_row = df.iloc[i+1]
     values_list = last_row.loc['band_1':].dropna().tolist()

@@ -9,8 +9,8 @@ data_bsdrfc = data[(data["algorithm"] == "bsdrfc") & (data["mode"] == "dyn")]
 data_bsdrcnn2 = data[(data["algorithm"] == "bsdrcnn") & (data["mode"] == "static")]
 data_bsdrfc2 = data[(data["algorithm"] == "bsdrfc") & (data["mode"] == "static")]
 
-tdf1 = pd.read_csv("results/model_time/summary.csv")
-tdf2 = pd.read_csv("results/model_time_static/summary.csv")
+tdf1 = pd.read_csv("backup_results/model_time/summary.csv")
+tdf2 = pd.read_csv("backup_results/model_time_static/summary.csv")
 
 
 data_bsdrcnn = data_bsdrcnn.merge(tdf1[['algorithm', 'mode', 'target_size', 'execution_time']], on=['algorithm', 'mode', 'target_size'], how='left')

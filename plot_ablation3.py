@@ -2,18 +2,26 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-files = ["results/40_bsdr_ad_cnn/summary.csv","results/44_bsdr_ad_cnn_4/summary.csv"]
+files = ["results/52_cnn_v/summary.csv"]
 algorithms = ["bsdrcnn_r","bsdrcnn"]
 modes = ["dyn","dyn"]
 algorithm_labels = ["AD-CNN (proposed)","BSDR-CNN"]
 
 df = pd.concat((pd.read_csv(f) for f in files), ignore_index=True)
+df = df[df["target_size"]<=128]
 
 fig, axes = plt.subplots(3, 1, figsize=(len(algorithms)*2+1, 14))
 metrics = ["r2", "rmse_o", "rpd_o"]
-colors = {"AD-CNN (proposed)": "blue", "AD-FCNN": "cyan", "FD-CNN": "green", "FD-FCNN": "lime", "BSDR-CNN": "red", "BSDR-FCNN": "purple"}
-markers = {"AD-CNN (proposed)": ".", "AD-FCNN": "+", "FD-CNN": "o", "FD-FCNN": "*", "BSDR-CNN": "v", "BSDR-FCNN": "x"}
-line_styles = {"AD-CNN (proposed)": "-", "AD-FCNN": "--", "FD-CNN": ".", "FD-FCNN": ":", "BSDR-CNN": (0, (3, 1, 1, 1)), "BSDR-FCNN": (0, (4, 2, 2, 1))}
+colors = {"AD-CNN (proposed)": "blue", "AD-FCNN": "cyan",
+          "FD-CNN": "green", "FD-FCNN": "lime",
+          "BSDR-CNN": "red", "BSDR-FCNN": "purple"
+          }
+markers = {"AD-CNN (proposed)": ".", "AD-FCNN": "+",
+           "FD-CNN": "o", "FD-FCNN": "*",
+           "BSDR-CNN": "v", "BSDR-FCNN": "x"}
+line_styles = {"AD-CNN (proposed)": "-", "AD-FCNN": "--",
+               "FD-CNN": ".", "FD-FCNN": ":",
+               "BSDR-CNN": (0, (3, 1, 1, 1)), "BSDR-FCNN": (0, (4, 2, 2, 1))}
 metric_labels = ["$R^2$","RMSE","RPD"]
 for i, metric in enumerate(metrics):
     ax = axes[i]
@@ -31,7 +39,7 @@ for i, metric in enumerate(metrics):
 
     ax.set_xscale("log", base=2)
     #ax.set_xticks([8, 16, 32, 64, 128, 256, 512])
-    ax.set_xticks([8, 16, 32, 64])
+    ax.set_xticks([8, 16, 32, 64, 128])
     ax.get_xaxis().set_major_formatter(plt.ScalarFormatter())
 
     ax.set_ylabel(metric_labels[i], fontsize=22)
