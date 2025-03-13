@@ -69,7 +69,6 @@ class Algorithm_cnn_4200(Algorithm):
                 loss = self.criterion(y_hat, batch_y)
                 loss.backward()
                 optimizer.step()
-                print(epoch, index, loss.item())
         return self
 
     def get_indices(self):
