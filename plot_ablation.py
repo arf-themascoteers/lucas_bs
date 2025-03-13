@@ -17,21 +17,30 @@ metrics = ["r2", "rmse_o", "rpd_o"]
 colors = {"bsdrcnn": "blue", "bsdrfc": "red", "bsdrcnn2": "green", "bsdrfc2": "orange", "bsdr": "purple"}
 markers = {"bsdrcnn": ".", "bsdrfc": "+", "bsdrcnn2": "o", "bsdrfc2": "*", "bsdr": "v"}
 line_Style = {"bsdrcnn": "-", "bsdrfc": "--", "bsdrcnn2": "-.", "bsdrfc2": ":", "bsdr": (0, (3, 1, 1, 1))}
-labels = {"bsdrcnn": "AD-CNN (proposed)", "bsdrfc": "AD-FCNN", "bsdrcnn2": "FD-CNN", "bsdrfc2": "FD-FCNN", "bsdr": "BSDR"}
+labels = {
+    "bsdr": "BSDR",
+    "bsdrfc2": "FD-FCNN",
+    "bsdrcnn2": "FD-CNN",
+    "bsdrfc": "AD-FCNN",
+    "bsdrcnn": "AD-CNN (proposed)"
+}
 metric_labels = ["$R^2$","RMSE","RPD"]
 for i, metric in enumerate(metrics):
     ax = axes[i]
-
-    ax.plot(data_bsdrcnn["target_size"], data_bsdrcnn[metric], color=colors["bsdrcnn"],
-            marker=markers["bsdrcnn"], markersize=8, label=labels["bsdrcnn"], linestyle=line_Style["bsdrcnn"])
-    ax.plot(data_bsdrfc["target_size"], data_bsdrfc[metric], color=colors["bsdrfc"],
-            marker=markers["bsdrfc"], markersize=8, label=labels["bsdrfc"], linestyle=line_Style["bsdrfc"])
-    ax.plot(data_bsdrcnn2["target_size"], data_bsdrcnn2[metric], color=colors["bsdrcnn2"],
-            marker=markers["bsdrcnn2"], markersize=8, label=labels["bsdrcnn2"], linestyle=line_Style["bsdrcnn2"])
-    ax.plot(data_bsdrfc2["target_size"], data_bsdrfc2[metric], color=colors["bsdrfc2"],
-            marker=markers["bsdrfc2"], markersize=8, label=labels["bsdrfc2"], linestyle=line_Style["bsdrfc2"])
     ax.plot(data_bsdr["target_size"], data_bsdr[metric], color=colors["bsdr"],
             marker=markers["bsdr"], markersize=8, label=labels["bsdr"], linestyle=line_Style["bsdr"])
+    ax.plot(data_bsdrfc2["target_size"], data_bsdrfc2[metric], color=colors["bsdrfc2"],
+            marker=markers["bsdrfc2"], markersize=8, label=labels["bsdrfc2"], linestyle=line_Style["bsdrfc2"])
+    ax.plot(data_bsdrcnn2["target_size"], data_bsdrcnn2[metric], color=colors["bsdrcnn2"],
+            marker=markers["bsdrcnn2"], markersize=8, label=labels["bsdrcnn2"], linestyle=line_Style["bsdrcnn2"])
+    ax.plot(data_bsdrfc["target_size"], data_bsdrfc[metric], color=colors["bsdrfc"],
+            marker=markers["bsdrfc"], markersize=8, label=labels["bsdrfc"], linestyle=line_Style["bsdrfc"])
+    ax.plot(data_bsdrcnn["target_size"], data_bsdrcnn[metric], color=colors["bsdrcnn"],
+            marker=markers["bsdrcnn"], markersize=8, label=labels["bsdrcnn"], linestyle=line_Style["bsdrcnn"])
+
+
+
+
 
     ax.set_xscale("log", base=2)
     ax.set_xticks([8, 16, 32, 64, 128, 256, 512])
