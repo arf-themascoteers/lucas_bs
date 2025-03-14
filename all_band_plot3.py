@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
-df = pd.read_csv('imp_res/all_bands_m2.csv')
+df = pd.read_csv('imp_res/all_bands_m3.csv')
 
 fig, axes = plt.subplots(2, 2, figsize=(6,6))
 
@@ -11,22 +11,22 @@ titles = ['(a) $R^2$', ' (b) RMSE', '(c) RPD', '(d) Execution time (seconds)']
 axes[1, 1].set_yscale('log')
 
 names = {
-    "bsdrcnn_r_4200_2" : "All 4,200 bands",
+    "bsdrcnn_r_4200_3" : "All 4,200 bands",
     "bsdrcnn_r" : "128 bands (AD-CNN)",
 }
 
 colors = {
-    "bsdrcnn_r_4200_2" : "red",
+    "bsdrcnn_r_4200_3" : "red",
     "bsdrcnn_r" : "blue",
 }
 
 markers = {
-    "bsdrcnn_r_4200_2": "+",
+    "bsdrcnn_r_4200_3": "+",
     "bsdrcnn_r": ".",
 }
 
 line_Style = {
-    "bsdrcnn_r_4200_2": "--",
+    "bsdrcnn_r_4200_3": "--",
     "bsdrcnn_r": "-",
 }
 
@@ -65,5 +65,5 @@ fig.legend(names.values(), loc='upper center', ncol=2, fontsize=10, frameon=True
 
 
 plt.tight_layout(rect=[0, 0, 1, 0.94])
-plt.savefig("all_bands.png", pad_inches=0)
+plt.savefig("all_bands3.png", pad_inches=0)
 plt.show()
