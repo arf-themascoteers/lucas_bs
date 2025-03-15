@@ -39,7 +39,7 @@ class ANN(nn.Module):
             torch.tensor([init_vals[i + 1] for i in range(self.target_size)], requires_grad=True).to(self.device))
         if self.mode in ["static", "semi"]:
             self.indices.requires_grad = False
-
+        print("|".join([f"{round(i.item()*4200)}" for i in self.indices]))
         self.cnn = self.get_cnn(self.target_size)
 
     def get_cnn(self, target_size):
