@@ -91,15 +91,18 @@ data_256 = [
     ("Conv1d", "In: 1 channel, Out: 32 filters, Kernel Size = 16, Stride = 1, Padding = 0"),
     ("BatchNorm1d", "32 channels"),
     ("Activation", "LeakyReLU"),
-    ("MaxPool1d", "Kernel Size = 8, Stride = 8, Padding = 0"),
+    ("MaxPool1d", "Kernel Size = 8, Stride = 6, Padding = 0"),
     ("Conv1d", "In: 32 channels, Out: 64 filters, Kernel Size = 8, Stride = 1, Padding = 0"),
     ("BatchNorm1d", "64 channels"),
     ("Activation", "LeakyReLU"),
-    ("MaxPool1d", "Kernel Size = 8, Stride = 8, Padding = 0"),
+    ("MaxPool1d", "Kernel Size = 4, Stride = 4, Padding = 0"),
+    ("Conv1d", "In: 64 channels, Out: 128 filters, Kernel Size = 4, Stride = 1, Padding = 0"),
+    ("BatchNorm1d", "128 channels"),
+    ("Activation", "LeakyReLU"),
+    ("MaxPool1d", "Kernel Size = 2, Stride = 2, Padding = 0"),
     ("Flatten", "Starting from dimension 1"),
-    ("Linear", "In Features = 128, Out Features = 1")
+    ("Linear", "In Features = 256, Out Features = 1")
 ]
-
 data_512 = [
     ("Conv1d", "In: 1 channel, Out: 32 filters, Kernel Size = 16, Stride = 1, Padding = 0"),
     ("BatchNorm1d", "32 channels"),

@@ -51,9 +51,13 @@ axes[0, 1].set_ylabel('RMSE')
 axes[1, 0].set_ylabel('RPD')
 axes[1, 1].set_ylabel(r"Seconds ($\log_{10}$ scale)")
 
+xticks = df['train_size'].unique()
+#xticks = [0.05, 0.25, 0.45, 0.65, 0.85]
+xtick_labels = [int(x * 100) for x in xticks]
 
 for ax, title in zip(axes.flat, titles):
-    ax.set_xticks([0.05, 0.25, 0.45, 0.65, 0.85])
+    ax.set_xticks(xticks)
+    ax.set_xticklabels(xtick_labels)
     ax.set_xlabel("Training size (%)", fontsize=10)
     ax.text(0.5, -0.35, title, transform=ax.transAxes, fontsize=12, ha='center')
 
