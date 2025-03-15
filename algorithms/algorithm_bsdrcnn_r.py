@@ -248,6 +248,7 @@ class Algorithm_bsdrcnn_r(Algorithm):
             optimizer.step()
             if self.verbose:
                 self.report(epoch)
+        print("|".join([f"{round(i.item() * 4200)}" for i in self.ann.indices]))
         return self
 
     def predict_train(self):

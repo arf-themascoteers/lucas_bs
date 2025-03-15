@@ -1,7 +1,23 @@
 import matplotlib.pyplot as plt
 
-numbers1 = [float(i) for i in "524.5|646.5|768.5|891|1013|1135|1257.5|1379.5|1501.5|1624|1746|1868|1990.5|2112.5|2234.5|2357".split("|")]
-numbers2 = [float(i) for i in "593|668.5|740.5|857|986|1061|1235.5|1412.5|1468.5|1512.5|1724.5|1861.5|2136.5|2243.5|2401".split("|")]
+
+def band_to_wl(band):
+    wl = 400 + (band * 0.5)
+    if wl == int(wl):
+        wl = int(wl)
+    return wl
+
+
+def band_str_to_wls(bands):
+    wls = []
+    for token in bands.split("|"):
+        tok = int(token)
+        wl = band_to_wl(tok)
+        wls.append(wl)
+    return wls
+
+numbers1 = band_str_to_wls("")
+numbers2 = band_str_to_wls("")
 
 plt.figure(figsize=(10, 3))
 plt.hlines(2, 400, 2500, colors='black', linewidth=2)
