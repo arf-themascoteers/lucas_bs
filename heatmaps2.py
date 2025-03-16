@@ -4,7 +4,7 @@ import seaborn as sns
 from matplotlib.colors import LogNorm
 import os
 
-df = pd.read_csv("results/13_best/summary.csv")
+df = pd.read_csv("imp_res/best.csv")
 df["train_size"] = (df["train_size"] * 100).astype(int)
 
 metrics = ["r2", "rmse_o", "rpd_o", "execution_time"]
@@ -16,7 +16,8 @@ for i,metric in enumerate(metrics):
     if metric == "execution_time":
         sns.heatmap(pivot_table, annot=True, cmap="viridis",
                     norm=LogNorm(vmin=pivot_table.min().min(), vmax=pivot_table.max().max()),
-                    fmt=".0f")
+                    fmt=",.0f", annot_kws={"size": 10})
+
 
 
     else:
