@@ -2,7 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from ds_manager import DSManager
-
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['font.size'] = 14
 bsdr_indices = []
 df = pd.read_csv("backup_results/2_compo/bsdrfc_r_norder_lucas_128_robust_dyn_0.75_0.csv")
 for i in range(3):
@@ -27,11 +28,11 @@ axes = axes.ravel()
 
 ad_indices = ad_indices[1]
 
-labels = ["(a) Original data",
-          "(b) Fixed-interval downsampling",
-          "(c) SAE",
-          "(d) BSDR",
-          "(e)Adaptive-downsampling"]
+labels = ["(a)",
+          "(b)",
+          "(c)",
+          "(d)",
+          "(e)"]
 for p in range(5):
     sae_data = pd.read_csv("v2.csv").to_numpy()
     ds = DSManager(name="min_lucas", shuffle=False)
@@ -59,41 +60,48 @@ for p in range(5):
 
     ax = axes[p]
 
-    min_val = np.min(X)
-    max_val = np.max(X)
+    min_val = np.min(X)-0.01
+    max_val = np.max(X)+0.01
 
     if p in [0, 1, 3, 4]:
         ax.set_ylim([min_val, max_val])
 
     if p == 0:
-        ax.plot(X, color="green", label="Original data")
-        ax.set_xlabel("Band", fontsize=12)
-        ax.set_ylabel("Reflectance", fontsize=12)
+        ax.plot(X, color="green")
+        ax.set_xlabel("Band")
+        ax.set_ylabel("Reflectance")
+        ax.set_title("Original data", fontsize=14)
 
     if p == 1:
-        ax.plot(h_fd, color="purple", label="Fixed-interval downsampling")
-        ax.set_xlabel("Index", fontsize=12)
-        ax.set_ylabel("Value", fontsize=12)
+        ax.plot(h_fd, color="purple")
+        ax.set_xlabel("Band")
+        ax.set_ylabel("Reflectance")
+        ax.set_title("Fixed-interval downsampling", fontsize=14)
 
     if p == 2:
         ax.plot(h_sae, color="red", label="SAE")
-        ax.set_xlabel("Index", fontsize=12)
-        ax.set_ylabel("Value", fontsize=12)
+        ax.set_xlabel("Index")
+        ax.set_ylabel("Value")
+        ax.set_title("SAE", fontsize=14)
 
     if p == 3:
-        ax.plot(h_bsdr, color="orange", label="BSDR")
-        ax.set_xlabel("Index", fontsize=12)
-        ax.set_ylabel("Value", fontsize=12)
+        ax.plot(h_bsdr, color="orange")
+        ax.set_xlabel("Band")
+        ax.set_ylabel("Reflectance")
+        ax.set_title("BSDR", fontsize=14)
 
     if p == 4:
-        ax.plot(h_ad, color="blue", label="Adaptive-downsampling")
-        ax.set_xlabel("Index", fontsize=12)
-        ax.set_ylabel("Value", fontsize=12)
+        ax.plot(h_ad, color="blue")
+        ax.set_xlabel("Band")
+        ax.set_ylabel("Reflectance")
+        ax.set_title("Adaptive-downsampling", fontsize=14)
 
-    ax.text(0.5, -0.5, labels[p], fontsize=14, ha="center", transform=ax.transAxes)
+    ax.text(0.5, -0.6, labels[p], fontsize=16, ha="center",
+        transform=ax.transAxes, fontname="Times New Roman")
 
 axes[5].set_visible(False)
-plt.tight_layout()
-plt.savefig("low_rep_3_march.png", dpi=600)
-plt.clf()
-plt.cla()
+plt.subplots_adjust(left=0.1, right=0.95, top=0.90, bottom=0.1,
+                    hspace=1, wspace=0.4)
+
+plt.savefig("low_rep_3_march.png", dpi=600, pad_inches=0)
+plt.show()

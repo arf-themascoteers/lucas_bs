@@ -1,6 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['font.size'] = 11
+
 
 data = pd.read_csv("imp_res/ablation_final.csv")
 
@@ -51,21 +54,28 @@ for i, metric in enumerate(metrics):
     ax.set_xticks([8, 16, 32, 64, 128, 256, 512])
     ax.get_xaxis().set_major_formatter(plt.ScalarFormatter())
 
-    ax.set_ylabel(metric_labels[i], fontsize=22)
+    ax.set_ylabel(metric_labels[i], fontsize=19)
 
-    ax.set_xlabel("Target Size (log\u2082 scale)", fontsize=22)
-    ax.tick_params(axis='x', labelsize=18)
-    ax.tick_params(axis='y', labelsize=18)
+    ax.set_xlabel("Lower-dimensional size (log\u2082 scale)", fontsize=19)
+    ax.tick_params(axis='x', labelsize=15)
+    ax.tick_params(axis='y', labelsize=15)
     ax.set_yticks(np.linspace(ax.get_ylim()[0], ax.get_ylim()[1], 4))
 
     ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: f'{y:.2f}'))
 
 fig.subplots_adjust(hspace=0.3)
-subplot_labels = ['(a) $R^2$', '(b) RMSE', '(c) RPD', '(d) Training time (seconds)']
+subplot_labels = ['(a)', '(b)', '(c)', '(d)']
 for i, ax in enumerate(axes.flatten()):
-    ax.text(0.5, -0.3, subplot_labels[i], transform=ax.transAxes, fontsize=25, ha='center', va='top')
+   ax.text(0.5, -0.3, subplot_labels[i], transform=ax.transAxes, fontsize=20, ha='center', va='top')
 
-fig.legend(labels.values(), loc="upper center", ncol=2, bbox_to_anchor=(0.55, 1), fontsize=19)
+fig.legend(labels.values(), loc="upper center", ncol=2, bbox_to_anchor=(0.55, 1),
+           fontsize=17)
+
+axes[i].tick_params(axis='both', labelsize=18)
+for label in axes[i].get_xticklabels() + axes[i].get_yticklabels():
+    label.set_fontname("Times New Roman")
+
 plt.tight_layout(rect=[0, 0, 1, 0.90])
+#plt.tight_layout(pad=2)
 plt.savefig("ablation_final.png", dpi=600)
 plt.show()

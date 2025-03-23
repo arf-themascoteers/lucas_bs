@@ -2,12 +2,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from ds_manager import DSManager
-
+plt.rcParams['font.family'] = 'Times New Roman'
 bsdr_indices = []
 for size in [
-f"results/2_compo/bsdrfc_r_norder_lucas_8_robust_dyn_0.75_0.csv",
-f"results/3_compo/bsdrfc_r_norder_lucas_16_robust_dyn_0.75_0.csv",
-f"results/2_compo/bsdrfc_r_norder_lucas_32_robust_dyn_0.75_0.csv"
+f"backup_results/2_compo/bsdrfc_r_norder_lucas_8_robust_dyn_0.75_0.csv",
+f"backup_results/3_compo/bsdrfc_r_norder_lucas_16_robust_dyn_0.75_0.csv",
+f"backup_results/2_compo/bsdrfc_r_norder_lucas_32_robust_dyn_0.75_0.csv"
 ]:
     df = pd.read_csv(size)
     last_row = df.iloc[-1]
@@ -23,9 +23,9 @@ bsdr_indices.append(values_list)
 
 ad_indices = []
 for size in [
-f"results/2_compo/bsdrcnn_r_lucas_8_robust_dyn_0.75_0.csv",
-f"results/3_compo/bsdrcnn_r_lucas_16_robust_dyn_0.75_0.csv",
-f"results/2_compo/bsdrcnn_r_lucas_32_robust_dyn_0.75_0.csv"
+f"backup_results/2_compo/bsdrcnn_r_lucas_8_robust_dyn_0.75_0.csv",
+f"backup_results/3_compo/bsdrcnn_r_lucas_16_robust_dyn_0.75_0.csv",
+f"backup_results/2_compo/bsdrcnn_r_lucas_32_robust_dyn_0.75_0.csv"
 ]:
     df = pd.read_csv(size)
     last_row = df.iloc[-1]
@@ -33,7 +33,7 @@ f"results/2_compo/bsdrcnn_r_lucas_32_robust_dyn_0.75_0.csv"
     values_list = [int(i) for i in values_list if i <4200]
     ad_indices.append(values_list)
 
-fig, axes = plt.subplots(3, 2, figsize=(5, 8))
+fig, axes = plt.subplots(3, 2, figsize=(5, 6))
 
 ds = DSManager(name="min_lucas", shuffle=False)
 original_data = ds.data[:, 0:-1]
@@ -73,15 +73,14 @@ for epoch in range(3):
     axes[epoch, 1].set_title(f"Selected bands: {len(ad_i)}", fontsize=11)
 
 
-    axes[epoch, 1].annotate(row_labels[epoch], xy=(1.2, 0.5), xycoords="axes fraction",
-                            fontsize=12, ha="center", va="center", rotation=90)
+    axes[epoch, 1].annotate(row_labels[epoch], xy=(1.1, 0.5), xycoords="axes fraction",
+                            fontsize=10, ha="center", va="center", rotation=90)
 
 # Add column titles
 #fig.suptitle("Comparison of BSDR and Adaptive-downsampling at Different Training Stages", fontsize=14)
-axes[-1,0].text(0.5, -0.4, "(a) BSDR", fontsize=12, ha="center", transform=axes[-1,0].transAxes)
-axes[-1,1].text(1.8, -0.4, "(b) Adaptive-downsampling", fontsize=12, ha="center", transform=axes[-1,0].transAxes)
+axes[-1,0].text(0.5, -0.8, "(a)", fontsize=11, ha="center", transform=axes[-1,0].transAxes)
+axes[-1,1].text(2, -0.8, "(b)", fontsize=11, ha="center", transform=axes[-1,0].transAxes)
 
-plt.tight_layout(rect=[0, 0, 1, 0.95])
-plt.savefig("low_rep_3_march_ba_size.png", dpi=600)
-plt.clf()
-plt.cla()
+plt.tight_layout(pad=2)
+plt.savefig("low_rep_3_march_ba_size.png", dpi=600, pad_inches=0)
+plt.show()

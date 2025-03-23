@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['font.size'] = 12
+
 df = pd.read_csv('imp_res/all_bands_m4.csv')
 
 adcnn_data = pd.read_csv("imp_res/best.csv")
@@ -17,7 +20,7 @@ df = pd.concat((df, adcnn_data), ignore_index=True)
 fig, axes = plt.subplots(2, 2, figsize=(6,6))
 
 metrics = ['r2', 'rmse_o', 'rpd_o', 'execution_time']
-titles = ['(a) $R^2$', ' (b) RMSE', '(c) RPD', '(d) Execution time (seconds)']
+titles = ['(a)', '(b)', '(c)', '(d)']
 
 axes[1, 1].set_yscale('log')
 
@@ -78,26 +81,23 @@ for i, ax in enumerate(axes.flat):
 axes[0, 0].set_ylabel('$R^2$')
 axes[0, 1].set_ylabel('RMSE')
 axes[1, 0].set_ylabel('RPD')
-axes[1, 1].set_ylabel(r"Seconds ($\log_{10}$ scale)")
+axes[1, 1].set_ylabel("Seconds (log$_{10}$ scale)", fontname="Times New Roman")
 
 xticks = df['train_size'].unique()
-#xticks = [0.05, 0.25, 0.45, 0.65, 0.85]
 xtick_labels = [int(x * 100) for x in xticks]
 
 for ax, title in zip(axes.flat, titles):
     ax.set_xticks(xticks)
     ax.set_xticklabels(xtick_labels)
-    ax.set_xlabel("Training size (%)", fontsize=10)
-    ax.text(0.5, -0.35, title, transform=ax.transAxes, fontsize=12, ha='center')
-
+    ax.set_xlabel("Training size (%)")
+    ax.text(0.5, -0.42, title, transform=ax.transAxes, ha='center', fontname="Times New Roman")
 
 plt.draw()
 
 names = [a["label"] for a in algorithms]
-#fig.subplots_adjust(hspace=0.6)
-fig.legend(names, loc='upper center', ncol=2, fontsize=10, frameon=True)
+fig.legend(names, loc='upper center', ncol=2, frameon=True)
 
 
-plt.tight_layout(rect=[0, 0, 1, 0.90])
-plt.savefig("all_bands4.png", pad_inches=0, dpi=600)
+plt.tight_layout(rect=[0, 0, 1, 0.88], pad=0.2)
+plt.savefig("all_bands5.png", pad_inches=0, dpi=600)
 plt.show()
