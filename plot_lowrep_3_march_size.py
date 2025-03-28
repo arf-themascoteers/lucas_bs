@@ -45,7 +45,7 @@ min_val = np.min(X)
 max_val = np.max(X)
 
 row_labels = ["8 bands", "16 bands", "32 bands"]
-col_labels = ["BSDR", "Adaptive-downsampling"]
+col_labels = ["BSDR", "Adaptive downsampling"]
 
 lims = [8,32,128]
 
@@ -77,7 +77,7 @@ for epoch in range(3):
                             fontsize=10, ha="center", va="center", rotation=90)
 
 # Add column titles
-#fig.suptitle("Comparison of BSDR and Adaptive-downsampling at Different Training Stages", fontsize=14)
+#fig.suptitle("Comparison of BSDR and Adaptive downsampling at Different Training Stages", fontsize=14)
 axes[-1,0].text(0.5, -0.8, "(a)", fontsize=11, ha="center", transform=axes[-1,0].transAxes)
 axes[-1,1].text(2, -0.8, "(b)", fontsize=11, ha="center", transform=axes[-1,0].transAxes)
 

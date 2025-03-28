@@ -94,7 +94,7 @@ for p in range(5):
         ax.plot(h_ad, color="blue")
         ax.set_xlabel("Band")
         ax.set_ylabel("Reflectance")
-        ax.set_title("Adaptive-downsampling", fontsize=14)
+        ax.set_title("Adaptive downsampling", fontsize=14)
 
     ax.text(0.5, -0.6, labels[p], fontsize=16, ha="center",
         transform=ax.transAxes, fontname="Times New Roman")

@@ -19,7 +19,7 @@ for i, (metric, label) in enumerate(zip(metrics, labels)):
     row = pivot_table.index.get_loc(75)
     col = pivot_table.columns.get_loc(128)
     axes[i].add_patch(plt.Rectangle((col, row), 1, 1, fill=False, edgecolor='blue', lw=3))
-    axes[i].set_xlabel("Lower-dimensional size", fontfamily="Times New Roman", fontsize=17)
+    axes[i].set_xlabel("Lower dimensional size", fontfamily="Times New Roman", fontsize=17)
     axes[i].set_ylabel("Training size (%)", fontfamily="Times New Roman", fontsize=17)
     axes[i].set_title(label, fontfamily="Times New Roman", fontsize=17)
     axes[i].text(0.5, -0.2, f'({chr(97+i)})', transform=axes[i].transAxes,

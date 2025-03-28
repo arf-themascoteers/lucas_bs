@@ -1,0 +1,1 @@
+An adaptive downsampling method uses backpropagation-guided 1D-CNN training to select hyperspectral bands most relevant to soil organic carbon prediction, outperforming fixed-interval selection.

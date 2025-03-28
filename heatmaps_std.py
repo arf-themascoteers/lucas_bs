@@ -36,7 +36,7 @@ for i,metric in enumerate(metrics):
     col = pivot_table.columns.get_loc(128)
     plt.gca().add_patch(plt.Rectangle((col, row), 1, 1, fill=False, edgecolor='blue', lw=3))
 
-    plt.xlabel("Lower-dimensional size", fontsize=14)
+    plt.xlabel("Lower dimensional size", fontsize=14)
     plt.ylabel("Training size (%)", fontsize=14)
     #plt.title(metric)
     plt.tight_layout(pad=0)

@@ -56,7 +56,7 @@ for i, metric in enumerate(metrics):
 
     ax.set_ylabel(metric_labels[i], fontsize=19)
 
-    ax.set_xlabel("Lower-dimensional size (log\u2082 scale)", fontsize=19)
+    ax.set_xlabel("Lower dimensional size (log\u2082 scale)", fontsize=19)
     ax.tick_params(axis='x', labelsize=15)
     ax.tick_params(axis='y', labelsize=15)
     ax.set_yticks(np.linspace(ax.get_ylim()[0], ax.get_ylim()[1], 4))

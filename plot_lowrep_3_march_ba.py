@@ -40,7 +40,7 @@ min_val = np.min(X)-0.02
 max_val = np.max(X)+0.02
 
 row_labels = ["Start", "Min-point", "End"]
-col_labels = ["BSDR", "Adaptive-downsampling"]
+col_labels = ["BSDR", "Adaptive downsampling"]
 
 for epoch in range(3):
     axes[epoch, 0].set_ylim([min_val, max_val])
@@ -67,7 +67,7 @@ for epoch in range(3):
     axes[epoch, 1].tick_params(axis='both', labelsize=11)
 
 # Add column titles
-#fig.suptitle("Comparison of BSDR and Adaptive-downsampling at Different Training Stages", fontsize=14)
+#fig.suptitle("Comparison of BSDR and Adaptive downsampling at Different Training Stages", fontsize=14)
 axes[-1,0].text(0.5, -0.58, "(a)", fontsize=11, ha="center", transform=axes[-1,0].transAxes)
 axes[-1,1].text(2, -0.58, "(b)", fontsize=11, ha="center", transform=axes[-1,0].transAxes)
 

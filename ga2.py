@@ -13,13 +13,14 @@ start = [int(v) for v in start]
 end = end.split("|")
 end = [int(v) for v in end]
 
-fig, axes = plt.subplots(1, 2, figsize=(12, 2))
+fig, axes = plt.subplots(1, 2, figsize=(12, 1))
 
 y_points = [0,0,0,0,0,0,0,0]
 
 for ax in axes:
     ax.set_xticks([])
     ax.set_yticks([])
+    ax.set_xlim([0, 4200])
     for spine in ax.spines.values():
         spine.set_visible(False)
 
@@ -29,6 +30,7 @@ x_points = start
 colors = plt.cm.Set1(np.linspace(0, 1, len(x_points)))
 for j, (x, y) in enumerate(zip(x_points, y_points)):
     ax.scatter(x, y, color=colors[j], s=200, zorder=5)
+    print(x,y)
 
 ax = axes[1]
 x_points = end

@@ -23,7 +23,7 @@ sns.heatmap(pivot_table, annot=True, cmap="viridis",
 row = pivot_table.index.get_loc(75)
 col = pivot_table.columns.get_loc(128)
 axes.add_patch(plt.Rectangle((col, row), 1, 1, fill=False, edgecolor='blue', lw=3))
-axes.set_xlabel("Lower-dimensional size", fontfamily="Times New Roman", fontsize=17)
+axes.set_xlabel("Lower dimensional size", fontfamily="Times New Roman", fontsize=17)
 axes.set_ylabel("Training size (%)", fontfamily="Times New Roman", fontsize=17)
 axes.set_title(label, fontfamily="Times New Roman", fontsize=17)
 
