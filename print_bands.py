@@ -1,14 +1,5 @@
-import csv
-from sklearn.neural_network import MLPRegressor
-from sklearn.svm import SVR
-import pandas as pd
-from ds_manager import DSManager
-import os
-from sklearn.metrics import mean_squared_error
-from sklearn.metrics import r2_score
 import numpy as np
-
-lucas = DSManager("lucas", 1, "robust", train_size=0.75,split="normal")
+from docx import Document
 
 selected_bands = {
     8:"678|887|1431|2025|2312|2777|3466|3603",
@@ -20,59 +11,39 @@ selected_bands = {
     512: "27|28|36|43|45|48|60|66|92|99|100|102|105|107|109|108|110|113|120|182|190|200|212|217|241|246|255|258|260|267|274|282|295|296|304|313|318|332|336|350|354|357|362|367|370|375|374|378|396|407|409|417|469|473|481|486|490|492|491|495|494|498|504|508|522|535|543|544|547|577|581|600|604|607|609|635|640|641|647|657|669|672|699|705|718|720|727|731|733|733|737|736|775|776|779|783|784|786|794|804|822|821|825|831|839|839|860|866|867|879|893|899|913|920|922|926|928|957|961|976|978|978|980|982|990|1000|1007|1021|1027|1029|1036|1043|1049|1058|1075|1090|1098|1106|1122|1122|1137|1145|1189|1192|1193|1195|1198|1204|1212|1223|1241|1244|1254|1269|1270|1274|1275|1282|1283|1291|1302|1302|1312|1317|1329|1328|1332|1333|1343|1369|1374|1379|1389|1396|1418|1420|1426|1452|1465|1468|1472|1474|1478|1483|1484|1497|1529|1533|1535|1536|1536|1563|1564|1565|1565|1568|1568|1570|1571|1585|1585|1617|1622|1624|1628|1662|1701|1702|1702|1711|1727|1728|1729|1733|1738|1738|1747|1747|1753|1777|1781|1780|1787|1787|1790|1791|1796|1818|1846|1871|1875|1878|1881|1888|1889|1943|1973|1956|1956|1995|1996|1998|1990|2006|2006|2008|2016|2019|2021|2048|2048|2048|2030|2029|2089|2091|2104|2107|2108|2119|2125|2128|2130|2134|2165|2166|2167|2188|2213|2214|2218|2223|2224|2226|2227|2233|2234|2236|2244|2249|2252|2252|2252|2260|2261|2262|2276|2362|2364|2367|2369|2375|2380|2385|2389|2391|2395|2399|2400|2403|2410|2412|2421|2421|2437|2447|2473|2473|2477|2478|2498|2502|2527|2532|2532|2539|2542|2554|2590|2592|2597|2598|2601|2603|2605|2609|2611|2613|2614|2614|2654|2653|2656|2683|2691|2693|2693|2695|2713|2712|2748|2759|2764|2767|2770|2783|2802|2812|2814|2817|2817|2826|2837|2840|2843|2911|2910|2909|2915|2916|2920|2921|2957|2968|2975|2974|2988|2988|2990|2992|2996|3000|3027|3034|3036|3036|3053|3052|3068|3087|3087|3094|3113|3133|3137|3142|3145|3145|3162|3176|3191|3205|3207|3212|3244|3249|3254|3257|3262|3263|3266|3268|3271|3282|3287|3298|3299|3302|3304|3328|3336|3346|3349|3356|3358|3362|3388|3394|3395|3403|3413|3421|3434|3440|3447|3450|3450|3460|3461|3462|3480|3499|3504|3528|3532|3540|3542|3549|3548|3549|3556|3560|3561|3569|3576|3637|3647|3652|3656|3657|3666|3677|3680|3682|3686|3691|3709|3721|3721|3728|3729|3738|3750|3751|3763|3759|3772|3781|3784|3798|3798|3815|3832|3845|3853|3866|3868|3887|3891|3893|3899|3900|3910|3910|3916|3925|3927|3930|3931|3937|3939|3946|3949|3959|3975|4002|4004|4005|4018|4028|4044|4054|4059|4068|4087|4089|4101|4117|4127|4130|4151|4191"
 }
 
-
 def get_mid_bands(size):
     x = np.linspace(0, 4199, size+2)
     x = x[1:-1]
     x = np.round(x)
     return x.astype(int)
 
-def check_svr(dataset, bands):    
-    for fold, (train_x, train_y, test_x, test_y) in enumerate(dataset.get_k_folds()):
-        train_x = train_x[:,bands]
-        test_x = test_x[:,bands]
-        model = MLPRegressor(hidden_layer_sizes=(100,), max_iter=1000)
-        model.fit(train_x, train_y)
-        y_hat = model.predict(test_x)
-        return calculate_metrics(dataset,test_y, y_hat)
+document = Document()
+table = document.add_table(rows=1, cols=3)
+table.style = 'Table Grid'
 
+# Set header
+hdr_cells = table.rows[0].cells
+hdr_cells[0].text = 'Key'
+hdr_cells[1].text = 'FD Bands'
+hdr_cells[2].text = 'AD Bands'
 
-def calculate_metrics(dataset,y_test, y_pred):
-    r2, rmse, rpd, rpiq = calculate_4_metrics(y_test, y_pred)
+def convert_band_to_wl(band):
+    wl = (band*0.5)+400
+    if wl == int(wl):
+        return int(wl)
+    return wl
 
-    y_test_original = dataset.scaler_y.inverse_transform(y_test.reshape(-1, 1)).ravel()
-    y_pred_original = dataset.scaler_y.inverse_transform(y_pred.reshape(-1, 1)).ravel()
-    r2_o, rmse_o, rpd_o, rpiq_o = calculate_4_metrics(y_test_original, y_pred_original)
+for key, value in selected_bands.items():
+    fd_bands = get_mid_bands(key)
+    ad_bands = [int(i) for i in value.split("|")]
 
-    return r2, rmse, rpd, rpiq, r2_o, rmse_o, rpd_o, rpiq_o
+    fd_wl = [convert_band_to_wl(i) for i in fd_bands]
+    ad_wl = [convert_band_to_wl(i) for i in ad_bands]
 
-def calculate_4_metrics(y_test, y_pred):
-    r2 = r2_score(y_test, y_pred)
-    rmse = np.sqrt(mean_squared_error(y_test, y_pred))
-    std_dev = np.std(y_test, ddof=1)
-    rpd = std_dev/rmse
-    iqr = np.percentile(y_test, 75) - np.percentile(y_test, 25)
-    rpiq = iqr/rmse
+    row_cells = table.add_row().cells
+    row_cells[0].text = str(key)
+    row_cells[1].text = ', '.join(map(str, fd_wl))
+    row_cells[2].text = ', '.join(map(str, ad_wl))
 
-    return r2, rmse, rpd, rpiq
+document.save('band_list.docx')
 
-with open('cc_bands.csv', 'w', newline='') as f:
-    writer = csv.writer(f)
-    header = [
-        'fd_r2', 'fd_rmse', 'fd_rpd', 'fd_rpiq',
-        'fd_r2_o', 'fd_rmse_o', 'fd_rpd_o', 'fd_rpiq_o',
-        'ad_r2', 'ad_rmse', 'ad_rpd', 'ad_rpiq',
-        'ad_r2_o', 'ad_rmse_o', 'ad_rpd_o', 'ad_rpiq_o'
-    ]
-    writer.writerow(header)
-    for key, value in selected_bands.items():
-        fd_bands = get_mid_bands(key)
-        ad_bands = [int(i) for i in value.split("|")]
-        r2, rmse, rpd, rpiq, r2_o, rmse_o, rpd_o, rpiq_o = check_svr(lucas, fd_bands)
-        fd_metrics = [r2, rmse, rpd, rpiq, r2_o, rmse_o, rpd_o, rpiq_o]
-        r2, rmse, rpd, rpiq, r2_o, rmse_o, rpd_o, rpiq_o = check_svr(lucas, ad_bands)
-        ad_metrics = [r2, rmse, rpd, rpiq, r2_o, rmse_o, rpd_o, rpiq_o]
-        writer.writerow(fd_metrics + ad_metrics)
-        f.flush()
-        print([round(float(i),3) for i in fd_metrics])
-        print([round(float(i),3) for i in ad_metrics])
