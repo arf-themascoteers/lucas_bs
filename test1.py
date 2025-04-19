@@ -4,8 +4,8 @@ import numpy as np
 
 selected_bands = {8: [739, 843.5, 1115.5, 1412.5, 1556, 1788.5, 2133, 2201.5],
                  16: [606, 671.5, 739, 857.5, 993, 1097, 1303.5, 1412.5, 1468, 1509, 1715.5, 1861, 2133.5, 2136, 2234.5, 2395],
-                 32: [579, 600, 650, 686, 698, 744, 747.5, 890.5, 900, 1007, 1043.5, 1119, 1210, 1261.5, 1366.5, 1469.5, 1495, 1609.5,
-                      1652.5, 1653.5, 1688, 1726.5, 1878.5, 1882, 2133.5, 2134.5, 2202, 2202, 2221, 2221.5, 2222, 2492],
+                 32: [579.5, 608, 651.5, 676.5, 709.5, 748.5, 775, 893.5, 896, 992.5, 1022, 1127.5, 1211, 1257.5, 1362, 1469.5, 1499, 1621.5,
+                      1622.5, 1726.5, 1730.5, 1731, 1883, 1880, 2125, 2135.5, 2185.5, 2185.5, 2255.5, 2266.5, 2366.5, 2417.5],
                  64: [447, 544.5, 546, 571.5, 587, 640, 663, 688.5, 718.5, 748.5, 758, 770, 813, 813, 838, 880, 890.5, 921.5, 978.5,
                       982.5, 1013.5, 1067.5, 1108, 1162.5, 1167, 1199, 1324, 1337, 1337.5, 1368.5, 1409, 1416, 1476, 1476.5, 1527.5,
                       1529.5, 1538, 1596, 1622.5, 1726, 1726.5, 1727.5, 1734, 1790.5, 1794.5, 1890.5, 1887.5, 1921, 1923.5, 1964, 2140,
@@ -66,11 +66,11 @@ selected_bands = {8: [739, 843.5, 1115.5, 1412.5, 1556, 1788.5, 2133, 2201.5],
                        2365.5, 2368.5, 2369.5, 2373, 2374.5, 2379.5, 2387.5, 2401, 2402, 2402.5, 2409, 2414, 2422, 2427, 2429.5, 2434,
                        2443.5, 2444.5, 2450.5, 2458.5, 2463.5, 2465, 2475.5, 2495.5]}
 
-ranges = [(400, 995.5), (1000, 1599.5), (1600, 1699.5), (1700, 1799.5), (1800, 1899.5), (1900, 1999.5), (2000, 2499.5)]
+ranges = [(400, 699.5), (700, 999.5), (1000, 1299.5), (1300, 1599.5), (1600, 1899.5), (1900, 2199.5), (2200, 2499.5)]
 labels = [f'{start}-{end}' for start, end in ranges]
 
 plt.rcParams['font.family'] = 'Times New Roman'
-plt.rcParams['font.size'] = 18
+plt.rcParams['font.size'] = 22
 
 counters = []
 for i, key in enumerate(sorted(selected_bands.keys())):
@@ -83,13 +83,15 @@ plt.tight_layout()
 plt.show()
 
 df = np.array(counters).T
-range_labels = [f"{start}–{end}" for start, end in ranges]
+range_labels = [f"{start:,.0f}–{end:,.1f}" for start, end in ranges]
 plt.figure(figsize=(10, 6))
-sns.heatmap(df, annot=True, fmt=".2f", cmap="viridis", cbar_kws={'label': 'Proportion of Selected Bands'})
-plt.xlabel("Lower-dimensional Size")
+sns.heatmap(df, annot=False, fmt=".2f", cmap="viridis", cbar_kws={'label': 'Proportion of Selected Bands'})
+for x in range(1, df.shape[1]):
+    plt.axvline(x, color='white', lw=2)
+plt.xlabel("Lower dimensional Size")
 plt.ylabel("Spectral Region (nm)")
 plt.yticks(ticks=np.arange(len(range_labels)) + 0.5, labels=range_labels, rotation=0)
-
+plt.xticks(ticks=np.arange(df.shape[1]) + 0.5, labels=[8, 16, 32, 64, 128, 256, 512], rotation=0)
 plt.tight_layout()
 plt.savefig("band_propo.png", dpi=300)
 plt.show()

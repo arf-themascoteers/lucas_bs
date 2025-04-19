@@ -99,6 +99,8 @@ for key, value in selected_bands.items():
 x = list(range(len(ratios)))
 labels = [8, 16, 32, 64, 128, 256, 512]
 
+plt.figure(figsize=(8, 4))
+
 plt.bar(x, ratios)
 plt.xticks(x, labels)
 plt.ylabel('Noisy band selection rate')
