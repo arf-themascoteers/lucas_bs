@@ -141,7 +141,7 @@ class Reporter:
                       execution_time,
                       params,
                       fold,selected_bands):
-        selected_bands = sorted(selected_bands)
+        #selected_bands = sorted(selected_bands)
         with open(self.details_file, 'a') as file:
             file.write(f"{algorithm},{dataset},{target_size},"
                        f"{scaler_y},{mode},{train_size},"
