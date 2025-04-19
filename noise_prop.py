@@ -1,5 +1,12 @@
 import numpy as np
 from docx import Document
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from matplotlib.colors import LogNorm
+
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['font.size'] = 14
 
 selected_bands = {8: [739, 843.5, 1115.5, 1412.5, 1556, 1788.5, 2133, 2201.5],
                  16: [606, 671.5, 739, 857.5, 993, 1097, 1303.5, 1412.5, 1468, 1509, 1715.5, 1861, 2133.5, 2136, 2234.5, 2395],
@@ -79,27 +86,23 @@ def get_mid_bands(size):
     x = [convert_band_to_wl(i) for i in x]
     return x
 
-document = Document()
-table = document.add_table(rows=1, cols=4)
-table.style = 'Table Grid'
 
-hdr_cells = table.rows[0].cells
-hdr_cells[0].text = '# of target bands'
-hdr_cells[1].text = 'Initial selection (Fixed-interval downsampling)'
-hdr_cells[2].text = '# of selected bands'
-hdr_cells[3].text = 'Final selection (Adaptive downsampling)'
-
-
-
+ratios = []
 for key, value in selected_bands.items():
-    fd_wl = get_mid_bands(key)
     ad_wl =  list(dict.fromkeys(selected_bands[key]))
+    count_all = len(ad_wl)
+    count_noise = len([i for i in ad_wl if 400<=i<=500])
+    ratio = count_noise/count_all
+    ratios.append(ratio)
 
-    row_cells = table.add_row().cells
-    row_cells[0].text = str(key)
-    row_cells[1].text = ', '.join(map(str, fd_wl))
-    row_cells[2].text = str(len(ad_wl))
-    row_cells[3].text = ', '.join(map(str, ad_wl))
 
-document.save('band_list.docx')
+x = list(range(len(ratios)))
+labels = [8, 16, 32, 64, 128, 256, 512]
 
+plt.bar(x, ratios)
+plt.xticks(x, labels)
+plt.ylabel('Noisy band selection rate')
+plt.xlabel('Lower dimensional size')
+plt.tight_layout()
+plt.savefig('noise_prop_bands.png',dpi=600)
+plt.show()

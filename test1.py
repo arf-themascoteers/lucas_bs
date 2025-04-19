@@ -1,5 +1,6 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
 import numpy as np
-from docx import Document
 
 selected_bands = {8: [739, 843.5, 1115.5, 1412.5, 1556, 1788.5, 2133, 2201.5],
                  16: [606, 671.5, 739, 857.5, 993, 1097, 1303.5, 1412.5, 1468, 1509, 1715.5, 1861, 2133.5, 2136, 2234.5, 2395],
@@ -65,41 +66,30 @@ selected_bands = {8: [739, 843.5, 1115.5, 1412.5, 1556, 1788.5, 2133, 2201.5],
                        2365.5, 2368.5, 2369.5, 2373, 2374.5, 2379.5, 2387.5, 2401, 2402, 2402.5, 2409, 2414, 2422, 2427, 2429.5, 2434,
                        2443.5, 2444.5, 2450.5, 2458.5, 2463.5, 2465, 2475.5, 2495.5]}
 
-def convert_band_to_wl(band):
-    wl = (band*0.5)+400
-    if wl == int(wl):
-        return int(wl)
-    return wl
+ranges = [(400, 995.5), (1000, 1599.5), (1600, 1699.5), (1700, 1799.5), (1800, 1899.5), (1900, 1999.5), (2000, 2499.5)]
+labels = [f'{start}-{end}' for start, end in ranges]
 
-def get_mid_bands(size):
-    x = np.linspace(0, 4199, size+2)
-    x = x[1:-1]
-    x = np.round(x)
-    x = x.astype(int)
-    x = [convert_band_to_wl(i) for i in x]
-    return x
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['font.size'] = 18
 
-document = Document()
-table = document.add_table(rows=1, cols=4)
-table.style = 'Table Grid'
-
-hdr_cells = table.rows[0].cells
-hdr_cells[0].text = '# of target bands'
-hdr_cells[1].text = 'Initial selection (Fixed-interval downsampling)'
-hdr_cells[2].text = '# of selected bands'
-hdr_cells[3].text = 'Final selection (Adaptive downsampling)'
+counters = []
+for i, key in enumerate(sorted(selected_bands.keys())):
+    bands = selected_bands[key]
+    counts = [sum(start <= b <= end for b in bands)/key for start, end in ranges]
+    counters.append(counts)
 
 
+plt.tight_layout()
+plt.show()
 
-for key, value in selected_bands.items():
-    fd_wl = get_mid_bands(key)
-    ad_wl =  list(dict.fromkeys(selected_bands[key]))
+df = np.array(counters).T
+range_labels = [f"{start}–{end}" for start, end in ranges]
+plt.figure(figsize=(10, 6))
+sns.heatmap(df, annot=True, fmt=".2f", cmap="viridis", cbar_kws={'label': 'Proportion of Selected Bands'})
+plt.xlabel("Lower-dimensional Size")
+plt.ylabel("Spectral Region (nm)")
+plt.yticks(ticks=np.arange(len(range_labels)) + 0.5, labels=range_labels, rotation=0)
 
-    row_cells = table.add_row().cells
-    row_cells[0].text = str(key)
-    row_cells[1].text = ', '.join(map(str, fd_wl))
-    row_cells[2].text = str(len(ad_wl))
-    row_cells[3].text = ', '.join(map(str, ad_wl))
-
-document.save('band_list.docx')
-
+plt.tight_layout()
+plt.savefig("band_propo.png", dpi=300)
+plt.show()
