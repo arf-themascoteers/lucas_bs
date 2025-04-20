@@ -92,6 +92,7 @@ diff_bsdr = np.mean(data_bsdr, axis=0)
 # plt.plot(diff_bsdr)
 ad_res = [float(i) for i in ad_res]
 bsdr_res = [float(i) for i in bsdr_res]
+print(diff_initial)
 print(ad_res)
 print(bsdr_res)
 plt.show()
