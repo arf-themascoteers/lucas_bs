@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['font.size'] = 16
 
 start = "466|927|1389|1850|2312|2773|3235|3696"
 end = "661|879|1398|2023|2315|2794|3466|3605"

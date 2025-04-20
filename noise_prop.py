@@ -6,7 +6,7 @@ import seaborn as sns
 from matplotlib.colors import LogNorm
 
 plt.rcParams['font.family'] = 'Times New Roman'
-plt.rcParams['font.size'] = 14
+plt.rcParams['font.size'] = 20
 
 selected_bands = {8: [739, 843.5, 1115.5, 1412.5, 1556, 1788.5, 2133, 2201.5],
                  16: [606, 671.5, 739, 857.5, 993, 1097, 1303.5, 1412.5, 1468, 1509, 1715.5, 1861, 2133.5, 2136, 2234.5, 2395],
@@ -99,11 +99,11 @@ for key, value in selected_bands.items():
 x = list(range(len(ratios)))
 labels = [8, 16, 32, 64, 128, 256, 512]
 
-plt.figure(figsize=(8, 4))
+plt.figure(figsize=(8, 3))
 
 plt.bar(x, ratios)
 plt.xticks(x, labels)
-plt.ylabel('Noisy band selection rate')
+plt.ylabel('Noisy band rate')
 plt.xlabel('Lower dimensional size')
 plt.tight_layout()
 plt.savefig('noise_prop_bands.png',dpi=600)

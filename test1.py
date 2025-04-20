@@ -85,13 +85,13 @@ plt.show()
 df = np.array(counters).T
 range_labels = [f"{start:,.0f}–{end:,.1f}" for start, end in ranges]
 plt.figure(figsize=(10, 6))
-sns.heatmap(df, annot=False, fmt=".2f", cmap="viridis", cbar_kws={'label': 'Proportion of Selected Bands'})
+sns.heatmap(df, annot=True, fmt=".2f", cmap="viridis", cbar_kws={'label': 'Proportion of selected bands'})
 for x in range(1, df.shape[1]):
     plt.axvline(x, color='white', lw=2)
 plt.xlabel("Lower dimensional Size")
-plt.ylabel("Spectral Region (nm)")
+plt.ylabel("Spectral region (nm)")
 plt.yticks(ticks=np.arange(len(range_labels)) + 0.5, labels=range_labels, rotation=0)
 plt.xticks(ticks=np.arange(df.shape[1]) + 0.5, labels=[8, 16, 32, 64, 128, 256, 512], rotation=0)
 plt.tight_layout()
-plt.savefig("band_propo.png", dpi=300)
+plt.savefig("band_propo.png", dpi=600)
 plt.show()

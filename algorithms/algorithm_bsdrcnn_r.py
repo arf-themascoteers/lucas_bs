@@ -279,7 +279,7 @@ class Algorithm_bsdrcnn_r(Algorithm):
         train_r2, train_rmse, train_rpd, train_rpiq, train_r2_o, train_rmse_o, train_rpd_o, train_rpiq_o \
             = self.calculate_metrics(self.train_y, train_y_hat)
 
-        self.reporter.report_epoch_bsdr(epoch, r2, rpd, rpiq, rmse, train_r2, train_rmse, train_rpd, train_rpiq, bands)
+        self.reporter.report_epoch_bsdr(epoch, r2, rmse_o, rpd_o, rpiq_o, train_r2, train_rmse_o, train_rpd_o, train_rpiq_o, bands)
         cells = [epoch, r2, rmse, rpd, rpiq, train_r2, train_rmse, train_rpd, train_rpiq] + bands
         cells = [round(item, 5) if isinstance(item, float) else item for item in cells]
         print("".join([str(i).ljust(20) for i in cells]))

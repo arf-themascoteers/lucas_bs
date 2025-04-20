@@ -74,9 +74,9 @@ for epoch in range(3):
 
 # Add column titles
 #fig.suptitle("Comparison of BSDR and Adaptive downsampling at Different Training Stages", fontsize=14)
-axes[-1,0].text(0.5, -0.8, "(a)", fontsize=11, ha="center", transform=axes[-1,0].transAxes)
-axes[-1,1].text(2, -0.8, "(b)", fontsize=11, ha="center", transform=axes[-1,0].transAxes)
+axes[-1,0].text(0.5, -0.5, "(a)", fontsize=11, ha="center", transform=axes[-1,0].transAxes)
+axes[-1,1].text(1.9, -0.5, "(b)", fontsize=11, ha="center", transform=axes[-1,0].transAxes)
 
-plt.tight_layout(pad=2)
+plt.tight_layout(pad=1.2)
 plt.savefig("low_rep_20_april.png", dpi=600, pad_inches=0)
 plt.show()
